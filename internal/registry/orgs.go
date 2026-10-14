@@ -175,7 +175,7 @@ func (r *Registry) SetOrgMember(ctx context.Context, u *accounts.User, org, user
 	var userID int64
 	err = r.DB.QueryRowContext(ctx, `SELECT id FROM users WHERE username = ?`, username).Scan(&userID)
 	if errors.Is(err, sql.ErrNoRows) {
-		return reject(http.StatusNotFound, "unknown_user", "There's no user @%s. They need a Gopkgreg account first.", username)
+		return reject(http.StatusNotFound, "unknown_user", "There's no user @%s. They need a gopkgreg account first.", username)
 	}
 	if err != nil {
 		return err

@@ -1,9 +1,9 @@
-// Package version reports which build of Gopkgreg is running.
+// Package version reports which build of gopkgreg is running.
 package version
 
 import "runtime/debug"
 
-// Module is Gopkgreg's module path; the CLI installs from Module + "/cmd/gopkgreg".
+// Module is gopkgreg's module path; the CLI installs from Module + "/cmd/gopkgreg".
 const Module = "github.com/gopkgreg/gopkgreg"
 
 // CLIInstall is the command that installs the gopkgreg CLI.

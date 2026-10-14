@@ -144,7 +144,7 @@ func (s *server) tooManyRequests(w http.ResponseWriter, r *http.Request, what st
 		Heading:     "Please wait a few minutes.",
 		Body:        "There have been too many " + what + " attempts from your network. Try again later.",
 		ActionURL:   "/",
-		ActionLabel: "Back to Gopkgreg",
+		ActionLabel: "Back to gopkgreg",
 	})
 }
 
@@ -357,7 +357,7 @@ type newToken struct {
 // notices maps ?done= keys to fixed messages, so the query string can't
 // inject arbitrary text into the page.
 var notices = map[string]string{
-	"signed-up":         "Welcome to Gopkgreg! We've emailed you a link to confirm your address.",
+	"signed-up":         "Welcome to gopkgreg! We've emailed you a link to confirm your address.",
 	"email-verified":    "Your email is verified. You can create API tokens now.",
 	"verification-sent": "We've sent a new verification link. It expires in 24 hours.",
 	"token-revoked":     "Token revoked. Anything using it can no longer publish.",

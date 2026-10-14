@@ -5,7 +5,7 @@
 #   sudo install -D -m 0600 gopkgreg.env /etc/gopkgreg/gopkgreg.env
 #   sudo cp gopkgregd.service /etc/systemd/system/ && sudo systemctl enable --now gopkgregd
 [Unit]
-Description=Gopkgreg Go module registry
+Description=gopkgreg Go module registry
 After=network-online.target
 Wants=network-online.target
 

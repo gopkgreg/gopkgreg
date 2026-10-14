@@ -164,7 +164,7 @@ func (s *server) handleAddTeamMember(w http.ResponseWriter, r *http.Request) {
 		}
 		if target != u.Username {
 			s.emailUser(target, accounts.EmailAccess, "You're now in the team @"+org+"/"+team,
-				fmt.Sprintf("@%s added you to the team @%s/%s on Gopkgreg. You have the access the team has to @%s's modules.\n\n%s%s",
+				fmt.Sprintf("@%s added you to the team @%s/%s on gopkgreg. You have the access the team has to @%s's modules.\n\n%s%s",
 					u.Username, org, team, org, s.siteURL, teamURL(org, team)))
 		}
 		return nil

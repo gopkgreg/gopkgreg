@@ -4,15 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>{{if .Title}}{{.Title}} · Gopkgreg{{else}}Gopkgreg · The Go module registry{{end}}</title>
+  <title>{{if .Title}}{{.Title}} · gopkgreg{{else}}gopkgreg · The Go module registry{{end}}</title>
   <meta name="description" content="Search Go libraries, see every release they have published, and read their documentation.">
   <meta name="theme-color" content="#FFFFFF">
   <link rel="icon" href="{{asset "favicon.ico"}}" sizes="48x48">
   <link rel="icon" href="{{asset "favicon.svg"}}" type="image/svg+xml">
   <link rel="apple-touch-icon" href="{{asset "apple-touch-icon.png"}}">
   <link rel="manifest" href="{{asset "site.webmanifest"}}">
-  <meta property="og:site_name" content="Gopkgreg">
-  <meta property="og:title" content="{{if .Title}}{{.Title}}{{else}}Gopkgreg, the Go module registry{{end}}">
+  <meta property="og:site_name" content="gopkgreg">
+  <meta property="og:title" content="{{if .Title}}{{.Title}}{{else}}gopkgreg, the Go module registry{{end}}">
   <meta property="og:description" content="Publish, discover and install Go modules: docs, release history, security advisories and verified builds.">
   <meta property="og:image" content="{{.SiteURL}}{{asset "og-image.png"}}">
   <meta name="twitter:card" content="summary">
@@ -29,7 +29,7 @@
 
 <header class="nav">
   <div class="wrap nav-inner">
-    <a class="brand" href="/" aria-label="Gopkgreg home">{{template "mark"}}<span>gopkgreg</span></a>
+    <a class="brand" href="/" aria-label="gopkgreg home">{{template "mark"}}<span>gopkgreg</span></a>
     <nav class="nav-links" aria-label="Main">
       <a href="/search">Browse</a>
       <a href="/#publish">Publish</a>

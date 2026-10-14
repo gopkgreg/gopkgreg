@@ -1,4 +1,4 @@
-// Command gpkbench builds large datasets for Gopkgreg and load-tests a
+// Command gpkbench builds large datasets for gopkgreg and load-tests a
 // running server.
 //
 //	gpkbench seed [-profile small|full] [flags]   build a dataset in bench/

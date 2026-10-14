@@ -30,7 +30,7 @@ jobs:
           issue_message: |
             Thanks for opening your first issue here! A maintainer will look at it soon. If it's about a security problem, please close it and follow [SECURITY.md](https://github.com/gopkgreg/gopkgreg/blob/main/SECURITY.md) instead.
           pr_message: |
-            Thanks for your first pull request to Gopkgreg! 🎉
+            Thanks for your first pull request to gopkgreg! 🎉
 
             What happens next:
             1. The CLA bot will ask you to sign the [Contributor License Agreement](https://github.com/gopkgreg/gopkgreg/blob/main/CLA.md): reply with the sentence it gives you.

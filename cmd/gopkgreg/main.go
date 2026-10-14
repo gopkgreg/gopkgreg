@@ -1,4 +1,4 @@
-// Command gopkgreg signs in to a Gopkgreg registry and publishes Go modules
+// Command gopkgreg signs in to a gopkgreg registry and publishes Go modules
 // from git tags.
 //
 //	gopkgreg login --registry https://gopkgreg.com

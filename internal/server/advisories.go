@@ -168,7 +168,7 @@ type advisoriesData struct {
 
 // Feed advertises the security advisories feed on the advisories page.
 func (d advisoriesData) Feed() *feedLink {
-	return &feedLink{"Security advisories on Gopkgreg", "/feeds/advisories.atom"}
+	return &feedLink{"Security advisories on gopkgreg", "/feeds/advisories.atom"}
 }
 
 func (s *server) handleAdvisories(w http.ResponseWriter, r *http.Request) {

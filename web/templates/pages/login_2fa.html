@@ -4,7 +4,7 @@
     <div class="auth-intro">
       <p class="kicker">Two-factor authentication</p>
       <h1>{{if and .Passkeys (not .App)}}Confirm it's you.{{else}}Enter your code.{{end}}</h1>
-      <p class="sub">{{if .Passkeys}}Use your passkey{{if .App}}, or enter the 6-digit code from your authenticator app{{end}}.{{else}}Open your authenticator app and enter the 6-digit code for Gopkgreg.{{end}} Lost your device? Use one of your recovery codes instead.</p>
+      <p class="sub">{{if .Passkeys}}Use your passkey{{if .App}}, or enter the 6-digit code from your authenticator app{{end}}.{{else}}Open your authenticator app and enter the 6-digit code for gopkgreg.{{end}} Lost your device? Use one of your recovery codes instead.</p>
     </div>
     <div class="form-card">
       {{with .Error}}<p class="notice danger" role="alert">{{.}}</p>{{end}}

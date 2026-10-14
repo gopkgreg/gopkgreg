@@ -447,7 +447,7 @@ func (s *server) handleSearchPage(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case !canUnify || q.Get("scope") == "hosted":
 	case hostedOnly:
-		data.ScopeNote = "Filters, sorting and pages apply to modules on Gopkgreg, so public modules from pkg.go.dev aren't shown."
+		data.ScopeNote = "Filters, sorting and pages apply to modules on gopkgreg, so public modules from pkg.go.dev aren't shown."
 	default:
 		data.Scope = "all"
 	}

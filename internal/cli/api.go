@@ -157,7 +157,7 @@ func doJSON(env Env, req *http.Request, out any) error {
 		return e
 	}
 	if err := json.Unmarshal(body, out); err != nil {
-		return fmt.Errorf("the registry sent an unexpected response (is %s a Gopkgreg registry?)", req.URL.Host)
+		return fmt.Errorf("the registry sent an unexpected response (is %s a gopkgreg registry?)", req.URL.Host)
 	}
 	return nil
 }

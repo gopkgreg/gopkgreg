@@ -1,6 +1,6 @@
-# Gopkgreg Individual Contributor License Agreement
+# gopkgreg Individual Contributor License Agreement
 
-Thank you for contributing to Gopkgreg ("the Project"), maintained by Parthiban Sivakumar ("the Maintainer"). This agreement lets the Project accept your contributions and keep its licensing options open, while you keep the copyright to your work. Please read it before you sign.
+Thank you for contributing to gopkgreg ("the Project"), maintained by Parthiban Sivakumar ("the Maintainer"). This agreement lets the Project accept your contributions and keep its licensing options open, while you keep the copyright to your work. Please read it before you sign.
 
 You sign it by posting the comment the CLA bot asks for on your pull request. It then covers all your contributions to the Project.
 
@@ -32,7 +32,7 @@ The Maintainer doesn't have to use Your Contributions. Unless required by law or
 
 ## 6. Why this agreement exists
 
-Gopkgreg is licensed under the GNU AGPL v3 or later. The broad license in section 2 lets the Project offer the code under other terms in the future, for example alongside a commercial license, without having to find and ask every past contributor. Your Contributions stay available under the AGPL in every version that was released under it.
+gopkgreg is licensed under the GNU AGPL v3 or later. The broad license in section 2 lets the Project offer the code under other terms in the future, for example alongside a commercial license, without having to find and ask every past contributor. Your Contributions stay available under the AGPL in every version that was released under it.
 
 ---
 

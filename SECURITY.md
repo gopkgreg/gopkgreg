@@ -1,6 +1,6 @@
 # Security policy
 
-Gopkgreg stores other people's code and credentials, so we take reports seriously and fix them first.
+gopkgreg stores other people's code and credentials, so we take reports seriously and fix them first.
 
 ## Reporting a vulnerability
 

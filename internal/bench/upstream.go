@@ -1,4 +1,4 @@
-// Package bench builds large, realistic datasets for Gopkgreg and drives
+// Package bench builds large, realistic datasets for gopkgreg and drives
 // load against a running server, to measure how it behaves at scale.
 //
 // Seeding samples real modules from the Go module index and mirror

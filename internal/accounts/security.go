@@ -34,7 +34,7 @@ const (
 	maxCodeFailures   = 10
 	codeFailureWindow = time.Hour
 	recoveryCodes     = 10
-	issuer            = "Gopkgreg"
+	issuer            = "gopkgreg"
 )
 
 // notify emails u about a change to their account in the background, so a
@@ -92,7 +92,7 @@ func (s *Service) RequestPasswordReset(ctx context.Context, email string, c Clie
 	link := strings.TrimSuffix(s.BaseURL, "/") + "/reset-password?" + url.Values{"token": {secret}}.Encode()
 	msg := mail.Message{
 		To:      u.Email,
-		Subject: "Reset your Gopkgreg password",
+		Subject: "Reset your gopkgreg password",
 		Body: fmt.Sprintf("Hi %s,\n\nSomeone asked to reset the password for @%s. Choose a new one here:\n\n%s\n\nThe link works once and expires in an hour. If you didn't ask for this, ignore this email; your password hasn't changed.\n",
 			u.Username, u.Username, link),
 	}
@@ -150,7 +150,7 @@ func (s *Service) ResetPassword(ctx context.Context, secret, password string, c 
 	if err := s.setPassword(ctx, u, password, "", "password.reset", c); err != nil {
 		return nil, err
 	}
-	s.notify(u, "Your Gopkgreg password was reset", "The password for @"+u.Username+" was just reset using an email link. Every session was signed out and any pending email change was canceled. API tokens and passkeys still work: review them on your account and security pages.")
+	s.notify(u, "Your gopkgreg password was reset", "The password for @"+u.Username+" was just reset using an email link. Every session was signed out and any pending email change was canceled. API tokens and passkeys still work: review them on your account and security pages.")
 	return u, nil
 }
 
@@ -175,7 +175,7 @@ func (s *Service) ChangePassword(ctx context.Context, u *User, current, next, ke
 	if err := s.setPassword(ctx, u, next, keepSession, "password.changed", c); err != nil {
 		return err
 	}
-	s.notify(u, "Your Gopkgreg password was changed", "The password for @"+u.Username+" was just changed. Other signed-in sessions were signed out.")
+	s.notify(u, "Your gopkgreg password was changed", "The password for @"+u.Username+" was just changed. Other signed-in sessions were signed out.")
 	return nil
 }
 
@@ -477,7 +477,7 @@ func (s *Service) CompleteLogin(ctx context.Context, challenge, code string, c C
 		s.auditNoTx(ctx, userID, "login.failed", "wrong 2FA code", c)
 		if failures+1 == maxCodeFailures {
 			if u, uerr := s.userByID(ctx, userID); uerr == nil {
-				s.notify(u, "Repeated wrong sign-in codes on your Gopkgreg account",
+				s.notify(u, "Repeated wrong sign-in codes on your gopkgreg account",
 					fmt.Sprintf("Someone signed in to @%s with the right password but entered a wrong two-factor code %d times in the last hour. "+
 						"Your password is probably known to someone else. Change it now. Sign-ins with codes are paused for an hour; passkeys still work.",
 						u.Username, maxCodeFailures))

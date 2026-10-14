@@ -31,7 +31,7 @@ type nopMailer struct{}
 
 func (nopMailer) Send(context.Context, mail.Message) error { return nil }
 
-// startRegistry runs a real Gopkgreg server with a verified user "alice"
+// startRegistry runs a real gopkgreg server with a verified user "alice"
 // and returns its URL and alice's API token.
 func startRegistry(t *testing.T) (*httptest.Server, string) {
 	t.Helper()

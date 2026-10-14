@@ -1,6 +1,6 @@
-# Contributing to Gopkgreg
+# Contributing to gopkgreg
 
-Thanks for helping build Gopkgreg. This guide covers everything from a first typo fix to a new feature. If something here is unclear, that's a bug too: open an issue.
+Thanks for helping build gopkgreg. This guide covers everything from a first typo fix to a new feature. If something here is unclear, that's a bug too: open an issue.
 
 ## Before you start
 

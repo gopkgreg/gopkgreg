@@ -55,7 +55,7 @@ func TestPasswordResetFlow(t *testing.T) {
 	resp, body = b.post("/forgot-password", url.Values{"email": {"alice@example.com"}})
 	expect(t, resp, body, http.StatusOK, "a reset link is on its way")
 
-	link := regexp.MustCompile(`/reset-password\?token=\S+`).FindString(env.mails.find(t, "alice@example.com", "Reset your Gopkgreg password"))
+	link := regexp.MustCompile(`/reset-password\?token=\S+`).FindString(env.mails.find(t, "alice@example.com", "Reset your gopkgreg password"))
 	resp, body = b.get(link)
 	expect(t, resp, body, http.StatusOK, "Choose a new password")
 	token, _ := url.ParseQuery(strings.TrimPrefix(link, "/reset-password?"))
@@ -188,7 +188,7 @@ func TestScopedTokenAndPublishEmail(t *testing.T) {
 	resp, body := alice.post("/account/tokens", url.Values{"name": {"ci"}, "expires": {"30"}, "module": {mod}, "password": {"correct horse battery"}})
 	expect(t, resp, body, http.StatusCreated, "Copy it now")
 	token := regexp.MustCompile(`gpk_[A-Za-z0-9_-]{43}`).FindString(body)
-	env.mails.find(t, "alice@example.com", "New Gopkgreg API token")
+	env.mails.find(t, "alice@example.com", "New gopkgreg API token")
 	resp, body = alice.get("/account")
 	expect(t, resp, body, http.StatusOK, "<code>gopkgreg.test/alice/retry</code>")
 	resp, body = alice.post("/account/tokens", url.Values{"name": {"x"}, "expires": {"30"}, "module": {"gopkgreg.test/bob/other"}, "password": {"correct horse battery"}})

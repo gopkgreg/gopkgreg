@@ -1,6 +1,9 @@
-<p align="center"><img src="web/static/favicon.svg" width="72" height="72" alt=""></p>
-
-<h1 align="center">gopkgreg</h1>
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-dark.svg">
+    <img src=".github/assets/logo.svg" alt="gopkgreg" width="320">
+  </picture>
+</h1>
 
 <p align="center">The Go module registry: publish, discover and install Go modules.</p>
 
@@ -109,7 +112,7 @@ For CI, prefer **trusted publishing** (next section): nothing secret to store. O
 - **Quality:** verified builds (trusted publishing) get a small boost; deprecated modules and ones with an active advisory sink.
 - **Duplicates:** a hosted module that pkg.go.dev also knows appears once, as the hosted result.
 
-**On Gopkgreg** (`&scope=hosted`) searches only this registry, with license, Go version and release-date filters, sorting and pages. Using any of those switches to it automatically, with a note. Public results are cached for 10 minutes. If pkg.go.dev takes more than 1.5 s, the page shows hosted results and says so. It all renders on the server, with no JavaScript needed. The `/api/v1/search` endpoint stays hosted-only.
+**On gopkgreg** (`&scope=hosted`) searches only this registry, with license, Go version and release-date filters, sorting and pages. Using any of those switches to it automatically, with a note. Public results are cached for 10 minutes. If pkg.go.dev takes more than 1.5 s, the page shows hosted results and says so. It all renders on the server, with no JavaScript needed. The `/api/v1/search` endpoint stays hosted-only.
 
 ## Documentation, source and dependencies
 
@@ -237,9 +240,9 @@ On a public HTTPS deployment, run just `go get gopkgreg.com/alice/retry@latest`.
 For `go get gopkgreg.com/alice/retry/backoff`, with default settings (`GOPROXY=https://proxy.golang.org,direct`):
 
 1. **Lookup.** `proxy.golang.org` requests `https://gopkgreg.com/alice/retry/backoff?go-get=1`.
-2. **Answer.** Gopkgreg finds the module that contains the package and replies with `<meta name="go-import" content="gopkgreg.com/alice/retry mod https://gopkgreg.com/api/proxy">`. A trailing `/vN` resolves to that major version's module when one is published.
+2. **Answer.** gopkgreg finds the module that contains the package and replies with `<meta name="go-import" content="gopkgreg.com/alice/retry mod https://gopkgreg.com/api/proxy">`. A trailing `/vN` resolves to that major version's module when one is published.
 3. **Download.** The mirror downloads through this registry's GOPROXY endpoints and caches the result. `sum.golang.org` records the `h1:` hash in its public log, so users get checksum verification without `GONOSUMDB`.
-4. **Early fetch.** After each publish, Gopkgreg requests the new version from the mirror and checksum database right away (`-notify-mirror`). The first user doesn't wait, and the hash is logged while the registry is known to serve it.
+4. **Early fetch.** After each publish, gopkgreg requests the new version from the mirror and checksum database right away (`-notify-mirror`). The first user doesn't wait, and the hash is logged while the registry is known to serve it.
 
 People who open `https://gopkgreg.com/alice/retry` in a browser get the project page, and a package path such as `…/retry/backoff` opens that package's docs.
 
@@ -426,7 +429,7 @@ go run ./cmd/gpkbench load -d 30m -publish-rate 2 -login-rate 5   # reads plus u
 **What `seed` builds.** Real modules are sampled from `index.golang.org`, in windows spread from 2020 to now, so old and new modules are mixed. Their `go.mod` files come from `proxy.golang.org`, and some get their real source zips. Their paths are remapped under the registry's host (`github.com/spf13/cobra` becomes `gopkgreg.localhost/spf13/cobra`), and their requirements are rewritten to match. Synthetic modules fill the set up to the target size. The busiest real owners get their own namespaces, and vanity domains become organizations. Everything is published through `Registry.Publish`, so zip checks, publish checks, search indexing and the dependency graph all run as they do for real uploads. It then records 30 days of downloads, spread by popularity. It writes `bench/data/seed-report.json`, with publish latency, and `modules.tsv` for the load tool.
 
 - **Upstream use:** everything downloaded is cached under `bench/cache`, so rebuilding a dataset downloads nothing. Fetches run 8 at a time and identify themselves in `User-Agent`.
-- **Every Go module?** Not possible: the public mirror has millions of modules and tens of millions of versions, and their paths belong to other hosts. Public modules already reach Gopkgreg live through `proxy.golang.org`. The benchmark measures this registry's own code at a known size.
+- **Every Go module?** Not possible: the public mirror has millions of modules and tens of millions of versions, and their paths belong to other hosts. Public modules already reach gopkgreg live through `proxy.golang.org`. The benchmark measures this registry's own code at a known size.
 
 **What `load` does.** Clients pick modules by a Zipf distribution, so a few are hot and most are cold, as on a real registry. They send a registry-like mix of traffic:
 - the go command's proxy requests;
@@ -627,7 +630,7 @@ Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md): setup,
 
 Copyright (C) 2026 Parthiban Sivakumar
 
-Gopkgreg is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](LICENSE) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+gopkgreg is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](LICENSE) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 In short: you may use, study, change and share it. If you run a modified version as a service that others use over a network, you must offer those users the source code of your version, under the same license (section 13).
 

@@ -43,7 +43,7 @@ func TestUnifiedSearch(t *testing.T) {
 
 	resp, body := fetch(t, env.srv, "/search?q=retry")
 	expect(t, resp, body, http.StatusOK, `aria-current="page">All Go modules</a>`)
-	expect(t, resp, body, http.StatusOK, "1 on Gopkgreg · 2 from pkg.go.dev")
+	expect(t, resp, body, http.StatusOK, "1 on gopkgreg · 2 from pkg.go.dev")
 	hosted := strings.Index(body, `>gopkgreg.test/<wbr>alice/<wbr>retry</code>`)
 	public := strings.Index(body, "github.com/<wbr>avast/<wbr>retry-go")
 	if hosted < 0 || public < 0 || hosted > public {
@@ -52,7 +52,7 @@ func TestUnifiedSearch(t *testing.T) {
 	if n := strings.Count(body, "alice/<wbr>retry</code>"); n != 1 {
 		t.Errorf("hosted module listed %d times; the public duplicate should be dropped", n)
 	}
-	if !strings.Contains(body, `<span class="pill p-hosted">Gopkgreg</span>`) || !strings.Contains(body, `<span class="pill p-public">pkg.go.dev</span>`) {
+	if !strings.Contains(body, `<span class="pill p-hosted">gopkgreg</span>`) || !strings.Contains(body, `<span class="pill p-public">pkg.go.dev</span>`) {
 		t.Error("results aren't labeled by source")
 	}
 
@@ -70,7 +70,7 @@ func TestUnifiedSearch(t *testing.T) {
 	}
 	// Filters apply to hosted modules only, and say so.
 	resp, body = fetch(t, env.srv, "/search?q=retry&hide_deprecated=1")
-	expect(t, resp, body, http.StatusOK, "Filters, sorting and pages apply to modules on Gopkgreg")
+	expect(t, resp, body, http.StatusOK, "Filters, sorting and pages apply to modules on gopkgreg")
 	if strings.Contains(body, "avast") {
 		t.Error("filtered search shows public modules")
 	}
@@ -92,6 +92,6 @@ func TestUnifiedSearchSlowUpstream(t *testing.T) {
 	if took := time.Since(start); took > 3*time.Second {
 		t.Errorf("search waited %v on a slow pkg.go.dev", took)
 	}
-	expect(t, resp, body, http.StatusOK, "load in time, so only modules on Gopkgreg are shown")
+	expect(t, resp, body, http.StatusOK, "load in time, so only modules on gopkgreg are shown")
 	expect(t, resp, body, http.StatusOK, "alice/<wbr>retry")
 }

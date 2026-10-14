@@ -84,7 +84,7 @@ func (s *server) handleDeleteAccount(w http.ResponseWriter, r *http.Request) {
 			Heading:     "Your account is gone.",
 			Body:        "We've deleted @" + u.Username + ", its sessions, API tokens and trusted publishers. Modules you published stay available, because programs depend on them, and the name @" + u.Username + " can't be registered again.",
 			ActionURL:   "/",
-			ActionLabel: "Back to Gopkgreg",
+			ActionLabel: "Back to gopkgreg",
 		})
 	}
 }

@@ -37,10 +37,10 @@ const (
 	fontSize = 11
 )
 
-// logoWidth is the space the Gopkgreg box takes at the left of the label.
+// logoWidth is the space the gopkgreg box takes at the left of the label.
 const logoWidth = 17
 
-// logo is the Gopkgreg box, scaled from its 32-unit drawing to 14px.
+// logo is the gopkgreg box, scaled from its 32-unit drawing to 14px.
 func logo() string {
 	return fmt.Sprintf(`<g transform="translate(5 3) scale(0.4375)">`+
 		`<path d="M16 2.5 28.5 9.5 16 16.5 3.5 9.5Z" fill="%s"/>`+
@@ -50,7 +50,7 @@ func logo() string {
 		hex("light-blue"), hex("gopher-blue"), hex("dark-blue"), hex("white"))
 }
 
-// SVG renders the badge, with the Gopkgreg box before the label. Text is
+// SVG renders the badge, with the gopkgreg box before the label. Text is
 // measured with approximate Verdana widths, which is what shields.io and
 // most READMEs expect.
 func (b Badge) SVG() []byte {

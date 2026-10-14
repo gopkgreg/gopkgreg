@@ -75,7 +75,7 @@
         {{with .Detail.Provenance}}
         <section class="side-block provenance" aria-labelledby="prov-title">
           <h2 id="prov-title">Verified source</h2>
-          <p class="prov-note">Uploaded by a GitHub Actions run through a trusted publisher. Gopkgreg checked the run's identity with GitHub; the details below aren't self-reported.</p>
+          <p class="prov-note">Uploaded by a GitHub Actions run through a trusted publisher. gopkgreg checked the run's identity with GitHub; the details below aren't self-reported.</p>
           <dl>
             <dt>Repository</dt><dd><a href="{{.RepositoryURL}}" rel="nofollow noopener">{{.Repository}}</a></dd>
             <dt>Workflow</dt><dd><a href="{{.WorkflowURL}}" rel="nofollow noopener">{{.Workflow}}</a></dd>
@@ -123,7 +123,7 @@
 
         <section class="side-block" aria-labelledby="badge-title">
           <h2 id="badge-title">README badge</h2>
-          <img class="badge-preview" src="/badge{{.URL}}.svg" alt="{{.Path}} on Gopkgreg" height="20">
+          <img class="badge-preview" src="/badge{{.URL}}.svg" alt="{{.Path}} on gopkgreg" height="20">
           <div class="cmd badge-cmd"><code>[![{{.Name}}]({{.SiteURL}}/badge{{.URL}}.svg)]({{.SiteURL}}{{.URL}})</code><button type="button" data-copy="[![{{.Name}}]({{.SiteURL}}/badge{{.URL}}.svg)]({{.SiteURL}}{{.URL}})">Copy</button></div>
           <p class="muted small">Downloads, verified-source and security badges: <a href="/api#badges">see all</a>.</p>
         </section>
@@ -369,7 +369,7 @@
 
           <section class="manage-block" aria-labelledby="yank-title">
             <h3 id="yank-title">Releases</h3>
-            <p class="muted">Yanking hides a release from new installs and <code>@latest</code> on Gopkgreg. Its files stay downloadable, so builds that already use it keep working. To warn people who install through the public Go module mirror too, add <code>retract vX.Y.Z</code> to go.mod and publish a new version.</p>
+            <p class="muted">Yanking hides a release from new installs and <code>@latest</code> on gopkgreg. Its files stay downloadable, so builds that already use it keep working. To warn people who install through the public Go module mirror too, add <code>retract vX.Y.Z</code> to go.mod and publish a new version.</p>
             <div class="table-wrap">
               <table class="releases manage-table">
                 <thead><tr><th scope="col">Version</th><th scope="col">Status</th><th scope="col"><span class="visually-hidden">Action</span></th></tr></thead>

@@ -1,5 +1,5 @@
 /*
- * Gopkgreg: a quiet, technical white theme in the official Go colors.
+ * gopkgreg: a quiet, technical white theme in the official Go colors.
  * Every color comes from /tokens.css (internal/tokens), including the
  * slate and blue tints used for borders and surfaces. Do not add color
  * literals here; internal/server tests reject them.

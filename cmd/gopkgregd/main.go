@@ -1,4 +1,4 @@
-// Command gopkgregd runs the Gopkgreg Go module registry server: accounts and API
+// Command gopkgregd runs the gopkgreg Go module registry server: accounts and API
 // tokens, a GOPROXY server for hosted modules, and a site to search libraries,
 // browse their release history and read their docs.
 package main
@@ -156,7 +156,7 @@ func run() error {
 	dbPath := flag.String("db", "data/gopkgreg.db", "SQLite database file")
 	baseURL := flag.String("base-url", "", "public site URL used in emails and cookies (default http://<addr>)")
 	smtpAddr := flag.String("smtp-addr", "", "SMTP server host:port; empty logs emails instead of sending them")
-	smtpFrom := flag.String("smtp-from", "Gopkgreg <no-reply@localhost>", "sender address for emails")
+	smtpFrom := flag.String("smtp-from", "gopkgreg <no-reply@localhost>", "sender address for emails")
 	smtpUser := flag.String("smtp-user", "", "SMTP username (password comes from $GOPKGREG_SMTP_PASSWORD)")
 	trustProxy := flag.Bool("trust-proxy", false, "take client IPs from X-Forwarded-For (only behind a reverse proxy that sets it)")
 	notifyMirror := flag.Bool("notify-mirror", true, "ask the public module mirror and checksum database to fetch each new version (skipped for local module hosts)")

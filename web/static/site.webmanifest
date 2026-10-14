@@ -1,6 +1,6 @@
 {
-  "name": "Gopkgreg",
-  "short_name": "Gopkgreg",
+  "name": "gopkgreg",
+  "short_name": "gopkgreg",
   "description": "The Go module registry",
   "start_url": "/",
   "display": "browser",

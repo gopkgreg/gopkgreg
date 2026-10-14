@@ -230,13 +230,13 @@ func (s *server) notifyRole(r *http.Request, target, kind, name, role, by, path 
 		return
 	}
 	if pending {
-		s.emailUser(target, accounts.EmailAccess, "@"+by+" invited you to "+name+" on Gopkgreg",
-			fmt.Sprintf("@%s invited you to be %s %s of %s on Gopkgreg. Nothing changes until you accept: accept or decline on your account page.\n\n%s/account",
+		s.emailUser(target, accounts.EmailAccess, "@"+by+" invited you to "+name+" on gopkgreg",
+			fmt.Sprintf("@%s invited you to be %s %s of %s on gopkgreg. Nothing changes until you accept: accept or decline on your account page.\n\n%s/account",
 				by, article(role), role, what, s.siteURL))
 		return
 	}
 	s.emailUser(target, accounts.EmailAccess, "You're now "+article(role)+" "+role+" of "+name,
-		fmt.Sprintf("@%s made you %s %s of %s on Gopkgreg.\n\n%s%s", by, article(role), role, what, s.siteURL, path))
+		fmt.Sprintf("@%s made you %s %s of %s on gopkgreg.\n\n%s%s", by, article(role), role, what, s.siteURL, path))
 }
 
 // ---- Invitations and leaving ----

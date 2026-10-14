@@ -1,4 +1,4 @@
-# Gopkgreg behind Caddy with automatic HTTPS.
+# gopkgreg behind Caddy with automatic HTTPS.
 #
 #   cp gopkgreg.env.example gopkgreg.env   # then fill it in
 #   docker compose up -d

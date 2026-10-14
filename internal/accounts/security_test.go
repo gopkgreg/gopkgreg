@@ -39,7 +39,7 @@ func TestTwoFactorLogin(t *testing.T) {
 	u, _ := s.Register(ctx, "alice", "alice@example.com", "correct horse battery", client)
 
 	setup, err := s.BeginTOTP(ctx, u)
-	if err != nil || !strings.HasPrefix(setup.URI, "otpauth://totp/Gopkgreg:alice?") || len(setup.Secret) != 32 {
+	if err != nil || !strings.HasPrefix(setup.URI, "otpauth://totp/gopkgreg:alice?") || len(setup.Secret) != 32 {
 		t.Fatalf("BeginTOTP = %+v, %v", setup, err)
 	}
 	if _, err := s.ConfirmTOTP(ctx, u, "000000", client); !errors.Is(err, ErrBadSecondFactor) {
@@ -134,7 +134,7 @@ func TestPasswordResetAndChange(t *testing.T) {
 	if err := s.RequestPasswordReset(ctx, "ALICE@example.com", client); err != nil {
 		t.Fatal(err)
 	}
-	body := rec.waitForMail(t, "alice@example.com", "Reset your Gopkgreg password") // sent in the background
+	body := rec.waitForMail(t, "alice@example.com", "Reset your gopkgreg password") // sent in the background
 	i := strings.Index(body, "token=")
 	token := strings.Fields(body[i+len("token="):])[0]
 	if err := s.CheckResetToken(ctx, token); err != nil {
@@ -218,7 +218,7 @@ func TestSecurityHardening(t *testing.T) {
 	if err := s.RequestPasswordReset(ctx, "alice@example.com", client); err != nil {
 		t.Fatal(err)
 	}
-	body := rec.waitForMail(t, "alice@example.com", "Reset your Gopkgreg password")
+	body := rec.waitForMail(t, "alice@example.com", "Reset your gopkgreg password")
 	token := strings.Fields(body[strings.Index(body, "token=")+len("token="):])[0]
 	if _, err := s.ResetPassword(ctx, token, "a brand new passphrase", client); err != nil {
 		t.Fatal(err)

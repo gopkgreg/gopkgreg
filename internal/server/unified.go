@@ -110,7 +110,7 @@ func (s *server) unifiedSearch(ctx context.Context, data *searchData) error {
 			return ctx.Err()
 		}
 		s.log.Warn("public search", "query", data.Query, "err", err)
-		data.PublicError = "Public modules from pkg.go.dev didn't load in time, so only modules on Gopkgreg are shown. Search again to retry."
+		data.PublicError = "Public modules from pkg.go.dev didn't load in time, so only modules on gopkgreg are shown. Search again to retry."
 	} else {
 		for i, r := range rs {
 			public = append(public, ranking.Candidate{Path: r.Path, Version: r.Version, Synopsis: r.Synopsis, Rank: i, Of: len(rs)})

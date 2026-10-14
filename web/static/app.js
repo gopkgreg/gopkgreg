@@ -1,4 +1,4 @@
-// Gopkgreg landing page: search, release history and docs.
+// gopkgreg landing page: search, release history and docs.
 // Page state lives in the URL: /?q=<query> shows results, /?m=<module>&v=<version> shows a library.
 (() => {
   "use strict";
@@ -115,7 +115,7 @@
       showLibrary(state, scroll);
     } else {
       librarySection.hidden = true;
-      document.title = "Gopkgreg · The Go module registry";
+      document.title = "gopkgreg · The Go module registry";
     }
   }
 
@@ -131,7 +131,7 @@
 
   // ---------- Library ----------
   async function showLibrary(state, scroll) {
-    document.title = `${state.m} · Gopkgreg`;
+    document.title = `${state.m} · gopkgreg`;
     librarySection.hidden = false;
     libraryBody.replaceChildren(backButton(state), h("p", { class: "loading" }, `Loading the release history of ${state.m}…`));
     if (scroll) librarySection.scrollIntoView({ block: "start" });

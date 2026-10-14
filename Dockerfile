@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# Gopkgreg registry server. The SQLite driver is pure Go, so the binaries
+# gopkgreg registry server. The SQLite driver is pure Go, so the binaries
 # are static and the runtime image has no shell or package manager.
 FROM golang:1.27.1 AS build
 WORKDIR /src

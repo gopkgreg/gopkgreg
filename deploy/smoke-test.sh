@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Checks a live Gopkgreg deployment from the outside, the way users reach it.
+# Checks a live gopkgreg deployment from the outside, the way users reach it.
 #
 #   deploy/smoke-test.sh https://gopkgreg.example.com
 #   deploy/smoke-test.sh https://gopkgreg.example.com gopkgreg.example.com/you/module@v0.1.0

@@ -1,4 +1,4 @@
-# Deploying Gopkgreg
+# Deploying gopkgreg
 
 What's in this directory:
 

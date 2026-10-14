@@ -34,7 +34,7 @@ func OSEnv() Env {
 	return Env{Stdin: os.Stdin, Stdout: os.Stdout, Stderr: os.Stderr, Getenv: os.Getenv, Dir: dir, HTTP: http.DefaultClient}
 }
 
-const usage = `gopkgreg publishes Go modules to a Gopkgreg registry.
+const usage = `gopkgreg publishes Go modules to a gopkgreg registry.
 
 Usage:
   gopkgreg login   [--registry URL]         save an API token for a registry

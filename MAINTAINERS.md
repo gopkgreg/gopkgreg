@@ -1,6 +1,6 @@
 # Maintainers
 
-The people who review, merge and release Gopkgreg. How they're chosen, and how to become one, is in [GOVERNANCE.md](GOVERNANCE.md).
+The people who review, merge and release gopkgreg. How they're chosen, and how to become one, is in [GOVERNANCE.md](GOVERNANCE.md).
 
 ## Maintainers
 

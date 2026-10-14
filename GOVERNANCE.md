@@ -1,6 +1,6 @@
 # Governance
 
-How Gopkgreg is run: who decides what, and how to get a say. The short version: anyone can contribute, people who keep showing up get more responsibility, and decisions happen in the open.
+How gopkgreg is run: who decides what, and how to get a say. The short version: anyone can contribute, people who keep showing up get more responsibility, and decisions happen in the open.
 
 ## Roles
 

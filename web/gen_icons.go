@@ -1,6 +1,6 @@
 //go:build ignore
 
-// gen_icons renders the Gopkgreg logo, a module box in the Go blues, to
+// gen_icons renders the gopkgreg logo, a module box in the Go blues, to
 // every raster size the site links: favicon.ico, the Apple touch icon,
 // the web app manifest icons and the link-preview image. It draws the same
 // polygons as static/favicon.svg, with supersampling, and needs no

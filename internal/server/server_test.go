@@ -162,7 +162,7 @@ func TestRoutes(t *testing.T) {
 		{"/api/proxy/example.com/hello/@v/v1.1.0.info", 200, "application/json", `"Hash":"9b2e61c04d7a83f5e2b1c9d0a4f3e7b6c5d8a291"`},
 		{"/api/proxy/example.com/hello/@v/v1.1.0.zip", 200, "application/zip", "example.com/hello@v1.1.0/hello.go"},
 		{"/tokens.css", 200, "text/css; charset=utf-8", "--go-gopher-blue"},
-		{"/static/app.js", 200, "text/javascript; charset=utf-8", "Gopkgreg"},
+		{"/static/app.js", 200, "text/javascript; charset=utf-8", "gopkgreg"},
 		{"/healthz", 200, "text/plain; charset=utf-8", "ok"},
 		{"/favicon.ico", 200, "image/x-icon", ""},
 		{"/static/favicon.svg", 200, "image/svg+xml", "#00ADD8"},
