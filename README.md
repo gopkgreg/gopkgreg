@@ -23,7 +23,7 @@ A package registry for Go modules, in the spirit of pypi.org.
 - **Project pages:** every module has a page at `/<owner>/<module>`, like pypi.org/project/…, with the rendered README, docs, release history, downloadable files with checksums, license, owner and links.
 - **Zero-setup installs:** on a public HTTPS domain, `go get gopkgreg.com/alice/retry` works with default Go settings. The registry answers the go command's `?go-get=1` lookup with a `go-import … mod` tag, and the public module mirror and checksum database pick new versions up automatically.
 - **GOPROXY server:** serves hosted modules to the `go` command at `/api/proxy`.
-- **Discovery:** full-text search with filters (license, Go version, last release, deprecated) and sorting (relevance, downloads, recently updated, newest), download counts and charts, and a home page with just-updated, most-downloaded and new modules. Public pkg.go.dev results follow in their own section.
+- **Discovery:** full-text search with filters (license, Go version, last release, deprecated) and sorting (relevance, downloads, recently updated, newest), download counts and charts, and a home page with just-updated, most-downloaded and new modules, plus the newest releases across the Go ecosystem from the public module index (shown, not hosted). Public pkg.go.dev results follow in their own section.
 - **Public modules:** modules that aren't hosted here come from `proxy.golang.org`, with search and docs from `pkg.go.dev`. Run with `-offline` to turn this off.
 
 Roadmap: accounts (done) → publish from the CLI (done) → zero-setup `go get` (done; confirm on your domain) → project pages (done) → maintainer tools (done) → search and stats (done) → trust and operations (done) → trusted publishing from GitHub Actions (done) → launch readiness (done; see [deploy/README.md](deploy/README.md)) → accounts and feeds (done) → security advisories (done) → production storage: S3 and Litestream (done) → documentation and dependency graph (done) → badges and public JSON API (done) → publish-time safety checks (done) → unified search (done) → passkeys (done) → organization teams (done).
@@ -56,6 +56,7 @@ Open http://localhost:8080 and choose **Register**. Without `-smtp-addr`, emails
 | `-smtp-addr` / `-smtp-from` / `-smtp-user` | | SMTP server for real emails; password in `$GOPKGREG_SMTP_PASSWORD` |
 | `-upstream` | `https://proxy.golang.org` | Public proxy for modules not hosted here |
 | `-pkgsite` | `https://pkg.go.dev` | Public search and docs links |
+| `-go-index` | `https://index.golang.org/index` | Go module index whose newest tagged releases the home page lists under **Just released across Go**: paths and versions only, read every two minutes. Empty, or `-offline`, turns it off |
 | `-offline` | `false` | Hosted modules only, no outbound requests |
 | `-trust-proxy` | `false` | Read client IPs from `X-Forwarded-For` (only behind your reverse proxy) |
 | `-notify-mirror` | `true` | After each publish, ask `proxy.golang.org` and `sum.golang.org` to fetch the version. Skipped for local module hosts |
@@ -599,6 +600,7 @@ internal/store/       on-disk module store (os.Root) and streaming zips
 internal/goproxy/     GOPROXY handler and client
 internal/godoc/       package docs from source via go/parser + go/doc
 internal/discovery/   search, release history, docs; hosted first, then public
+internal/goindex/     follows index.golang.org for the home page's newest public releases (paths and versions only)
 internal/server/      routes, JSON API, middleware
 internal/tokens/      Go brand color tokens → /tokens.css, contrast tests
 deploy/               Docker Compose + Caddy, systemd unit, env file, launch checklist, smoke test
