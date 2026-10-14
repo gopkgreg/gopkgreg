@@ -15,23 +15,23 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/blob"
-	"github.com/codebled/gopherdex/internal/database"
-	"github.com/codebled/gopherdex/internal/discovery"
-	"github.com/codebled/gopherdex/internal/goproxy"
-	"github.com/codebled/gopherdex/internal/mail"
-	"github.com/codebled/gopherdex/internal/registry"
-	"github.com/codebled/gopherdex/internal/server"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/blob"
+	"github.com/gopkgreg/gopkgreg/internal/database"
+	"github.com/gopkgreg/gopkgreg/internal/discovery"
+	"github.com/gopkgreg/gopkgreg/internal/goproxy"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/server"
 )
 
-const moduleHost = "gopherdex.test"
+const moduleHost = "gopkgreg.test"
 
 type nopMailer struct{}
 
 func (nopMailer) Send(context.Context, mail.Message) error { return nil }
 
-// startRegistry runs a real Gopherdex server with a verified user "alice"
+// startRegistry runs a real gopkgreg server with a verified user "alice"
 // and returns its URL and alice's API token.
 func startRegistry(t *testing.T) (*httptest.Server, string) {
 	t.Helper()
@@ -164,7 +164,7 @@ func TestLoginWhoamiPublish(t *testing.T) {
 	mod := moduleHost + "/alice/retry"
 	repo := gitRepo(t, mod)
 	configFile := filepath.Join(t.TempDir(), "credentials.json")
-	r := &runner{t: t, env: map[string]string{"GOPHERDEX_CONFIG": configFile}, dir: repo, client: srv.Client()}
+	r := &runner{t: t, env: map[string]string{"GOPKGREG_CONFIG": configFile}, dir: repo, client: srv.Client()}
 
 	code, _, stderr := r.run("", "whoami")
 	if code != 1 {
@@ -172,7 +172,7 @@ func TestLoginWhoamiPublish(t *testing.T) {
 	}
 	mustContain(t, stderr, "no registry chosen")
 
-	code, _, stderr = r.run("gdx_not-a-real-token\n", "login", "--registry", srv.URL)
+	code, _, stderr = r.run("gpk_not-a-real-token\n", "login", "--registry", srv.URL)
 	if code != 1 {
 		t.Fatalf("login with bad token: exit %d", code)
 	}
@@ -302,7 +302,7 @@ func TestLoginWhoamiPublish(t *testing.T) {
 
 func TestNormalizeRegistry(t *testing.T) {
 	for in, want := range map[string]string{
-		"https://gopherdex.dev/":  "https://gopherdex.dev",
+		"https://gopkgreg.com/":   "https://gopkgreg.com",
 		"http://localhost:8080":   "http://localhost:8080",
 		"http://127.0.0.1:9000/x": "http://127.0.0.1:9000/x",
 	} {
@@ -310,7 +310,7 @@ func TestNormalizeRegistry(t *testing.T) {
 			t.Errorf("normalizeRegistry(%q) = %q, %v; want %q", in, got, err, want)
 		}
 	}
-	for _, bad := range []string{"http://gopherdex.dev", "gopherdex.dev", "https://user:pw@gopherdex.dev", "ftp://x.dev"} {
+	for _, bad := range []string{"http://gopkgreg.com", "gopkgreg.com", "https://user:pw@gopkgreg.com", "ftp://x.dev"} {
 		if _, err := normalizeRegistry(bad); err == nil {
 			t.Errorf("normalizeRegistry(%q) accepted", bad)
 		}

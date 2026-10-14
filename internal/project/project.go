@@ -21,16 +21,16 @@ import (
 	xmodule "golang.org/x/mod/module"
 	"golang.org/x/mod/semver"
 
-	"github.com/codebled/gopherdex/internal/godoc"
-	"github.com/codebled/gopherdex/internal/gomod"
-	"github.com/codebled/gopherdex/internal/license"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/godoc"
+	"github.com/gopkgreg/gopkgreg/internal/gomod"
+	"github.com/gopkgreg/gopkgreg/internal/license"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 // Page is everything the project page template needs.
 type Page struct {
-	Path              string // module path, e.g. gopherdex.dev/alice/retry/v2
+	Path              string // module path, e.g. gopkgreg.com/alice/retry/v2
 	Namespace         string
 	Name              string // "retry"
 	Major             string // "v2", or "" for v0/v1
@@ -113,7 +113,7 @@ type versionContent struct {
 const cacheSize = 256
 
 // URL returns the site-relative project URL for a module path, e.g.
-// gopherdex.dev/alice/retry → /alice/retry.
+// gopkgreg.com/alice/retry → /alice/retry.
 func (s *Service) URL(modPath, version string) string {
 	u := strings.TrimPrefix(modPath, s.ModuleHost)
 	if version != "" {

@@ -14,15 +14,15 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/blob"
-	"github.com/codebled/gopherdex/internal/database"
-	"github.com/codebled/gopherdex/internal/discovery"
-	"github.com/codebled/gopherdex/internal/goproxy"
-	"github.com/codebled/gopherdex/internal/mail"
-	"github.com/codebled/gopherdex/internal/registry"
-	"github.com/codebled/gopherdex/internal/store"
-	"github.com/codebled/gopherdex/web"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/blob"
+	"github.com/gopkgreg/gopkgreg/internal/database"
+	"github.com/gopkgreg/gopkgreg/internal/discovery"
+	"github.com/gopkgreg/gopkgreg/internal/goproxy"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/store"
+	"github.com/gopkgreg/gopkgreg/web"
 )
 
 // newTestServer serves the sample modules in data/modules, offline, with a
@@ -71,16 +71,16 @@ func newTestEnvWith(t *testing.T, configure func(*Config)) *testEnv {
 
 	log := slog.New(slog.NewTextHandler(io.Discard, nil))
 	rec := &mailRecorder{}
-	reg := &registry.Registry{DB: db, Blobs: blobs, ModuleHost: "gopherdex.test", MaxZipSize: 1 << 20, Log: log}
+	reg := &registry.Registry{DB: db, Blobs: blobs, ModuleHost: "gopkgreg.test", MaxZipSize: 1 << 20, Log: log}
 	hosted := registry.Multi{reg, st}
-	disc := &discovery.Service{Local: hosted, ProxyPrefix: "/api/proxy", DocsBase: "https://pkg.go.dev", Log: log, ModuleHost: "gopherdex.test"}
-	accts := &accounts.Service{DB: db, Mailer: rec, BaseURL: "http://gopherdex.test", Log: log}
+	disc := &discovery.Service{Local: hosted, ProxyPrefix: "/api/proxy", DocsBase: "https://pkg.go.dev", Log: log, ModuleHost: "gopkgreg.test"}
+	accts := &accounts.Service{DB: db, Mailer: rec, BaseURL: "http://gopkgreg.test", Log: log}
 	downloads := &registry.Downloads{Registry: reg}
 	proxy := goproxy.NewHandler(hosted, log)
 	proxy.OnZip = downloads.Count
 	cfg := Config{
 		Discovery: disc, Accounts: accts, Registry: reg, Proxy: proxy, Log: log,
-		SiteURL: "http://gopherdex.test", ModuleHost: "gopherdex.test", Admins: []string{"alice"},
+		SiteURL: "http://gopkgreg.test", ModuleHost: "gopkgreg.test", Admins: []string{"alice"},
 	}
 	if configure != nil {
 		configure(&cfg)
@@ -162,7 +162,7 @@ func TestRoutes(t *testing.T) {
 		{"/api/proxy/example.com/hello/@v/v1.1.0.info", 200, "application/json", `"Hash":"9b2e61c04d7a83f5e2b1c9d0a4f3e7b6c5d8a291"`},
 		{"/api/proxy/example.com/hello/@v/v1.1.0.zip", 200, "application/zip", "example.com/hello@v1.1.0/hello.go"},
 		{"/tokens.css", 200, "text/css; charset=utf-8", "--go-gopher-blue"},
-		{"/static/app.js", 200, "text/javascript; charset=utf-8", "Gopherdex"},
+		{"/static/app.js", 200, "text/javascript; charset=utf-8", "gopkgreg"},
 		{"/healthz", 200, "text/plain; charset=utf-8", "ok"},
 		{"/favicon.ico", 200, "image/x-icon", ""},
 		{"/static/favicon.svg", 200, "image/svg+xml", "#00ADD8"},
@@ -245,10 +245,10 @@ func TestTokensETag(t *testing.T) {
 
 func TestAPISearch(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
 	for _, q := range []string{"/api/search?q=retry", "/api/search?q=retry&scope=hosted"} {
 		resp, body := fetch(t, env.srv, q)
-		if resp.StatusCode != http.StatusOK || !strings.Contains(body, `"path":"gopherdex.test/alice/retry"`) {
+		if resp.StatusCode != http.StatusOK || !strings.Contains(body, `"path":"gopkgreg.test/alice/retry"`) {
 			t.Errorf("%s: %d %s", q, resp.StatusCode, body)
 		}
 	}

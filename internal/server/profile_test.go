@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
 )
 
 // sentTo reports whether any email to "to" has a subject containing subject.
@@ -26,7 +26,7 @@ func (m *mailRecorder) sentTo(to, subject string) bool {
 
 func TestAccountSettings(t *testing.T) {
 	env := newTestEnv(t)
-	mod := "gopherdex.test/alice/retry"
+	mod := "gopkgreg.test/alice/retry"
 	env.publish(t, mod, "v1.0.0")
 	alice := newBrowser(t, env.srv.URL)
 	alice.post("/login", url.Values{"login": {"alice"}, "password": {"correct horse battery"}})
@@ -108,15 +108,15 @@ func TestAccountSettings(t *testing.T) {
 
 func TestFeeds(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
-	env.publish(t, "gopherdex.test/alice/retry", "v1.1.0")
-	env.publish(t, "gopherdex.test/alice/retry/v2", "v2.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.1.0")
+	env.publish(t, "gopkgreg.test/alice/retry/v2", "v2.0.0")
 
 	for path, want := range map[string][]string{
-		"/feeds/releases.atom":       {`<feed xmlns="http://www.w3.org/2005/Atom">`, "<title>gopherdex.test/alice/retry v1.1.0</title>", "<title>gopherdex.test/alice/retry/v2 v2.0.0</title>", `href="http://gopherdex.test/alice/retry@v1.0.0"`, "<name>@alice</name>"},
-		"/feeds/new.atom":            {"<title>gopherdex.test/alice/retry</title>", "<title>gopherdex.test/alice/retry/v2</title>"},
+		"/feeds/releases.atom":       {`<feed xmlns="http://www.w3.org/2005/Atom">`, "<title>gopkgreg.test/alice/retry v1.1.0</title>", "<title>gopkgreg.test/alice/retry/v2 v2.0.0</title>", `href="http://gopkgreg.test/alice/retry@v1.0.0"`, "<name>@alice</name>"},
+		"/feeds/new.atom":            {"<title>gopkgreg.test/alice/retry</title>", "<title>gopkgreg.test/alice/retry/v2</title>"},
 		"/feeds/alice.atom":          {"<title>Releases by @alice</title>", "v2.0.0"},
-		"/feeds/alice/retry.atom":    {"<title>Releases of gopherdex.test/alice/retry</title>", "v1.0.0", "<summary>Package lib is a test.</summary>"},
+		"/feeds/alice/retry.atom":    {"<title>Releases of gopkgreg.test/alice/retry</title>", "v1.0.0", "<summary>Package lib is a test.</summary>"},
 		"/feeds/alice/retry/v2.atom": {"v2.0.0"},
 	} {
 		resp, body := fetch(t, env.srv, path)

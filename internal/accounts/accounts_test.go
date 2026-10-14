@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/database"
-	"github.com/codebled/gopherdex/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/database"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
 )
 
 type recorder struct {
@@ -62,7 +62,7 @@ func newService(t *testing.T) (*Service, *recorder, *clock) {
 	t.Cleanup(func() { db.Close() })
 	rec := &recorder{}
 	c := &clock{t: time.Date(2026, 9, 17, 12, 0, 0, 0, time.UTC)}
-	return &Service{DB: db, Mailer: rec, BaseURL: "https://gopherdex.test", Now: c.now}, rec, c
+	return &Service{DB: db, Mailer: rec, BaseURL: "https://gopkgreg.test", Now: c.now}, rec, c
 }
 
 var client = Client{IP: "192.0.2.1", UserAgent: "test"}

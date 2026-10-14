@@ -71,7 +71,7 @@ func checkPassword(password, encoded string) (bool, error) {
 // dummyHash is compared against when a login names an unknown account, so
 // response time does not reveal which usernames exist.
 var dummyHash = func() string {
-	h, err := hashPassword("gopherdex-dummy-password")
+	h, err := hashPassword("gopkgreg-dummy-password")
 	if err != nil {
 		panic(err)
 	}

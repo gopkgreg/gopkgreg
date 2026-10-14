@@ -219,7 +219,7 @@ func TestSearchAtScaleBehaviour(t *testing.T) {
 
 	// The registry's own host isn't indexed, so it doesn't match everything,
 	// but a pasted full path still finds the module.
-	if _, n, _ := f.reg.Search(ctx, SearchQuery{Text: "gopherdex"}); n != 0 {
+	if _, n, _ := f.reg.Search(ctx, SearchQuery{Text: "gopkgreg"}); n != 0 {
 		t.Errorf("the module host matched %d modules", n)
 	}
 	for _, q := range []string{host + "/alice/kv", "https://" + host + "/alice/kv"} {

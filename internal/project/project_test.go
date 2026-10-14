@@ -11,15 +11,15 @@ import (
 	xmodule "golang.org/x/mod/module"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/blob"
-	"github.com/codebled/gopherdex/internal/database"
-	"github.com/codebled/gopherdex/internal/license"
-	"github.com/codebled/gopherdex/internal/mail"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/blob"
+	"github.com/gopkgreg/gopkgreg/internal/database"
+	"github.com/gopkgreg/gopkgreg/internal/license"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
-const host = "gopherdex.test"
+const host = "gopkgreg.test"
 
 const mitLicense = `MIT License
 
@@ -149,7 +149,7 @@ func TestPage(t *testing.T) {
 	if !strings.HasPrefix(p.GoSum[0], mod+" v1.1.0 h1:") || !strings.HasPrefix(p.GoSum[1], mod+" v1.1.0/go.mod h1:") {
 		t.Errorf("go.sum lines = %q", p.GoSum)
 	}
-	if p.ZipURL != "https://gopherdex.test/api/proxy/gopherdex.test/alice/retry/@v/v1.1.0.zip" {
+	if p.ZipURL != "https://gopkgreg.test/api/proxy/gopkgreg.test/alice/retry/@v/v1.1.0.zip" {
 		t.Errorf("zip URL = %q", p.ZipURL)
 	}
 	if len(p.MajorVersions) != 2 || p.MajorVersions[0].Label != "v0/v1" || !p.MajorVersions[0].Current || p.MajorVersions[1].URL != "/alice/retry/v2" {

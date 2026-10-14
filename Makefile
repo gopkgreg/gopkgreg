@@ -1,14 +1,14 @@
 .PHONY: run run-offline test vet fmt lint text tidy vuln actions check build dist docker clean bench-seed bench-serve bench-load
 
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo devel)
-LDFLAGS := -s -w -X github.com/codebled/gopherdex/internal/version.Version=$(VERSION)
+LDFLAGS := -s -w -X github.com/gopkgreg/gopkgreg/internal/version.Version=$(VERSION)
 PLATFORMS := linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64
 
 run:
-	go run ./cmd/gopherdexd
+	go run ./cmd/gopkgregd
 
 run-offline:
-	go run ./cmd/gopherdexd -offline
+	go run ./cmd/gopkgregd -offline
 
 # Explicit patterns, not ./...: a benchmark dataset in bench/ holds about a
 # million files for the go command to walk.
@@ -54,15 +54,15 @@ actions:
 check: lint text tidy test
 
 build:
-	go build -trimpath -ldflags "$(LDFLAGS)" -o bin/gopherdexd ./cmd/gopherdexd
-	go build -trimpath -ldflags "$(LDFLAGS)" -o bin/gopherdex ./cmd/gopherdex
+	go build -trimpath -ldflags "$(LDFLAGS)" -o bin/gopkgregd ./cmd/gopkgregd
+	go build -trimpath -ldflags "$(LDFLAGS)" -o bin/gopkgreg ./cmd/gopkgreg
 
 # Release binaries for every platform in dist/, with checksums.
 dist:
 	rm -rf dist && mkdir -p dist
 	@for p in $(PLATFORMS); do \
 		os=$${p%/*}; arch=$${p#*/}; ext=; [ $$os = windows ] && ext=.exe; \
-		for cmd in gopherdex gopherdexd; do \
+		for cmd in gopkgreg gopkgregd; do \
 			echo "dist/$$cmd-$(VERSION)-$$os-$$arch$$ext"; \
 			CGO_ENABLED=0 GOOS=$$os GOARCH=$$arch go build -trimpath -ldflags "$(LDFLAGS)" \
 				-o dist/$$cmd-$(VERSION)-$$os-$$arch$$ext ./cmd/$$cmd || exit 1; \
@@ -71,18 +71,18 @@ dist:
 	cd dist && shasum -a 256 * > SHA256SUMS
 
 docker:
-	docker build --build-arg VERSION=$(VERSION) -t gopherdex:$(VERSION) .
+	docker build --build-arg VERSION=$(VERSION) -t gopkgreg:$(VERSION) .
 
 # Load testing (see "Load testing" in README.md). PROFILE=full for 100k modules.
 PROFILE ?= small
 bench-seed:
-	go run ./cmd/gdxbench seed -profile $(PROFILE)
+	go run ./cmd/gpkbench seed -profile $(PROFILE)
 
 bench-serve:
-	go run ./cmd/gopherdexd -db bench/data/gopherdex.db -blobs bench/data/blobs -offline -trust-proxy -notify-mirror=false
+	go run ./cmd/gopkgregd -db bench/data/gopkgreg.db -blobs bench/data/blobs -offline -trust-proxy -notify-mirror=false
 
 bench-load:
-	go run ./cmd/gdxbench load -c 32 -d 60s
+	go run ./cmd/gpkbench load -c 32 -d 60s
 
 clean:
 	rm -rf bin dist

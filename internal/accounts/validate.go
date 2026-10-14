@@ -23,7 +23,7 @@ const (
 )
 
 // Usernames become the owner segment of module paths
-// (gopherdex.dev/<username>/<module>), so they use the strictest safe
+// (gopkgreg.com/<username>/<module>), so they use the strictest safe
 // subset of module path characters.
 var usernamePattern = regexp.MustCompile(`^[a-z0-9](?:[a-z0-9]|-[a-z0-9]){1,38}$`)
 
@@ -35,7 +35,7 @@ var majorVersion = regexp.MustCompile(`^v[0-9]+$`)
 var reserved = []string{
 	"about", "account", "accounts", "admin", "administrator", "advisories", "advisory", "api", "app", "assets", "auth",
 	"badge", "badges", "feed", "feeds", "vulndb", "vuln",
-	"blog", "docs", "download", "downloads", "favicon.ico", "gopherdex", "golang", "go",
+	"blog", "docs", "download", "downloads", "favicon.ico", "gopkgreg", "golang", "go",
 	"healthz", "help", "join", "legal", "login", "logout", "mail", "modules", "new", "publish", "news", "org",
 	"orgs", "organizations", "privacy", "project", "projects", "proxy", "register", "report", "reset-password", "forgot-password", "root",
 	"search", "security", "settings", "signin", "signout", "signup", "sitemap", "static",

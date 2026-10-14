@@ -29,7 +29,7 @@ type S3 struct {
 	Endpoint  string // e.g. https://s3.us-east-1.amazonaws.com or https://<account>.r2.cloudflarestorage.com
 	Region    string // "auto" for R2
 	Bucket    string
-	Prefix    string // key prefix inside the bucket, e.g. "gopherdex/"
+	Prefix    string // key prefix inside the bucket, e.g. "gopkgreg/"
 	PathStyle bool   // https://endpoint/bucket/key instead of https://bucket.endpoint/key
 	AccessKey string
 	SecretKey string
@@ -186,7 +186,7 @@ func (s *S3) Put(ctx context.Context, key string, r io.Reader, maxSize int64) (I
 	if err := checkKey(key); err != nil {
 		return Info{}, err
 	}
-	tmp, err := os.CreateTemp("", "gopherdex-blob-*")
+	tmp, err := os.CreateTemp("", "gopkgreg-blob-*")
 	if err != nil {
 		return Info{}, err
 	}
@@ -272,7 +272,7 @@ func (s *S3) open(ctx context.Context, key string) (Reader, error) {
 		}
 		return &memReader{Reader: bytes.NewReader(data)}, nil
 	}
-	f, err := os.CreateTemp("", "gopherdex-blob-*")
+	f, err := os.CreateTemp("", "gopkgreg-blob-*")
 	if err != nil {
 		return nil, err
 	}

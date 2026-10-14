@@ -50,13 +50,13 @@ func uploadFiles(t *testing.T, env *testEnv, token, modPath, version string, fil
 
 func TestPublishChecksOverHTTP(t *testing.T) {
 	env := newTestEnv(t) // alice is an admin
-	mod := "gopherdex.test/alice/retry"
+	mod := "gopkgreg.test/alice/retry"
 	env.publish(t, mod, "v1.0.0")
 	alice := newBrowser(t, env.srv.URL)
 	alice.post("/login", url.Values{"login": {"alice"}, "password": {"correct horse battery"}})
 	_, body := alice.post("/account/tokens", url.Values{"name": {"ci"}, "expires": {"30"}, "password": {"correct horse battery"}})
-	token := strings.Split(strings.Split(body, `data-copy="gdx_`)[1], `"`)[0]
-	token = "gdx_" + token
+	token := strings.Split(strings.Split(body, `data-copy="gpk_`)[1], `"`)[0]
+	token = "gpk_" + token
 
 	status, body := uploadFiles(t, env, token, mod, "v1.1.0", map[string]string{
 		"go.mod": "module " + mod + "\n", "lib.go": "package lib\n", "tool.exe": "MZ\x90\x00\x03",

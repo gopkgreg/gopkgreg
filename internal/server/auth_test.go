@@ -82,7 +82,7 @@ func TestAccountFlow(t *testing.T) {
 	}
 
 	resp, body = b.get("/signup")
-	expect(t, resp, body, http.StatusOK, "gopherdex.test/")
+	expect(t, resp, body, http.StatusOK, "gopkgreg.test/")
 
 	resp, body = b.post("/signup", url.Values{"username": {"API"}, "email": {"a@example.com"}, "password": {"correct horse battery"}})
 	expect(t, resp, body, http.StatusUnprocessableEntity, "That name is reserved")
@@ -100,7 +100,7 @@ func TestAccountFlow(t *testing.T) {
 
 	resp, body = b.get("/account?done=signed-up")
 	expect(t, resp, body, http.StatusOK, "Not verified")
-	if !strings.Contains(body, "@alice") || !strings.Contains(body, "gopherdex.test/alice/") || resp.Header.Get("Cache-Control") != "no-store" {
+	if !strings.Contains(body, "@alice") || !strings.Contains(body, "gopkgreg.test/alice/") || resp.Header.Get("Cache-Control") != "no-store" {
 		t.Fatalf("account page is missing user details or no-store")
 	}
 
@@ -108,7 +108,7 @@ func TestAccountFlow(t *testing.T) {
 	resp, body = b.post("/account/tokens", url.Values{"name": {"laptop"}, "expires": {"90"}, "password": {"correct horse battery"}})
 	expect(t, resp, body, http.StatusForbidden, "Verify your email")
 
-	link := regexp.MustCompile(`http://gopherdex\.test(/verify-email\?token=\S+)`).FindStringSubmatch(mails.last(t).Body)
+	link := regexp.MustCompile(`http://gopkgreg\.test(/verify-email\?token=\S+)`).FindStringSubmatch(mails.last(t).Body)
 	if link == nil {
 		t.Fatalf("verification email has no link:\n%s", mails.last(t).Body)
 	}
@@ -122,7 +122,7 @@ func TestAccountFlow(t *testing.T) {
 	expect(t, resp, body, http.StatusUnprocessableEntity, "Enter your current password")
 	resp, body = b.post("/account/tokens", url.Values{"name": {"laptop"}, "expires": {"90"}, "password": {"correct horse battery"}})
 	expect(t, resp, body, http.StatusCreated, "Copy it now")
-	secret := regexp.MustCompile(`gdx_[A-Za-z0-9_-]{43}`).FindString(body)
+	secret := regexp.MustCompile(`gpk_[A-Za-z0-9_-]{43}`).FindString(body)
 	if secret == "" {
 		t.Fatal("new token not shown")
 	}
@@ -136,10 +136,10 @@ func TestAccountFlow(t *testing.T) {
 		Token     struct{ Scope string }
 	}
 	json.Unmarshal([]byte(body), &who)
-	if who.Namespace != "gopherdex.test/alice" || who.Token.Scope != "namespace:alice" {
+	if who.Namespace != "gopkgreg.test/alice" || who.Token.Scope != "namespace:alice" {
 		t.Fatalf("whoami = %s", body)
 	}
-	resp, body = api.do(http.MethodGet, "/api/whoami", nil, http.Header{"Authorization": {"Bearer gdx_wrong"}})
+	resp, body = api.do(http.MethodGet, "/api/whoami", nil, http.Header{"Authorization": {"Bearer gpk_wrong"}})
 	expect(t, resp, body, http.StatusUnauthorized, "invalid")
 
 	// Revoke it from the account page.

@@ -15,14 +15,14 @@ import (
 	xmodule "golang.org/x/mod/module"
 	"golang.org/x/mod/semver"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/vulndb"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/vulndb"
 )
 
 // AdvisoryPrefix starts the IDs of advisories published here, e.g.
-// GDX-2026-0001, so they never collide with GO-… IDs from vuln.go.dev.
-const AdvisoryPrefix = "GDX"
+// GPK-2026-0001, so they never collide with GO-… IDs from vuln.go.dev.
+const AdvisoryPrefix = "GPK"
 
 // VersionRange is an affected range: from Introduced (or the first
 // version) up to but not including Fixed (or every later version).
@@ -40,7 +40,7 @@ type AffectedPackage struct {
 
 // Advisory is a security advisory for a hosted module.
 type Advisory struct {
-	ID          string // GDX-2026-0001
+	ID          string // GPK-2026-0001
 	ModulePath  string
 	Summary     string
 	Details     string

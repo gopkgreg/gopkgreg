@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Checks a live Gopherdex deployment from the outside, the way users reach it.
+# Checks a live gopkgreg deployment from the outside, the way users reach it.
 #
-#   deploy/smoke-test.sh https://gopherdex.example.com
-#   deploy/smoke-test.sh https://gopherdex.example.com gopherdex.example.com/you/module@v0.1.0
+#   deploy/smoke-test.sh https://gopkgreg.example.com
+#   deploy/smoke-test.sh https://gopkgreg.example.com gopkgreg.example.com/you/module@v0.1.0
 #
 # With a module, it also runs a real "go get" with default Go settings (no
 # GOPROXY, GONOSUMDB or GOPRIVATE) in a throwaway module cache, which is the

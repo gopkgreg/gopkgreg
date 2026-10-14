@@ -7,14 +7,14 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/codebled/gopherdex/internal/badge"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/badge"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 // badgeKinds are the badges a module can show, with their default labels.
 var badgeKinds = map[string]string{
-	"version":   "gopherdex",
+	"version":   "gopkgreg",
 	"downloads": "downloads",
 	"verified":  "source",
 	"security":  "security",

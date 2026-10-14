@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/oidc"
-	"github.com/codebled/gopherdex/internal/oidc/oidctest"
-	"github.com/codebled/gopherdex/internal/server"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/oidc"
+	"github.com/gopkgreg/gopkgreg/internal/oidc/oidctest"
+	"github.com/gopkgreg/gopkgreg/internal/server"
 )
 
 // TestTrustedPublish runs the whole flow: a GitHub Actions job with no API
@@ -49,8 +49,8 @@ func TestTrustedPublish(t *testing.T) {
 	repo := gitRepo(t, mod)
 	gitRun(t, repo, "tag", "v1.0.0")
 	env := map[string]string{
-		"GOPHERDEX_CONFIG":               filepath.Join(t.TempDir(), "credentials.json"), // no saved token
-		"GOPHERDEX_REGISTRY":             tr.srv.URL,
+		"GOPKGREG_CONFIG":                filepath.Join(t.TempDir(), "credentials.json"), // no saved token
+		"GOPKGREG_REGISTRY":              tr.srv.URL,
 		"GITHUB_ACTIONS":                 "true",
 		"ACTIONS_ID_TOKEN_REQUEST_URL":   gh.URL + "/token?api-version=2.0",
 		"ACTIONS_ID_TOKEN_REQUEST_TOKEN": "runtime-token",
@@ -108,7 +108,7 @@ func TestPublishWarnings(t *testing.T) {
 	gitRun(t, repo, "add", ".")
 	gitRun(t, repo, "commit", "-q", "-m", "init")
 	gitRun(t, repo, "tag", "v1.0.0")
-	r := &runner{t: t, env: map[string]string{"GOPHERDEX_CONFIG": filepath.Join(t.TempDir(), "c.json"), "GOPHERDEX_REGISTRY": srv.URL, "GOPHERDEX_TOKEN": token}, dir: repo, client: srv.Client()}
+	r := &runner{t: t, env: map[string]string{"GOPKGREG_CONFIG": filepath.Join(t.TempDir(), "c.json"), "GOPKGREG_REGISTRY": srv.URL, "GOPKGREG_TOKEN": token}, dir: repo, client: srv.Client()}
 	code, stdout, stderr := r.run("", "publish")
 	if code != 0 {
 		t.Fatalf("publish: %d %s", code, stderr)

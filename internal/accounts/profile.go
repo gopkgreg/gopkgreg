@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
 )
 
 // ErrLastOrgOwner blocks deleting an account that is the only owner of an
@@ -86,13 +86,13 @@ func (s *Service) RequestEmailChange(ctx context.Context, u *User, newEmail, pas
 	link := strings.TrimSuffix(s.BaseURL, "/") + "/verify-email?" + url.Values{"token": {secret}}.Encode()
 	if err := s.Mailer.Send(ctx, mail.Message{
 		To:      newEmail,
-		Subject: "Confirm your new email for Gopherdex",
-		Body: fmt.Sprintf("Hi %s,\n\nOpen this link to make %s the email address of your Gopherdex account:\n\n%s\n\nThe link expires in 24 hours. If you didn't ask for this, ignore this email; nothing changes.\n",
+		Subject: "Confirm your new email for gopkgreg",
+		Body: fmt.Sprintf("Hi %s,\n\nOpen this link to make %s the email address of your gopkgreg account:\n\n%s\n\nThe link expires in 24 hours. If you didn't ask for this, ignore this email; nothing changes.\n",
 			u.Username, newEmail, link),
 	}); err != nil {
 		return fmt.Errorf("send confirmation to %s: %w", newEmail, err)
 	}
-	s.notify(u, "Email change requested for your Gopherdex account",
+	s.notify(u, "Email change requested for your gopkgreg account",
 		fmt.Sprintf("Someone signed in as @%s asked to change the account's email address to %s. It changes only if the link sent there is opened.", u.Username, newEmail))
 	return nil
 }
@@ -223,8 +223,8 @@ func (s *Service) DeleteAccount(ctx context.Context, u *User, password, code str
 	go func() {
 		ctx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 30*time.Second)
 		defer cancel()
-		err := s.Mailer.Send(ctx, mail.Message{To: u.Email, Subject: "Your Gopherdex account was deleted",
-			Body: fmt.Sprintf("Hi %s,\n\nYour Gopherdex account @%s was deleted. Modules you published stay available, because programs depend on them, and the name @%s can't be registered again.\n\nIf you didn't do this, contact the registry's administrators right away.\n", u.Username, u.Username, u.Username)})
+		err := s.Mailer.Send(ctx, mail.Message{To: u.Email, Subject: "Your gopkgreg account was deleted",
+			Body: fmt.Sprintf("Hi %s,\n\nYour gopkgreg account @%s was deleted. Modules you published stay available, because programs depend on them, and the name @%s can't be registered again.\n\nIf you didn't do this, contact the registry's administrators right away.\n", u.Username, u.Username, u.Username)})
 		if err != nil {
 			s.log().Error("send account deletion email", "user", u.Username, "err", err)
 		}

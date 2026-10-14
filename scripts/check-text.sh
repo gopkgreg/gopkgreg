@@ -6,12 +6,12 @@ set -eu
 
 status=0
 # Trailing spaces or tabs at the end of a line.
-if git grep -nIE '[[:blank:]]+$' -- . ':!*.svg' >/tmp/gdx-trailing.$$ 2>/dev/null; then
+if git grep -nIE '[[:blank:]]+$' -- . ':!*.svg' >/tmp/gpk-trailing.$$ 2>/dev/null; then
 	echo "Trailing whitespace (remove it, or let .editorconfig do it):"
-	cat /tmp/gdx-trailing.$$
+	cat /tmp/gpk-trailing.$$
 	status=1
 fi
-rm -f /tmp/gdx-trailing.$$
+rm -f /tmp/gpk-trailing.$$
 
 # A final newline in every non-empty text file.
 for f in $(git ls-files); do

@@ -9,11 +9,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/codebled/gopherdex/internal/godoc"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/project"
-	"github.com/codebled/gopherdex/internal/registry"
-	"github.com/codebled/gopherdex/internal/scan"
+	"github.com/gopkgreg/gopkgreg/internal/godoc"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/project"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/scan"
 )
 
 // goImportPage answers the go command's ?go-get=1 lookup. The "mod" form
@@ -29,7 +29,7 @@ var goImportPage = template.Must(template.New("go-import").Parse(`<!doctype html
 <title>{{.Root}}</title>
 </head>
 <body>
-<p>{{.Root}} is a Go module on Gopherdex. Install it with <code>go get {{.Root}}</code>, or <a href="{{.PageURL}}">see its project page</a>.</p>
+<p>{{.Root}} is a Go module on gopkgreg. Install it with <code>go get {{.Root}}</code>, or <a href="{{.PageURL}}">see its project page</a>.</p>
 </body>
 </html>
 `))
@@ -409,7 +409,7 @@ func (s *server) notFound(w http.ResponseWriter, r *http.Request) {
 		Heading:     "There's nothing at this address.",
 		Body:        "The module, version or page may not exist, or the link has a typo. Search for the library instead.",
 		ActionURL:   "/",
-		ActionLabel: "Search Gopherdex",
+		ActionLabel: "Search gopkgreg",
 	})
 }
 

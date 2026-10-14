@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/oidc"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/oidc"
 )
 
 var ghClaimsSeq int

@@ -24,7 +24,7 @@ func inGitHubActions(env Env) bool {
 // errNoIDTokenPermission explains the usual reason a GitHub Actions job
 // can't request an ID token.
 var errNoIDTokenPermission = errors.New("no API token, and this GitHub Actions job can't request an ID token for trusted publishing. " +
-	"Add this to the workflow:\n\n  permissions:\n    id-token: write\n\nor set GOPHERDEX_TOKEN from a repository secret")
+	"Add this to the workflow:\n\n  permissions:\n    id-token: write\n\nor set GOPKGREG_TOKEN from a repository secret")
 
 type mintResponse struct {
 	Token     string    `json:"token"`

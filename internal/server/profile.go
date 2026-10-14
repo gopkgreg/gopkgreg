@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/codebled/gopherdex/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
 )
 
 // handleChangeEmail starts an email change; the address changes once the
@@ -84,7 +84,7 @@ func (s *server) handleDeleteAccount(w http.ResponseWriter, r *http.Request) {
 			Heading:     "Your account is gone.",
 			Body:        "We've deleted @" + u.Username + ", its sessions, API tokens and trusted publishers. Modules you published stay available, because programs depend on them, and the name @" + u.Username + " can't be registered again.",
 			ActionURL:   "/",
-			ActionLabel: "Back to Gopherdex",
+			ActionLabel: "Back to gopkgreg",
 		})
 	}
 }

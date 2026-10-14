@@ -1,24 +1,27 @@
-<p align="center"><img src="web/static/favicon.svg" width="72" height="72" alt=""></p>
-
-<h1 align="center">gopherdex</h1>
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-dark.svg">
+    <img src=".github/assets/logo.svg" alt="gopkgreg" width="320">
+  </picture>
+</h1>
 
 <p align="center">The Go module registry: publish, discover and install Go modules.</p>
 
 <p align="center">
-<a href="https://github.com/codebled/gopherdex/actions/workflows/ci.yml"><img src="https://github.com/codebled/gopherdex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-<a href="https://goreportcard.com/report/github.com/codebled/gopherdex"><img src="https://goreportcard.com/badge/github.com/codebled/gopherdex" alt="Go Report Card"></a>
-<a href="go.mod"><img src="https://img.shields.io/github/go-mod/go-version/codebled/gopherdex" alt="Go version"></a>
-<a href="LICENSE"><img src="https://img.shields.io/github/license/codebled/gopherdex" alt="License: AGPL-3.0"></a>
-<a href="https://github.com/codebled/gopherdex/labels/good%20first%20issue"><img src="https://img.shields.io/github/issues/codebled/gopherdex/good%20first%20issue?label=good%20first%20issues" alt="Good first issues"></a>
+<a href="https://github.com/gopkgreg/gopkgreg/actions/workflows/ci.yml"><img src="https://github.com/gopkgreg/gopkgreg/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+<a href="https://goreportcard.com/report/github.com/gopkgreg/gopkgreg"><img src="https://goreportcard.com/badge/github.com/gopkgreg/gopkgreg" alt="Go Report Card"></a>
+<a href="go.mod"><img src="https://img.shields.io/github/go-mod/go-version/gopkgreg/gopkgreg" alt="Go version"></a>
+<a href="LICENSE"><img src="https://img.shields.io/github/license/gopkgreg/gopkgreg" alt="License: AGPL-3.0"></a>
+<a href="https://github.com/gopkgreg/gopkgreg/labels/good%20first%20issue"><img src="https://img.shields.io/github/issues/gopkgreg/gopkgreg/good%20first%20issue?label=good%20first%20issues" alt="Good first issues"></a>
 </p>
 
 
 A package registry for Go modules, in the spirit of pypi.org.
 
 - **Accounts:** register, confirm your email, and create API tokens. Your username is your namespace: `<module-host>/<username>/<module>`.
-- **Publishing:** `gopherdex publish` builds a module zip from a git tag, checks it with the go command's own rules and uploads it. Versions are immutable.
+- **Publishing:** `gopkgreg publish` builds a module zip from a git tag, checks it with the go command's own rules and uploads it. Versions are immutable.
 - **Project pages:** every module has a page at `/<owner>/<module>`, like pypi.org/project/…, with the rendered README, docs, release history, downloadable files with checksums, license, owner and links.
-- **Zero-setup installs:** on a public HTTPS domain, `go get gopherdex.dev/alice/retry` works with default Go settings. The registry answers the go command's `?go-get=1` lookup with a `go-import … mod` tag, and the public module mirror and checksum database pick new versions up automatically.
+- **Zero-setup installs:** on a public HTTPS domain, `go get gopkgreg.com/alice/retry` works with default Go settings. The registry answers the go command's `?go-get=1` lookup with a `go-import … mod` tag, and the public module mirror and checksum database pick new versions up automatically.
 - **GOPROXY server:** serves hosted modules to the `go` command at `/api/proxy`.
 - **Discovery:** full-text search with filters (license, Go version, last release, deprecated) and sorting (relevance, downloads, recently updated, newest), download counts and charts, and a home page with just-updated, most-downloaded and new modules. Public pkg.go.dev results follow in their own section.
 - **Public modules:** modules that aren't hosted here come from `proxy.golang.org`, with search and docs from `pkg.go.dev`. Run with `-offline` to turn this off.
@@ -31,12 +34,12 @@ Two programs:
 
 | Program | Who runs it |
 |---|---|
-| `gopherdexd` | The registry server |
-| `gopherdex` | Module authors: `login`, `whoami`, `publish`, `yank`, `unyank`, `logout` |
+| `gopkgregd` | The registry server |
+| `gopkgreg` | Module authors: `login`, `whoami`, `publish`, `yank`, `unyank`, `logout` |
 
 ```bash
-go run ./cmd/gopherdexd
-go install github.com/codebled/gopherdex/cmd/gopherdex@latest   # the author CLI
+go run ./cmd/gopkgregd
+go install github.com/gopkgreg/gopkgreg/cmd/gopkgreg@latest   # the author CLI
 ```
 
 Open http://localhost:8080 and choose **Register**. Without `-smtp-addr`, emails aren't sent. The verification link is printed in the server log instead.
@@ -45,12 +48,12 @@ Open http://localhost:8080 and choose **Register**. Without `-smtp-addr`, emails
 |---|---|---|
 | `-addr` | `localhost:8080` | Listen address |
 | `-base-url` | `http://<addr>` | Public URL, used in email links and CLI output; `https` turns on Secure cookies |
-| `-module-host` | host of `-base-url`, or `gopherdex.localhost` | Domain in module paths. Module paths can't have a port or a dot-less host, so local development uses `gopherdex.localhost/<user>/<module>` |
-| `-db` | `data/gopherdex.db` | SQLite database (created and migrated on start) |
-| `-blobs` | `data/blobs` | Published module zips: a directory, or an S3-compatible bucket, `s3://bucket/prefix?region=…&endpoint=…`, with credentials in `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY`. `gopherdexd blobs copy -from … -to …` moves existing zips |
+| `-module-host` | host of `-base-url`, or `gopkgreg.localhost` | Domain in module paths. Module paths can't have a port or a dot-less host, so local development uses `gopkgreg.localhost/<user>/<module>` |
+| `-db` | `data/gopkgreg.db` | SQLite database (created and migrated on start) |
+| `-blobs` | `data/blobs` | Published module zips: a directory, or an S3-compatible bucket, `s3://bucket/prefix?region=…&endpoint=…`, with credentials in `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY`. `gopkgregd blobs copy -from … -to …` moves existing zips |
 | `-max-upload` | 50 MiB | Largest module zip accepted |
 | `-data` | (none) | Serve fixture modules from a directory too, e.g. `data/modules` for demos |
-| `-smtp-addr` / `-smtp-from` / `-smtp-user` | | SMTP server for real emails; password in `$GOPHERDEX_SMTP_PASSWORD` |
+| `-smtp-addr` / `-smtp-from` / `-smtp-user` | | SMTP server for real emails; password in `$GOPKGREG_SMTP_PASSWORD` |
 | `-upstream` | `https://proxy.golang.org` | Public proxy for modules not hosted here |
 | `-pkgsite` | `https://pkg.go.dev` | Public search and docs links |
 | `-offline` | `false` | Hosted modules only, no outbound requests |
@@ -69,20 +72,20 @@ Open http://localhost:8080 and choose **Register**. Without `-smtp-addr`, emails
 | `-vulndb` | `https://vuln.go.dev` | Public Go vulnerability database merged into `/vulndb` and used to flag vulnerable dependencies. Empty, or `-offline`, turns it off |
 | `-v` | `false` | Debug logging |
 
-Every flag can also come from the environment as `GOPHERDEX_<FLAG>` (`-base-url` → `GOPHERDEX_BASE_URL`); flags on the command line win. `gopherdexd version` prints the build, and `gopherdexd healthcheck` exits 0 when `/healthz` answers (for container health checks). With an `https` base URL, the server logs a warning for each missing production setting (SMTP, admins, backups, `-trust-proxy`).
+Every flag can also come from the environment as `GOPKGREG_<FLAG>` (`-base-url` → `GOPKGREG_BASE_URL`); flags on the command line win. `gopkgregd version` prints the build, and `gopkgregd healthcheck` exits 0 when `/healthz` answers (for container health checks). With an `https` base URL, the server logs a warning for each missing production setting (SMTP, admins, backups, `-trust-proxy`).
 
 ## Publish a module
 
 ```bash
-go install github.com/codebled/gopherdex/cmd/gopherdex@latest   # or: make build
+go install github.com/gopkgreg/gopkgreg/cmd/gopkgreg@latest   # or: make build
 
 # go.mod
-module gopherdex.localhost/alice/retry          # <module-host>/<your-username>/<name>
+module gopkgreg.localhost/alice/retry          # <module-host>/<your-username>/<name>
 
 git tag v0.1.0
-gopherdex login --registry http://localhost:8080   # paste a token from /account
-gopherdex publish --dry-run                        # build and check, upload nothing
-gopherdex publish
+gopkgreg login --registry http://localhost:8080   # paste a token from /account
+gopkgreg publish --dry-run                        # build and check, upload nothing
+gopkgreg publish
 ```
 
 What `publish` checks before uploading:
@@ -98,7 +101,7 @@ The server checks everything again:
 
 Re-uploading identical content is a no-op, so CI retries are safe. Different content for an existing version gets `409`.
 
-For CI, prefer **trusted publishing** (next section): nothing secret to store. Or skip `login` and set `GOPHERDEX_REGISTRY` and `GOPHERDEX_TOKEN` from a CI secret.
+For CI, prefer **trusted publishing** (next section): nothing secret to store. Or skip `login` and set `GOPKGREG_REGISTRY` and `GOPKGREG_TOKEN` from a CI secret.
 
 ## Unified search
 
@@ -109,7 +112,7 @@ For CI, prefer **trusted publishing** (next section): nothing secret to store. O
 - **Quality:** verified builds (trusted publishing) get a small boost; deprecated modules and ones with an active advisory sink.
 - **Duplicates:** a hosted module that pkg.go.dev also knows appears once, as the hosted result.
 
-**On Gopherdex** (`&scope=hosted`) searches only this registry, with license, Go version and release-date filters, sorting and pages. Using any of those switches to it automatically, with a note. Public results are cached for 10 minutes. If pkg.go.dev takes more than 1.5 s, the page shows hosted results and says so. It all renders on the server, with no JavaScript needed. The `/api/v1/search` endpoint stays hosted-only.
+**On gopkgreg** (`&scope=hosted`) searches only this registry, with license, Go version and release-date filters, sorting and pages. Using any of those switches to it automatically, with a note. Public results are cached for 10 minutes. If pkg.go.dev takes more than 1.5 s, the page shows hosted results and says so. It all renders on the server, with no JavaScript needed. The `/api/v1/search` endpoint stays hosted-only.
 
 ## Documentation, source and dependencies
 
@@ -165,7 +168,7 @@ Owners publish advisories for their modules from the module's **Security** tab. 
 - Affected version ranges, meaning the first affected version and the version with the fix (several ranges if needed).
 - Optionally, the affected packages and functions, CVE or GHSA IDs, links and credit.
 
-Each gets an ID like `GDX-2026-0001` and a page at `/advisories/<id>`. After publishing:
+Each gets an ID like `GPK-2026-0001` and a page at `/advisories/<id>`. After publishing:
 - **Warnings:** affected versions show a warning on their project page and a **Vulnerable** tag in the release history.
 - **Email:** every maintainer is emailed.
 - **Edits:** owners can edit an advisory, for example to add the fixed version once it's out. They can also withdraw one published in error; it stays visible, marked withdrawn, and tools stop reporting it.
@@ -174,7 +177,7 @@ Each gets an ID like `GDX-2026-0001` and a page at `/advisories/<id>`. After pub
 **govulncheck.** The registry serves the [Go vulnerability database format](https://go.dev/security/vuln/database) at `/vulndb`: its own advisories as OSV entries, merged with Go's public database (refreshed hourly). One command checks hosted and public modules:
 
 ```bash
-govulncheck -db https://gopherdex.dev/vulndb ./...
+govulncheck -db https://gopkgreg.com/vulndb ./...
 ```
 
 govulncheck reports only vulnerabilities your code can reach. When an advisory names functions, it points to the call. Entries from the public database are redirected to vuln.go.dev.
@@ -186,7 +189,7 @@ govulncheck reports only vulnerabilities your code can reach. When an advisory n
 Like PyPI's trusted publishers: a GitHub Actions workflow publishes with no API token stored anywhere.
 
 1. **Register the workflow.** On the module's **Manage** tab, add a trusted publisher: GitHub repository (`owner/name`), workflow file (`release.yml`), and optionally an environment. Before a module's first release, add it from **Publish from GitHub Actions** on your account page instead.
-2. **Give the job `id-token: write`** and run `gopherdex publish`:
+2. **Give the job `id-token: write`** and run `gopkgreg publish`:
 
 ```yaml
 on:
@@ -202,8 +205,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with: { go-version: stable }
-      - run: go install <where-this-source-lives>/cmd/gopherdex@latest
-      - run: gopherdex publish --registry https://gopherdex.dev
+      - run: go install <where-this-source-lives>/cmd/gopkgreg@latest
+      - run: gopkgreg publish --registry https://gopkgreg.com
 ```
 
 With no token configured, `publish` sees it's running in GitHub Actions. It fetches the audience from `/api/oidc/audience` and asks GitHub for an ID token with that audience. It then trades the token at `/api/oidc/mint-token` for a registry token that expires after 15 minutes and can only upload that one module.
@@ -227,38 +230,38 @@ Afterwards:
 Install it on a local development host, where the public mirror can't reach:
 
 ```bash
-GOPROXY=http://localhost:8080/api/proxy GONOSUMDB=gopherdex.localhost go get gopherdex.localhost/alice/retry@latest
+GOPROXY=http://localhost:8080/api/proxy GONOSUMDB=gopkgreg.localhost go get gopkgreg.localhost/alice/retry@latest
 ```
 
-On a public HTTPS deployment, run just `go get gopherdex.dev/alice/retry@latest`. See **Deploy** below.
+On a public HTTPS deployment, run just `go get gopkgreg.com/alice/retry@latest`. See **Deploy** below.
 
 ## How `go get` finds modules
 
-For `go get gopherdex.dev/alice/retry/backoff`, with default settings (`GOPROXY=https://proxy.golang.org,direct`):
+For `go get gopkgreg.com/alice/retry/backoff`, with default settings (`GOPROXY=https://proxy.golang.org,direct`):
 
-1. **Lookup.** `proxy.golang.org` requests `https://gopherdex.dev/alice/retry/backoff?go-get=1`.
-2. **Answer.** Gopherdex finds the module that contains the package and replies with `<meta name="go-import" content="gopherdex.dev/alice/retry mod https://gopherdex.dev/api/proxy">`. A trailing `/vN` resolves to that major version's module when one is published.
+1. **Lookup.** `proxy.golang.org` requests `https://gopkgreg.com/alice/retry/backoff?go-get=1`.
+2. **Answer.** gopkgreg finds the module that contains the package and replies with `<meta name="go-import" content="gopkgreg.com/alice/retry mod https://gopkgreg.com/api/proxy">`. A trailing `/vN` resolves to that major version's module when one is published.
 3. **Download.** The mirror downloads through this registry's GOPROXY endpoints and caches the result. `sum.golang.org` records the `h1:` hash in its public log, so users get checksum verification without `GONOSUMDB`.
-4. **Early fetch.** After each publish, Gopherdex requests the new version from the mirror and checksum database right away (`-notify-mirror`). The first user doesn't wait, and the hash is logged while the registry is known to serve it.
+4. **Early fetch.** After each publish, gopkgreg requests the new version from the mirror and checksum database right away (`-notify-mirror`). The first user doesn't wait, and the hash is logged while the registry is known to serve it.
 
-People who open `https://gopherdex.dev/alice/retry` in a browser get the project page, and a package path such as `…/retry/backoff` opens that package's docs.
+People who open `https://gopkgreg.com/alice/retry` in a browser get the project page, and a package path such as `…/retry/backoff` opens that package's docs.
 
 Good to know:
 - **Nothing can be deleted.** The public mirror caches versions permanently and the checksum log can't be edited. That's why versions here are immutable.
 - **`@latest` can lag.** The mirror refreshes version lists on its own schedule, so `@latest` may show a new release a few minutes late. Asking for the exact version (`@v1.2.3`) works at once.
-- **Skipping the public mirror:** users who can't or don't want to use it can set `GOPROXY=https://gopherdex.dev/api/proxy`, or `GOPROXY=direct`, and still use the checksum database.
+- **Skipping the public mirror:** users who can't or don't want to use it can set `GOPROXY=https://gopkgreg.com/api/proxy`, or `GOPROXY=direct`, and still use the checksum database.
 
 ## Deploy
 
 Zero-setup installs need a real domain served over HTTPS on the standard port, with the module host equal to that domain. [deploy/README.md](deploy/README.md) has the Docker Compose + Caddy setup, a systemd unit, the environment file, a launch checklist, and `deploy/smoke-test.sh`, which checks a live deployment from outside, including a real `go get` with default Go settings.
 
 ```bash
-cd deploy && cp gopherdex.env.example gopherdex.env   # domain, SMTP, admins
+cd deploy && cp gopkgreg.env.example gopkgreg.env   # domain, SMTP, admins
 docker compose up -d --build
-./smoke-test.sh https://gopherdex.example.com gopherdex.example.com/you/module@v0.1.0
+./smoke-test.sh https://gopkgreg.example.com gopkgreg.example.com/you/module@v0.1.0
 ```
 
-Releases: pushing a `v*` tag runs `.github/workflows/release.yml`. It attaches `make dist` binaries (Linux, macOS and Windows; `SHA256SUMS`) to a GitHub release and pushes the image to `ghcr.io/codebled/gopherdex`. `make docker` builds the image locally.
+Releases: pushing a `v*` tag runs `.github/workflows/release.yml`. It attaches `make dist` binaries (Linux, macOS and Windows; `SHA256SUMS`) to a GitHub release and pushes the image to `ghcr.io/gopkgreg/gopkgreg`. `make docker` builds the image locally.
 
 ## Project pages
 
@@ -296,7 +299,7 @@ Owners and maintainers see a **Manage** tab on the project page.
 
 | Action | Who | What it does |
 |---|---|---|
-| **Yank / restore a release** | owners, maintainers | Hides the version from `@v/list` and `@latest`, so new installs skip it. Its `.info`, `.mod` and `.zip` stay downloadable, so builds that already use it keep working, as on PyPI. Also available as `gopherdex yank MODULE@VERSION --reason "…"` and `gopherdex unyank MODULE@VERSION` |
+| **Yank / restore a release** | owners, maintainers | Hides the version from `@v/list` and `@latest`, so new installs skip it. Its `.info`, `.mod` and `.zip` stay downloadable, so builds that already use it keep working, as on PyPI. Also available as `gopkgreg yank MODULE@VERSION --reason "…"` and `gopkgreg unyank MODULE@VERSION` |
 | **Deprecate** | owners | Shows a notice, and optionally a replacement module, on the project page. The go command only reports `// Deprecated:` comments in go.mod, so add one to your next release too |
 | **Co-owners** | owners | Invite another user as *owner* (everything) or *maintainer* (publish and yank). It's an invitation: they get no access, and don't count as an owner, until they accept it on their account page |
 | **Transfer** | owners | Invite the new owner; once they accept, remove yourself. A module always keeps at least one owner who has accepted |
@@ -308,7 +311,7 @@ Yanking only affects this registry. `proxy.golang.org` has its own copy of versi
 
 ### Organizations
 
-Create one on your account page. It gets its own namespace, for example `gopherdex.dev/acme/…`, and a page at `/acme`.
+Create one on your account page. It gets its own namespace, for example `gopkgreg.com/acme/…`, and a page at `/acme`.
 
 | Role | Can |
 |---|---|
@@ -402,8 +405,8 @@ Each finding was confirmed in the code, then fixed with a test.
 For production, keep module zips in S3-compatible storage (`-blobs s3://bucket/prefix?region=…&endpoint=…`) and replicate the database continuously with Litestream. [deploy/README.md](deploy/README.md) has the setup and the recovery steps. The rest of this section covers the built-in local backups.
 
 ```bash
-gopherdexd backup -db data/gopherdex.db -out /backups/gopherdex.db    # one-off, safe while the server runs
-gopherdexd -backup-dir /backups -backup-every 24h -backup-keep 7 …    # automatic
+gopkgregd backup -db data/gopkgreg.db -out /backups/gopkgreg.db    # one-off, safe while the server runs
+gopkgregd -backup-dir /backups -backup-every 24h -backup-keep 7 …    # automatic
 ```
 
 Database backups use SQLite's `VACUUM INTO`, which makes a consistent copy of the live database. Published module zips live in the blob directory (`-blobs`). They're never modified once written, so copy that directory with any file backup tool (`rsync`, snapshots, object storage sync).
@@ -412,21 +415,21 @@ To restore, stop the server, put the database file and the blob directory back, 
 
 ## Load testing
 
-`gdxbench` builds a large, realistic registry and measures a server under load.
+`gpkbench` builds a large, realistic registry and measures a server under load.
 
 ```sh
 make bench-seed                 # small: 5,000 modules, ~25,000 versions (~5 minutes)
 make bench-seed PROFILE=full    # 100,000 modules, ~1,000,000 versions (hours)
 make bench-serve                # serve bench/data offline on :8080, trusting X-Forwarded-For
 make bench-load                 # 32 clients for 60 seconds
-go run ./cmd/gdxbench accounts  # tokens and sign-in accounts for write load
-go run ./cmd/gdxbench load -d 30m -publish-rate 2 -login-rate 5   # reads plus uploads and sign-ins
+go run ./cmd/gpkbench accounts  # tokens and sign-in accounts for write load
+go run ./cmd/gpkbench load -d 30m -publish-rate 2 -login-rate 5   # reads plus uploads and sign-ins
 ```
 
-**What `seed` builds.** Real modules are sampled from `index.golang.org`, in windows spread from 2020 to now, so old and new modules are mixed. Their `go.mod` files come from `proxy.golang.org`, and some get their real source zips. Their paths are remapped under the registry's host (`github.com/spf13/cobra` becomes `gopherdex.localhost/spf13/cobra`), and their requirements are rewritten to match. Synthetic modules fill the set up to the target size. The busiest real owners get their own namespaces, and vanity domains become organizations. Everything is published through `Registry.Publish`, so zip checks, publish checks, search indexing and the dependency graph all run as they do for real uploads. It then records 30 days of downloads, spread by popularity. It writes `bench/data/seed-report.json`, with publish latency, and `modules.tsv` for the load tool.
+**What `seed` builds.** Real modules are sampled from `index.golang.org`, in windows spread from 2020 to now, so old and new modules are mixed. Their `go.mod` files come from `proxy.golang.org`, and some get their real source zips. Their paths are remapped under the registry's host (`github.com/spf13/cobra` becomes `gopkgreg.localhost/spf13/cobra`), and their requirements are rewritten to match. Synthetic modules fill the set up to the target size. The busiest real owners get their own namespaces, and vanity domains become organizations. Everything is published through `Registry.Publish`, so zip checks, publish checks, search indexing and the dependency graph all run as they do for real uploads. It then records 30 days of downloads, spread by popularity. It writes `bench/data/seed-report.json`, with publish latency, and `modules.tsv` for the load tool.
 
 - **Upstream use:** everything downloaded is cached under `bench/cache`, so rebuilding a dataset downloads nothing. Fetches run 8 at a time and identify themselves in `User-Agent`.
-- **Every Go module?** Not possible: the public mirror has millions of modules and tens of millions of versions, and their paths belong to other hosts. Public modules already reach Gopherdex live through `proxy.golang.org`. The benchmark measures this registry's own code at a known size.
+- **Every Go module?** Not possible: the public mirror has millions of modules and tens of millions of versions, and their paths belong to other hosts. Public modules already reach gopkgreg live through `proxy.golang.org`. The benchmark measures this registry's own code at a known size.
 
 **What `load` does.** Clients pick modules by a Zipf distribution, so a few are hot and most are cold, as on a real registry. They send a registry-like mix of traffic:
 - the go command's proxy requests;
@@ -434,7 +437,7 @@ go run ./cmd/gdxbench load -d 30m -publish-rate 2 -login-rate 5   # reads plus u
 - search;
 - the JSON API, badges, feeds and `go-get` lookups.
 
-**Write load.** `gdxbench accounts` puts credentials in the benchmark database, in `bench/data/accounts.tsv` (owner-only file permissions, test data only): API tokens for existing publishers, and fresh accounts with known passwords. With `-publish-rate`, `load` uploads through `/api/upload` at a fixed rate, whether or not the server keeps up, as real traffic arrives. Uploads are new patch releases of existing modules, plus a share (`-new-share`) of brand-new modules. `-login-rate` adds password sign-ins. The report adds a timeline (`-window`) with read and write latency over time, to show drift.
+**Write load.** `gpkbench accounts` puts credentials in the benchmark database, in `bench/data/accounts.tsv` (owner-only file permissions, test data only): API tokens for existing publishers, and fresh accounts with known passwords. With `-publish-rate`, `load` uploads through `/api/upload` at a fixed rate, whether or not the server keeps up, as real traffic arrives. Uploads are new patch releases of existing modules, plus a share (`-new-share`) of brand-new modules. `-login-rate` adds password sign-ins. The report adds a timeline (`-window`) with read and write latency over time, to show drift.
 
 Each client sends a different `X-Forwarded-For` address, so run the server with `-trust-proxy` to load it as many users would, instead of tripping one client's rate limits. The report gives requests per second, errors, and p50/p90/p99/max latency per scenario. `-mix only=search` isolates one scenario, `-rps` fixes the request rate, and `-out` saves JSON. It refuses non-local servers unless given `-i-own-this-server`.
 
@@ -456,7 +459,7 @@ What load testing found, and what fixed it:
 - **Major version links** on every project page (`…/v2`, `…/v3`) used `LIKE`, which SQLite can't answer from an index. That made the page scan every module: 68% of all server CPU at 100,000 modules. The lookup is now an index range, 24 ms down to 0.03 ms.
 - **Reads** spent three quarters of the CPU in `pread` system calls, one per database page. The database is now memory-mapped (`mmap_size`), so reads come straight from the OS page cache.
 - **Search** summed 30 days of downloads for every match of every query, and scored every README match. Each module now keeps its 30-day count, updated as downloads are written and recomputed daily. Modules whose path, name or summary match are ranked first; README-only matches follow, and are only ranked when someone pages that far.
-- **The module host was indexed** in every path, so "go" or "dev" matched every module on `gopherdex.dev`. Paths are indexed without it, and a pasted full module path still finds the module.
+- **The module host was indexed** in every path, so "go" or "dev" matched every module on `gopkgreg.com`. Paths are indexed without it, and a pasted full module path still finds the module.
 - **The home page, registry totals and search filter counts** took a pass over every module per view. They're cached for `-listing-cache` (30 seconds by default). When the cache expires, visitors get the cached copy while one background refresh runs, so nobody waits.
 - **Owner pages** listed every module: 5,487 modules, 2 MB of HTML and 0.74 s for the busiest namespace. They now show 60 at a time, and `/api/v1/owners/{name}` returns 100 per page with `total` and `next`.
 - **Name checks at publish** ranked every module by downloads for each new module. On large registries the ranking is reused for 10 minutes.
@@ -479,7 +482,7 @@ The after-fixes run is its first 8 minutes: then the laptop running it went to s
 - **Broad searches** ("go" is in most summaries) are ranked in three tiers: path or name matches, then summary, then README. A tier is ranked only when a page reaches it. Totals are counted from the full-text index alone when no filters are set.
 - **The first brand-new module took 3.5 s** because the name check ranked every module by all-time downloads. It now reads the stored 30-day counts, in 1 ms.
 
-**Profiling.** `-debug-addr localhost:6060` serves Go's profiler (`net/http/pprof`) on a loopback address only. For example, `go tool pprof http://localhost:6060/debug/pprof/profile?seconds=20` while `gdxbench load` runs.
+**Profiling.** `-debug-addr localhost:6060` serves Go's profiler (`net/http/pprof`) on a loopback address only. For example, `go tool pprof http://localhost:6060/debug/pprof/profile?seconds=20` while `gpkbench load` runs.
 
 ## Accounts and API tokens
 
@@ -500,7 +503,7 @@ The after-fixes run is its first 8 minutes: then the laptop running it went to s
 | `POST /-/orgs/leave`, `POST /-/collaborators/leave` | Leave an organization, or give up your role on a module |
 | `POST /account/delete` | Delete the account (password, 2FA code if on, and the username typed to confirm). Refused while you're an organization's only owner |
 | `POST /account/tokens`, `POST /account/tokens/{id}/revoke` | Create or revoke a token (creating needs a verified email and your current password) |
-| `GET /api/whoami` | `Authorization: Bearer gdx_…` returns the token's user, namespaces (own and organizations') and scope |
+| `GET /api/whoami` | `Authorization: Bearer gpk_…` returns the token's user, namespaces (own and organizations') and scope |
 | `POST /api/yank` | Bearer token; JSON `{"module", "version", "reason", "yank": true\|false}` |
 | `POST /-/yank`, `/-/unyank`, `/-/deprecate`, `/-/undeprecate`, `/-/collaborators[/remove]`, `/-/orgs`, `/-/orgs/members[/remove]`, `/-/orgs/access` | Website forms behind the Manage tab, the account page and organization pages |
 | `GET /orgs/<org>/teams/<team>`, `POST /-/orgs/teams[/delete]`, `/-/orgs/teams/members[/remove]`, `/-/orgs/teams/modules[/remove]` | Team pages (organization members only) and the forms owners manage teams with |
@@ -517,7 +520,7 @@ The after-fixes run is its first 8 minutes: then the laptop running it went to s
 
 Security notes:
 - **Passwords:** hashed with argon2id. Two-factor secrets are stored as-is, so protect database backups like the live database.
-- **Secrets:** sessions, verification links and API tokens are 32 random bytes each, and only their SHA-256 hash is stored. Tokens start with `gdx_`, so secret scanners can recognize leaked ones.
+- **Secrets:** sessions, verification links and API tokens are 32 random bytes each, and only their SHA-256 hash is stored. Tokens start with `gpk_`, so secret scanners can recognize leaked ones.
 - **Cookies:** the session cookie is HttpOnly and SameSite=Lax, and also Secure when served over HTTPS.
 - **Form protection:** browser form posts from other sites are rejected by `http.CrossOriginProtection`. Sign-in, sign-up and email resends are rate limited per IP or account.
 - **Audit log:** account creation, sign-ins (including failures), email verification and token changes are recorded in `audit_log`.
@@ -573,9 +576,9 @@ Zips follow the module zip rules: files go under `<module>@<version>/`, and VCS 
 ## Layout
 
 ```
-cmd/gopherdexd/       registry server: flags, wiring, graceful shutdown
-cmd/gopherdex/        author CLI: login, whoami, publish, logout
-cmd/gdxbench/         load testing: build a large dataset (seed) and drive traffic at a server (load)
+cmd/gopkgregd/       registry server: flags, wiring, graceful shutdown
+cmd/gopkgreg/        author CLI: login, whoami, publish, logout
+cmd/gpkbench/         load testing: build a large dataset (seed) and drive traffic at a server (load)
 internal/bench/       dataset sampling from index.golang.org, remapping, synthetic modules, load generator
 internal/cli/         CLI implementation (git tags → module zip → upload)
 internal/registry/    publish validation, immutable versions, serving published modules, import path lookup,
@@ -607,7 +610,7 @@ data/modules/         sample module example.com/hello (v1.0.0 retracted, v1.1.0,
 
 ```bash
 make test   # go test ./...
-make build  # bin/gopherdexd and bin/gopherdex
+make build  # bin/gopkgregd and bin/gopkgreg
 ```
 
 ## Contributing
@@ -618,7 +621,7 @@ Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md): setup,
 - **main is protected:** changes arrive by pull request, with passing checks and a maintainer's review. Pull requests are squash-merged.
 - **First-time contributors:** a welcome message explains the steps; a maintainer approves the first CI run; the [CLA](CLA.md) is signed once, by replying to a bot. Issues labelled `good first issue` are a good place to start.
 - **Security problems** are reported privately: see [SECURITY.md](SECURITY.md).
-- **Questions and ideas** go to [Discussions](https://github.com/codebled/gopherdex/discussions); issues are for bugs and agreed work.
+- **Questions and ideas** go to [Discussions](https://github.com/gopkgreg/gopkgreg/discussions); issues are for bugs and agreed work.
 - **Who decides what:** [GOVERNANCE.md](GOVERNANCE.md) describes the roles, how to become a triager or maintainer, and how decisions are made. [MAINTAINERS.md](MAINTAINERS.md) lists the current maintainers.
 - Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 - Maintainers apply the repository's settings with `scripts/github-settings.sh`: branch rules, labels, topics, Discussions, the maintainer and triage teams, private vulnerability reporting and Actions defaults.
@@ -627,7 +630,7 @@ Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md): setup,
 
 Copyright (C) 2026 Parthiban Sivakumar
 
-Gopherdex is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](LICENSE) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+gopkgreg is free software: you can redistribute it and/or modify it under the terms of the [GNU Affero General Public License](LICENSE) as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 In short: you may use, study, change and share it. If you run a modified version as a service that others use over a network, you must offer those users the source code of your version, under the same license (section 13).
 

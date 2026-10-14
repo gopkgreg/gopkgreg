@@ -24,7 +24,7 @@
     <div class="wrap" id="library-body"></div>
   </section>
 
-  <section class="showcase" id="browse" aria-label="Modules on Gopherdex">
+  <section class="showcase" id="browse" aria-label="Modules on gopkgreg">
     <div class="wrap">
       {{if .Recent}}
       <div class="showcase-grid{{if .Popular}} three{{end}}">
@@ -102,7 +102,7 @@
         <ol class="publish-steps-band">
           <li><span>1</span>Name it <code>{{.ModuleHost}}/&lt;you&gt;/&lt;module&gt;</code></li>
           <li><span>2</span><code>git tag v0.1.0</code></li>
-          <li><span>3</span><code>gopherdex publish</code></li>
+          <li><span>3</span><code>gopkgreg publish</code></li>
         </ol>
         <p class="cli-install">Get the CLI: <code>{{cliInstall}}</code></p>
         {{if $.User}}

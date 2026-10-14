@@ -9,17 +9,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/oidc"
-	"github.com/codebled/gopherdex/internal/oidc/oidctest"
+	"github.com/gopkgreg/gopkgreg/internal/oidc"
+	"github.com/gopkgreg/gopkgreg/internal/oidc/oidctest"
 )
 
 func TestVerify(t *testing.T) {
 	iss := oidctest.New(t)
 	now := time.Unix(1_800_000_000, 0)
-	v := &oidc.Verifier{Issuer: iss.URL, Audience: "gopherdex.test", Now: func() time.Time { return now }}
+	v := &oidc.Verifier{Issuer: iss.URL, Audience: "gopkgreg.test", Now: func() time.Time { return now }}
 	ctx := context.Background()
 
-	good := iss.GitHubClaims("octo-org/retry", "release.yml", "gopherdex.test", now.Unix()-10)
+	good := iss.GitHubClaims("octo-org/retry", "release.yml", "gopkgreg.test", now.Unix()-10)
 	var c oidc.GitHubClaims
 	if err := v.Verify(ctx, iss.Sign(t, good), &c); err != nil {
 		t.Fatalf("valid token: %v", err)
@@ -30,7 +30,7 @@ func TestVerify(t *testing.T) {
 
 	// A list audience works too.
 	listAud := iss.GitHubClaims("octo-org/retry", "release.yml", "", now.Unix())
-	listAud["aud"] = []string{"other", "gopherdex.test"}
+	listAud["aud"] = []string{"other", "gopkgreg.test"}
 	if err := v.Verify(ctx, iss.Sign(t, listAud), &c); err != nil {
 		t.Errorf("list audience: %v", err)
 	}
@@ -40,7 +40,7 @@ func TestVerify(t *testing.T) {
 		t.Fatal(err)
 	}
 	with := func(k string, val any) map[string]any {
-		m := iss.GitHubClaims("octo-org/retry", "release.yml", "gopherdex.test", now.Unix())
+		m := iss.GitHubClaims("octo-org/retry", "release.yml", "gopkgreg.test", now.Unix())
 		m[k] = val
 		return m
 	}

@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/mail"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 const maxFieldBytes = 1024
@@ -84,7 +84,7 @@ func (s *server) handleUpload(w http.ResponseWriter, r *http.Request) {
 				writeJSON(w, http.StatusBadRequest, apiError{"Send exactly one zip part."})
 				return
 			}
-			tmp, err := os.CreateTemp("", "gopherdex-upload-*.zip")
+			tmp, err := os.CreateTemp("", "gopkgreg-upload-*.zip")
 			if err != nil {
 				s.apiError(w, r, fmt.Errorf("create upload file: %w", err))
 				return

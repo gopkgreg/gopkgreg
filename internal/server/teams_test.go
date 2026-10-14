@@ -7,12 +7,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/codebled/gopherdex/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
 )
 
 func TestTeamsOverHTTP(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0") // creates alice
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0") // creates alice
 	for _, name := range []string{"bob", "carol"} {
 		if _, err := env.accts.Register(context.Background(), name, name+"@example.com", "correct horse battery", accounts.Client{}); err != nil {
 			t.Fatal(err)
@@ -31,7 +31,7 @@ func TestTeamsOverHTTP(t *testing.T) {
 	alice.post("/-/orgs/members", url.Values{"org": {"acme"}, "username": {"bob"}, "role": {"member"}})
 	resp, body = bob.post("/account/invitations/accept", url.Values{"kind": {"organization"}, "name": {"acme"}})
 	expect(t, resp, body, http.StatusSeeOther, "")
-	env.publish(t, "gopherdex.test/acme/api", "v1.0.0")
+	env.publish(t, "gopkgreg.test/acme/api", "v1.0.0")
 
 	// Create a team; it opens on its own page.
 	resp, body = bob.post("/-/orgs/teams", url.Values{"org": {"acme"}, "team": {"backend"}})
@@ -48,13 +48,13 @@ func TestTeamsOverHTTP(t *testing.T) {
 	expect(t, resp, body, http.StatusSeeOther, "")
 	resp, body = alice.post("/-/orgs/teams/members", url.Values{"org": {"acme"}, "team": {"backend"}, "username": {"carol"}})
 	expect(t, resp, body, http.StatusConflict, "Add them to the organization first")
-	resp, body = alice.post("/-/orgs/teams/modules", url.Values{"org": {"acme"}, "team": {"backend"}, "module": {"gopherdex.test/acme/api"}, "role": {"owner"}})
+	resp, body = alice.post("/-/orgs/teams/modules", url.Values{"org": {"acme"}, "team": {"backend"}, "module": {"gopkgreg.test/acme/api"}, "role": {"owner"}})
 	expect(t, resp, body, http.StatusSeeOther, "")
 
 	// Members see teams; everyone else doesn't.
 	resp, body = alice.get("/orgs/acme/teams/backend")
 	expect(t, resp, body, http.StatusOK, "Runs the API")
-	if !strings.Contains(body, "@bob") || !strings.Contains(body, "gopherdex.test/acme/api") || !strings.Contains(body, "Delete @acme/backend") {
+	if !strings.Contains(body, "@bob") || !strings.Contains(body, "gopkgreg.test/acme/api") || !strings.Contains(body, "Delete @acme/backend") {
 		t.Error("team page should list members and modules, and let owners manage it")
 	}
 	resp, body = bob.get("/orgs/acme/teams/backend")
@@ -91,7 +91,7 @@ func TestTeamsOverHTTP(t *testing.T) {
 	expect(t, resp, body, http.StatusSeeOther, "")
 	resp, body = alice.get("/acme")
 	expect(t, resp, body, http.StatusOK, "their teams decide which existing ones they maintain")
-	resp, body = alice.post("/-/orgs/teams/modules/remove", url.Values{"org": {"acme"}, "team": {"backend"}, "module": {"gopherdex.test/acme/api"}})
+	resp, body = alice.post("/-/orgs/teams/modules/remove", url.Values{"org": {"acme"}, "team": {"backend"}, "module": {"gopkgreg.test/acme/api"}})
 	expect(t, resp, body, http.StatusSeeOther, "")
 	resp, body = bob.get("/acme/api?tab=manage")
 	expect(t, resp, body, http.StatusNotFound, "")

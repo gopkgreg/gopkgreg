@@ -2,12 +2,12 @@
 # below. The last matching rule wins. The teams are created by
 # scripts/github-settings.sh; their members are listed in MAINTAINERS.md.
 # When a maintainer takes on an area, add a rule for it here.
-*                                   @codebled/gopherdex-maintainers
+*                                   @gopkgreg/maintainers
 
 # Security-sensitive areas: every change here needs a maintainer's review.
-/internal/accounts/                 @codebled/gopherdex-maintainers
-/internal/database/migrations/      @codebled/gopherdex-maintainers
-/.github/                           @codebled/gopherdex-maintainers
+/internal/accounts/                 @gopkgreg/maintainers
+/internal/database/migrations/      @gopkgreg/maintainers
+/.github/                           @gopkgreg/maintainers
 
 # Project rules and governance: the lead maintainer reviews these.
 /GOVERNANCE.md                      @parthiban-sivakumar

@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/oidc"
-	"github.com/codebled/gopherdex/internal/oidc/oidctest"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/oidc"
+	"github.com/gopkgreg/gopkgreg/internal/oidc/oidctest"
 )
 
 func postJSON(t *testing.T, env *testEnv, path, token string, body any) (int, string) {
@@ -36,9 +36,9 @@ func postJSON(t *testing.T, env *testEnv, path, token string, body any) (int, st
 func TestTrustedPublishingFlow(t *testing.T) {
 	iss := oidctest.New(t)
 	env := newTestEnvWith(t, func(c *Config) {
-		c.GitHubOIDC = &oidc.Verifier{Issuer: iss.URL, Audience: "gopherdex.test"}
+		c.GitHubOIDC = &oidc.Verifier{Issuer: iss.URL, Audience: "gopkgreg.test"}
 	})
-	mod := "gopherdex.test/alice/retry"
+	mod := "gopkgreg.test/alice/retry"
 	env.publish(t, mod, "v1.0.0")
 	if _, err := env.accts.Register(context.Background(), "bob", "bob@example.com", "correct horse battery", accounts.Client{}); err != nil {
 		t.Fatal(err)
@@ -66,12 +66,12 @@ func TestTrustedPublishingFlow(t *testing.T) {
 	pubID := regexp.MustCompile(`name="id" value="(\d+)"`).FindStringSubmatch(body)[1]
 
 	// Pending publishers live on the account page.
-	resp, body = alice.post("/-/publishers", url.Values{"from": {"account"}, "module": {"gopherdex.test/bob/stolen"}, "repository": {"alice/x"}, "workflow": {"release.yml"}})
-	expect(t, resp, body, http.StatusForbidden, "can&#39;t create modules in gopherdex.test/bob/")
-	if !strings.Contains(body, `value="gopherdex.test/bob/stolen"`) {
+	resp, body = alice.post("/-/publishers", url.Values{"from": {"account"}, "module": {"gopkgreg.test/bob/stolen"}, "repository": {"alice/x"}, "workflow": {"release.yml"}})
+	expect(t, resp, body, http.StatusForbidden, "can&#39;t create modules in gopkgreg.test/bob/")
+	if !strings.Contains(body, `value="gopkgreg.test/bob/stolen"`) {
 		t.Error("the form lost what was typed")
 	}
-	resp, _ = alice.post("/-/publishers", url.Values{"from": {"account"}, "module": {"gopherdex.test/alice/next"}, "repository": {"alice/next"}, "workflow": {"release.yml"}})
+	resp, _ = alice.post("/-/publishers", url.Values{"from": {"account"}, "module": {"gopkgreg.test/alice/next"}, "repository": {"alice/next"}, "workflow": {"release.yml"}})
 	if loc := resp.Header.Get("Location"); !strings.HasPrefix(loc, "/account?done=publisher-added") {
 		t.Errorf("pending publisher redirect to %q", loc)
 	}
@@ -80,13 +80,13 @@ func TestTrustedPublishingFlow(t *testing.T) {
 
 	// The exchange.
 	_, body = fetch(t, env.srv, "/api/oidc/audience")
-	if !strings.Contains(body, `"audience":"gopherdex.test"`) {
+	if !strings.Contains(body, `"audience":"gopkgreg.test"`) {
 		t.Errorf("audience: %s", body)
 	}
 	if status, body := postJSON(t, env, "/api/oidc/mint-token", "", map[string]string{"token": "junk", "module": mod}); status != http.StatusUnauthorized {
 		t.Errorf("junk ID token: %d %s", status, body)
 	}
-	idToken := iss.Sign(t, iss.GitHubClaims("alice/retry", "release.yml", "gopherdex.test", time.Now().Unix()))
+	idToken := iss.Sign(t, iss.GitHubClaims("alice/retry", "release.yml", "gopkgreg.test", time.Now().Unix()))
 	status, body := postJSON(t, env, "/api/oidc/mint-token", "", map[string]string{"token": idToken, "module": mod})
 	if status != http.StatusOK {
 		t.Fatalf("mint: %d %s", status, body)
@@ -141,7 +141,7 @@ func TestTrustedPublishingOff(t *testing.T) {
 	if resp, _ := fetch(t, env.srv, "/api/oidc/audience"); resp.StatusCode != http.StatusNotFound {
 		t.Errorf("audience with trusted publishing off: %d", resp.StatusCode)
 	}
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
 	alice := newBrowser(t, env.srv.URL)
 	alice.post("/login", url.Values{"login": {"alice"}, "password": {"correct horse battery"}})
 	if _, body := alice.get("/alice/retry?tab=manage"); strings.Contains(body, "Trusted publishers") {

@@ -36,7 +36,7 @@ var (
 const (
 	maxPasskeys  = 10
 	ceremonyTTL  = 5 * time.Minute
-	rpName       = "Gopherdex"
+	rpName       = "gopkgreg"
 	userHandleSz = 32
 )
 
@@ -82,7 +82,7 @@ func (w *waUser) WebAuthnID() []byte { return w.handle }
 // someone picks a passkey.
 func (w *waUser) WebAuthnName() string { return w.u.Username }
 
-// WebAuthnDisplayName returns the username as Gopherdex shows it, with a
+// WebAuthnDisplayName returns the username as gopkgreg shows it, with a
 // leading @.
 func (w *waUser) WebAuthnDisplayName() string { return "@" + w.u.Username }
 
@@ -295,7 +295,7 @@ func (s *Service) FinishPasskeyRegistration(ctx context.Context, u *User, token,
 	if err := tx.Commit(); err != nil {
 		return nil, nil, err
 	}
-	s.notify(u, "A passkey was added to your Gopherdex account",
+	s.notify(u, "A passkey was added to your gopkgreg account",
 		fmt.Sprintf("A passkey named %q was added to @%s. It can now sign in to the account.", name, u.Username))
 	return &Passkey{ID: id, Name: name, CreatedAt: now, Synced: cred.Flags.BackupState}, codes, nil
 }
@@ -559,7 +559,7 @@ func (s *Service) DeletePasskey(ctx context.Context, u *User, id int64, password
 	if err := tx.Commit(); err != nil {
 		return err
 	}
-	s.notify(u, "A passkey was removed from your Gopherdex account",
+	s.notify(u, "A passkey was removed from your gopkgreg account",
 		fmt.Sprintf("The passkey named %q was removed from @%s and can no longer sign in.", name, u.Username))
 	return nil
 }

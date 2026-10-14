@@ -49,7 +49,7 @@ type writers struct {
 func newWriters(l *loader, client *http.Client, path string) (*writers, error) {
 	accts, err := readAccounts(path)
 	if err != nil {
-		return nil, fmt.Errorf("%w (run gdxbench accounts first)", err)
+		return nil, fmt.Errorf("%w (run gpkbench accounts first)", err)
 	}
 	w := &writers{l: l, client: client, owned: map[string][]*target{}, next: map[string]string{}}
 	w.host, _, _ = strings.Cut(l.targets[0].path, "/")
@@ -238,7 +238,7 @@ func writeSmallZip(out io.Writer, modPath, version string) error {
 	files := map[string]string{
 		"go.mod":    "module " + modPath + "\n\ngo 1.22\n",
 		"lib.go":    fmt.Sprintf("// Package %s is published by the load test.\npackage %s\n\n// Version is this release.\nconst Version = %q\n", pkgName(name), pkgName(name), version),
-		"README.md": "# " + name + "\n\nPublished by gdxbench load at " + time.Now().UTC().Format(time.RFC3339) + ".\n",
+		"README.md": "# " + name + "\n\nPublished by gpkbench load at " + time.Now().UTC().Format(time.RFC3339) + ".\n",
 	}
 	for f, body := range files {
 		fw, err := zw.Create(prefix + f)

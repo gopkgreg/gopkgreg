@@ -7,7 +7,7 @@
 # run again: every step replaces the previous setting.
 set -eu
 
-repo=${1:-codebled/gopherdex}
+repo=${1:-gopkgreg/gopkgreg}
 echo "Configuring $repo"
 
 # Pull requests are squash-merged; merged branches are deleted.
@@ -56,9 +56,9 @@ team() { # name description permission
 		gh api -X POST "orgs/$org/teams" -f name="$1" -f description="$2" -f privacy=closed >/dev/null
 	gh api -X PUT "orgs/$org/teams/$1/repos/$repo" -f permission="$3"
 }
-team gopherdex-maintainers "Reviews, merges and releases Gopherdex (MAINTAINERS.md)" maintain
-team gopherdex-triage      "Labels and answers Gopherdex issues (GOVERNANCE.md)"     triage
-gh api -X PUT "orgs/$org/teams/gopherdex-maintainers/memberships/$(gh api user --jq .login)" \
+team maintainers "Reviews, merges and releases gopkgreg (MAINTAINERS.md)" maintain
+team triage      "Labels and answers gopkgreg issues (GOVERNANCE.md)"     triage
+gh api -X PUT "orgs/$org/teams/maintainers/memberships/$(gh api user --jq .login)" \
 	-f role=maintainer >/dev/null
 
 # main: no direct pushes, force-pushes or deletion. Changes arrive by pull

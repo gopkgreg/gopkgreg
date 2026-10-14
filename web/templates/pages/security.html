@@ -37,7 +37,7 @@
           <p>{{if .Passkeys}}Your passkeys already protect your account. You can also add an authenticator app as a backup.{{else}}Protect your account and your modules with a second step at sign-in, or add a passkey instead.{{if .Require2FA}} <strong>This registry requires one of them to publish.</strong>{{end}}{{end}}</p>
           <ol class="tfa-steps">
             <li>Scan this code with an authenticator app (1Password, Google Authenticator, Authy…).
-              <div class="qr"><img src="{{.QR}}" width="220" height="220" alt="QR code for adding Gopherdex to an authenticator app"></div>
+              <div class="qr"><img src="{{.QR}}" width="220" height="220" alt="QR code for adding gopkgreg to an authenticator app"></div>
               <p class="muted small">Can't scan it? Enter this key: <code class="secret">{{.Setup.Secret}}</code></p>
             </li>
             <li>Enter the 6-digit code the app shows.

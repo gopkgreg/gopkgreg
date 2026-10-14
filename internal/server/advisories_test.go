@@ -17,9 +17,9 @@ import (
 	xmodule "golang.org/x/mod/module"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/registry"
-	"github.com/codebled/gopherdex/internal/vulndb"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/vulndb"
 )
 
 // fakeVulnDB serves a tiny public database: github.com/x/dep has
@@ -76,7 +76,7 @@ func TestSecurityAdvisories(t *testing.T) {
 		t.Fatal(err)
 	}
 	env := newTestEnvWith(t, func(c *Config) { c.VulnDB = upstream })
-	mod := "gopherdex.test/alice/retry"
+	mod := "gopkgreg.test/alice/retry"
 	for _, v := range []string{"v1.0.0", "v1.1.0", "v1.2.0"} {
 		env.publish(t, mod, v)
 	}
@@ -98,7 +98,7 @@ func TestSecurityAdvisories(t *testing.T) {
 	form.Set("packages", ".: Do")
 	resp, body = alice.post("/-/advisories", form)
 	expect(t, resp, body, http.StatusSeeOther, "")
-	id := regexp.MustCompile(`GDX-\d{4}-\d{4}`).FindString(resp.Header.Get("Location"))
+	id := regexp.MustCompile(`GPK-\d{4}-\d{4}`).FindString(resp.Header.Get("Location"))
 	if id == "" {
 		t.Fatalf("redirect to %q", resp.Header.Get("Location"))
 	}
@@ -106,7 +106,7 @@ func TestSecurityAdvisories(t *testing.T) {
 
 	resp, body = alice.get("/advisories/" + id + "?done=published")
 	expect(t, resp, body, http.StatusOK, "Unbounded retries in retry.Do")
-	expect(t, resp, body, http.StatusOK, "go get gopherdex.test/alice/retry@v1.2.0")
+	expect(t, resp, body, http.StatusOK, "go get gopkgreg.test/alice/retry@v1.2.0")
 	expect(t, resp, body, http.StatusOK, "Save changes") // alice owns it
 	if _, body := fetch(t, env.srv, "/advisories/"+id); strings.Contains(body, "Save changes") {
 		t.Error("anonymous visitors see the edit form")
@@ -162,8 +162,8 @@ func TestSecurityAdvisories(t *testing.T) {
 	}
 
 	// Dependencies: both a public and a hosted vulnerable requirement.
-	env.publishGoMod(t, "gopherdex.test/alice/app", "v1.0.0",
-		"module gopherdex.test/alice/app\n\ngo 1.22\n\nrequire (\n\tgithub.com/x/dep v1.2.0\n\tgopherdex.test/alice/retry v1.1.0\n\tgithub.com/x/safe v1.0.0\n)\n")
+	env.publishGoMod(t, "gopkgreg.test/alice/app", "v1.0.0",
+		"module gopkgreg.test/alice/app\n\ngo 1.22\n\nrequire (\n\tgithub.com/x/dep v1.2.0\n\tgopkgreg.test/alice/retry v1.1.0\n\tgithub.com/x/safe v1.0.0\n)\n")
 	_, body = fetch(t, env.srv, "/alice/app?tab=security")
 	for _, want := range []string{"2 known vulnerabilities in modules that v1.0.0 requires", "GO-2020-0001", "github.com/x/dep@v1.2.0", id, "Fixed in v1.5.0"} {
 		if !strings.Contains(body, want) {

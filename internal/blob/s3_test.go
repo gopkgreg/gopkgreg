@@ -36,14 +36,14 @@ func TestSigV4(t *testing.T) {
 func TestParseS3(t *testing.T) {
 	env := map[string]string{"AWS_ACCESS_KEY_ID": "id", "AWS_SECRET_ACCESS_KEY": "secret"}
 	getenv := func(k string) string { return env[k] }
-	s, err := ParseS3("s3://modules/gopherdex?region=eu-west-1", getenv)
+	s, err := ParseS3("s3://modules/gopkgreg?region=eu-west-1", getenv)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if s.Endpoint != "https://s3.eu-west-1.amazonaws.com" || s.PathStyle || s.Prefix != "gopherdex/" {
+	if s.Endpoint != "https://s3.eu-west-1.amazonaws.com" || s.PathStyle || s.Prefix != "gopkgreg/" {
 		t.Errorf("AWS: %+v", s)
 	}
-	if u := s.objectURL("modules/a/@v/v1.0.0-ab.zip").String(); u != "https://modules.s3.eu-west-1.amazonaws.com/gopherdex/modules/a/%40v/v1.0.0-ab.zip" {
+	if u := s.objectURL("modules/a/@v/v1.0.0-ab.zip").String(); u != "https://modules.s3.eu-west-1.amazonaws.com/gopkgreg/modules/a/%40v/v1.0.0-ab.zip" {
 		t.Errorf("object URL = %s", u)
 	}
 	s, err = ParseS3("s3://modules?endpoint=https://acct.r2.cloudflarestorage.com&region=auto", getenv)
@@ -61,14 +61,14 @@ func TestParseS3(t *testing.T) {
 }
 
 // TestS3Store runs against a real S3-compatible server when
-// GOPHERDEX_TEST_S3 names a bucket URL, for example with MinIO:
+// GOPKGREG_TEST_S3 names a bucket URL, for example with MinIO:
 //
 //	docker run -d -p 9000:9000 minio/minio server /data
-//	GOPHERDEX_TEST_S3='s3://test?endpoint=http://localhost:9000' AWS_ACCESS_KEY_ID=minioadmin AWS_SECRET_ACCESS_KEY=minioadmin go test ./internal/blob
+//	GOPKGREG_TEST_S3='s3://test?endpoint=http://localhost:9000' AWS_ACCESS_KEY_ID=minioadmin AWS_SECRET_ACCESS_KEY=minioadmin go test ./internal/blob
 func TestS3Store(t *testing.T) {
-	spec := os.Getenv("GOPHERDEX_TEST_S3")
+	spec := os.Getenv("GOPKGREG_TEST_S3")
 	if spec == "" {
-		t.Skip("set GOPHERDEX_TEST_S3 to test against an S3-compatible server")
+		t.Skip("set GOPKGREG_TEST_S3 to test against an S3-compatible server")
 	}
 	s, err := ParseS3(spec, os.Getenv)
 	if err != nil {

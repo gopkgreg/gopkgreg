@@ -1,9 +1,9 @@
-// Command gdxbench builds large datasets for Gopherdex and load-tests a
+// Command gpkbench builds large datasets for gopkgreg and load-tests a
 // running server.
 //
-//	gdxbench seed [-profile small|full] [flags]   build a dataset in bench/
-//	gdxbench accounts [flags]                     credentials for write load (tokens, sign-ins)
-//	gdxbench load [flags]                         drive traffic at a server
+//	gpkbench seed [-profile small|full] [flags]   build a dataset in bench/
+//	gpkbench accounts [flags]                     credentials for write load (tokens, sign-ins)
+//	gpkbench load [flags]                         drive traffic at a server
 //
 // Seed samples real modules from index.golang.org and proxy.golang.org
 // (cached under bench/cache, so reruns don't download again), remaps them
@@ -14,14 +14,14 @@
 // requests, and trusting X-Forwarded-For so the load comes from many
 // clients instead of tripping one client's rate limits:
 //
-//	gopherdexd -db bench/data/gopherdex.db -blobs bench/data/blobs -offline -trust-proxy
-//	gdxbench load -url http://localhost:8080 -c 64 -d 60s
+//	gopkgregd -db bench/data/gopkgreg.db -blobs bench/data/blobs -offline -trust-proxy
+//	gpkbench load -url http://localhost:8080 -c 64 -d 60s
 //
 // Mixed read and write load, e.g. for 30 minutes with two uploads and five
 // sign-ins a second:
 //
-//	gdxbench accounts
-//	gdxbench load -d 30m -publish-rate 2 -login-rate 5
+//	gpkbench accounts
+//	gpkbench load -d 30m -publish-rate 2 -login-rate 5
 package main
 
 import (
@@ -41,7 +41,7 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/bench"
+	"github.com/gopkgreg/gopkgreg/internal/bench"
 )
 
 type profile struct {
@@ -71,13 +71,13 @@ func main() {
 		usage()
 	}
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "gdxbench:", err)
+		fmt.Fprintln(os.Stderr, "gpkbench:", err)
 		os.Exit(1)
 	}
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: gdxbench seed|accounts|load [flags]   (-h for flags)")
+	fmt.Fprintln(os.Stderr, "usage: gpkbench seed|accounts|load [flags]   (-h for flags)")
 	os.Exit(2)
 }
 
@@ -85,7 +85,7 @@ func seed(ctx context.Context, args []string) error {
 	fs := flag.NewFlagSet("seed", flag.ExitOnError)
 	prof := fs.String("profile", "small", "dataset size: small (a few minutes) or full (100k modules, 1M versions; hours)")
 	dir := fs.String("dir", "bench", "where the cache, dataset and reports go")
-	host := fs.String("module-host", "gopherdex.localhost", "module host of the server that will serve the dataset")
+	host := fs.String("module-host", "gopkgreg.localhost", "module host of the server that will serve the dataset")
 	index := fs.String("index", "https://index.golang.org", "Go module index")
 	proxy := fs.String("proxy", "https://proxy.golang.org", "Go module mirror")
 	since := fs.String("since", "2020-01-01", "oldest date to sample the index from")
@@ -121,7 +121,7 @@ func seed(ctx context.Context, args []string) error {
 	}
 	data := filepath.Join(*dir, "data")
 	cfg := bench.SeedConfig{
-		DB: filepath.Join(data, "gopherdex.db"), Blobs: filepath.Join(data, "blobs"), Out: data, ModuleHost: *host,
+		DB: filepath.Join(data, "gopkgreg.db"), Blobs: filepath.Join(data, "blobs"), Out: data, ModuleHost: *host,
 		Upstream: &bench.Upstream{Index: strings.TrimSuffix(*index, "/"), Proxy: strings.TrimSuffix(*proxy, "/"),
 			Cache: filepath.Join(*dir, "cache"), HTTP: &http.Client{Timeout: 2 * time.Minute}, MaxZip: *maxZip},
 		Real: pick(*realMods, p.real), Zips: pick(*zips, p.zips), Modules: pick(*modules, p.modules), Versions: pick(*versions, p.versions),
@@ -134,11 +134,11 @@ func seed(ctx context.Context, args []string) error {
 	if rep != nil {
 		writeSeedReport(os.Stdout, rep, time.Since(start))
 		if err := saveJSON(filepath.Join(data, "seed-report.json"), rep); err != nil {
-			fmt.Fprintln(os.Stderr, "gdxbench: save seed report:", err)
+			fmt.Fprintln(os.Stderr, "gpkbench: save seed report:", err)
 		}
 	}
 	if err == nil {
-		fmt.Printf("\nDataset ready. Serve it with:\n  gopherdexd -db %s -blobs %s -module-host %s -offline -trust-proxy\n",
+		fmt.Printf("\nDataset ready. Serve it with:\n  gopkgregd -db %s -blobs %s -module-host %s -offline -trust-proxy\n",
 			cfg.DB, cfg.Blobs, *host)
 	}
 	return err
@@ -180,7 +180,7 @@ func load(ctx context.Context, args []string) error {
 	timeout := fs.Duration("timeout", 30*time.Second, "per-request timeout")
 	out := fs.String("out", "", "also write the report as JSON to this file")
 	remote := fs.Bool("i-own-this-server", false, "allow a non-local -url (only load servers you run)")
-	accts := fs.String("accounts", "bench/data/accounts.tsv", "credentials written by gdxbench accounts, for write load")
+	accts := fs.String("accounts", "bench/data/accounts.tsv", "credentials written by gpkbench accounts, for write load")
 	publishRate := fs.Float64("publish-rate", 0, "uploads per second through /api/upload, alongside the reads")
 	newShare := fs.Float64("new-share", 0.3, "fraction of uploads that are brand-new modules; the rest are new versions")
 	loginRate := fs.Float64("login-rate", 0, "password sign-ins per second")
@@ -228,7 +228,7 @@ func prepareAccounts(ctx context.Context, args []string) error {
 		return err
 	}
 	out := filepath.Join(*dir, "data", "accounts.tsv")
-	n, err := bench.PrepareAccounts(ctx, bench.AccountsConfig{DB: filepath.Join(*dir, "data", "gopherdex.db"), Out: out,
+	n, err := bench.PrepareAccounts(ctx, bench.AccountsConfig{DB: filepath.Join(*dir, "data", "gopkgreg.db"), Out: out,
 		Publishers: *publishers, NewUsers: *users})
 	if err != nil {
 		return err

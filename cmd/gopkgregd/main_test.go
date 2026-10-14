@@ -16,26 +16,26 @@ func TestFlagsFromEnv(t *testing.T) {
 		t.Fatal(err)
 	}
 	env := map[string]string{
-		"GOPHERDEX_BASE_URL":    "https://gopherdex.dev",
-		"GOPHERDEX_ADDR":        ":1", // the command line wins
-		"GOPHERDEX_REQUIRE_2FA": "true",
+		"GOPKGREG_BASE_URL":    "https://gopkgreg.com",
+		"GOPKGREG_ADDR":        ":1", // the command line wins
+		"GOPKGREG_REQUIRE_2FA": "true",
 	}
 	if err := flagsFromEnv(fs, func(k string) string { return env[k] }); err != nil {
 		t.Fatal(err)
 	}
-	if *base != "https://gopherdex.dev" || *addr != ":9000" || !*twoFA {
+	if *base != "https://gopkgreg.com" || *addr != ":9000" || !*twoFA {
 		t.Errorf("base=%q addr=%q 2fa=%v", *base, *addr, *twoFA)
 	}
-	env["GOPHERDEX_REQUIRE_2FA"] = "maybe"
+	env["GOPKGREG_REQUIRE_2FA"] = "maybe"
 	fs2 := flag.NewFlagSet("t", flag.ContinueOnError)
 	fs2.Bool("require-2fa", false, "")
-	if err := flagsFromEnv(fs2, func(k string) string { return env[k] }); err == nil || !strings.Contains(err.Error(), "GOPHERDEX_REQUIRE_2FA") {
+	if err := flagsFromEnv(fs2, func(k string) string { return env[k] }); err == nil || !strings.Contains(err.Error(), "GOPKGREG_REQUIRE_2FA") {
 		t.Errorf("bad value: %v", err)
 	}
 }
 
 func TestLaunchWarnings(t *testing.T) {
-	prod, _ := url.Parse("https://gopherdex.dev")
+	prod, _ := url.Parse("https://gopkgreg.com")
 	dev, _ := url.Parse("http://localhost:8080")
 	if w := launchWarnings(dev, "", "", "", false, "localhost:8080"); len(w) != 0 {
 		t.Errorf("development warnings: %v", w)

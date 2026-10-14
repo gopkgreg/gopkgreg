@@ -5,9 +5,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/discovery"
-	"github.com/codebled/gopherdex/internal/ranking"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/discovery"
+	"github.com/gopkgreg/gopkgreg/internal/ranking"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 const (
@@ -110,7 +110,7 @@ func (s *server) unifiedSearch(ctx context.Context, data *searchData) error {
 			return ctx.Err()
 		}
 		s.log.Warn("public search", "query", data.Query, "err", err)
-		data.PublicError = "Public modules from pkg.go.dev didn't load in time, so only modules on Gopherdex are shown. Search again to retry."
+		data.PublicError = "Public modules from pkg.go.dev didn't load in time, so only modules on gopkgreg are shown. Search again to retry."
 	} else {
 		for i, r := range rs {
 			public = append(public, ranking.Candidate{Path: r.Path, Version: r.Version, Synopsis: r.Synopsis, Rank: i, Of: len(rs)})

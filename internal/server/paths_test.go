@@ -15,8 +15,8 @@ import (
 	xmodule "golang.org/x/mod/module"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 // publish puts a minimal module version into the registry as alice.
@@ -97,17 +97,17 @@ func parseGoImports(t *testing.T, r io.Reader) []goImport {
 
 func TestGoGet(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
-	env.publish(t, "gopherdex.test/alice/retry/v2", "v2.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry/v2", "v2.0.0")
 	client := env.srv.Client()
 	client.CheckRedirect = func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }
 
 	tests := []struct{ path, root string }{
-		{"/alice/retry", "gopherdex.test/alice/retry"},
-		{"/alice/retry/internal/backoff", "gopherdex.test/alice/retry"},
-		{"/alice/retry/v2", "gopherdex.test/alice/retry/v2"},
-		{"/alice/retry/v2/sub", "gopherdex.test/alice/retry/v2"},
-		{"/alice/retry/v3", "gopherdex.test/alice/retry"}, // no v3 module: a package path inside v1
+		{"/alice/retry", "gopkgreg.test/alice/retry"},
+		{"/alice/retry/internal/backoff", "gopkgreg.test/alice/retry"},
+		{"/alice/retry/v2", "gopkgreg.test/alice/retry/v2"},
+		{"/alice/retry/v2/sub", "gopkgreg.test/alice/retry/v2"},
+		{"/alice/retry/v3", "gopkgreg.test/alice/retry"}, // no v3 module: a package path inside v1
 	}
 	for _, tt := range tests {
 		resp, err := client.Get(env.srv.URL + tt.path + "?go-get=1")
@@ -119,7 +119,7 @@ func TestGoGet(t *testing.T) {
 		if resp.StatusCode != http.StatusOK {
 			t.Fatalf("%s: status %d", tt.path, resp.StatusCode)
 		}
-		want := goImport{tt.root, "mod", "http://gopherdex.test/api/proxy"}
+		want := goImport{tt.root, "mod", "http://gopkgreg.test/api/proxy"}
 		if len(imports) != 1 || imports[0] != want {
 			t.Errorf("%s?go-get=1: go-import = %+v, want %+v", tt.path, imports, want)
 		}
@@ -160,15 +160,15 @@ func TestGoGet(t *testing.T) {
 }
 
 func TestInstallCommand(t *testing.T) {
-	public := &server{moduleHost: "gopherdex.dev", siteURL: "https://gopherdex.dev", zeroConfig: true}
-	if got := public.installCommand("gopherdex.dev/alice/retry", "v1.0.0"); got != "go get gopherdex.dev/alice/retry@v1.0.0" {
+	public := &server{moduleHost: "gopkgreg.com", siteURL: "https://gopkgreg.com", zeroConfig: true}
+	if got := public.installCommand("gopkgreg.com/alice/retry", "v1.0.0"); got != "go get gopkgreg.com/alice/retry@v1.0.0" {
 		t.Errorf("public host: %q", got)
 	}
-	if got := public.installCommand("example.com/hello", "latest"); !strings.HasPrefix(got, "GOPROXY=https://gopherdex.dev/api/proxy GONOSUMDB=example.com ") {
+	if got := public.installCommand("example.com/hello", "latest"); !strings.HasPrefix(got, "GOPROXY=https://gopkgreg.com/api/proxy GONOSUMDB=example.com ") {
 		t.Errorf("fixture module on public registry: %q", got)
 	}
-	local := &server{moduleHost: "gopherdex.localhost", siteURL: "http://localhost:8080"}
-	if got := local.installCommand("gopherdex.localhost/alice/retry", "latest"); got != "GOPROXY=http://localhost:8080/api/proxy GONOSUMDB=gopherdex.localhost go get gopherdex.localhost/alice/retry@latest" {
+	local := &server{moduleHost: "gopkgreg.localhost", siteURL: "http://localhost:8080"}
+	if got := local.installCommand("gopkgreg.localhost/alice/retry", "latest"); got != "GOPROXY=http://localhost:8080/api/proxy GONOSUMDB=gopkgreg.localhost go get gopkgreg.localhost/alice/retry@latest" {
 		t.Errorf("local host: %q", got)
 	}
 }
@@ -192,9 +192,9 @@ func TestClientIPBehindProxy(t *testing.T) {
 
 func TestProjectPages(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
-	env.publish(t, "gopherdex.test/alice/retry", "v1.1.0")
-	env.publish(t, "gopherdex.test/alice/retry/v2", "v2.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.1.0")
+	env.publish(t, "gopkgreg.test/alice/retry/v2", "v2.0.0")
 	client := env.srv.Client()
 	client.CheckRedirect = func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }
 
@@ -214,11 +214,11 @@ func TestProjectPages(t *testing.T) {
 		status   int
 		contains []string
 	}{
-		{"/alice/retry", 200, []string{"<h1", "v1.1.0", "Latest version", "Project description", "GOPROXY=http://gopherdex.test/api/proxy", "Major versions"}},
-		{"/alice/retry@v1.0.0", 200, []string{"Newer version available: v1.1.0", "go get gopherdex.test/alice/retry@v1.0.0", `href="/alice/retry@v1.0.0?tab=docs"`}},
+		{"/alice/retry", 200, []string{"<h1", "v1.1.0", "Latest version", "Project description", "GOPROXY=http://gopkgreg.test/api/proxy", "Major versions"}},
+		{"/alice/retry@v1.0.0", 200, []string{"Newer version available: v1.1.0", "go get gopkgreg.test/alice/retry@v1.0.0", `href="/alice/retry@v1.0.0?tab=docs"`}},
 		{"/alice/retry?tab=docs", 200, []string{"Package lib is a test.", `id="pkg"`}},
 		{"/alice/retry?tab=versions", 200, []string{`href="/alice/retry@v1.0.0"`, "@alice"}},
-		{"/alice/retry?tab=files", 200, []string{"retry@v1.1.0.zip", "gopherdex.test/alice/retry v1.1.0 h1:", "/api/proxy/gopherdex.test/alice/retry/@v/v1.1.0.zip"}},
+		{"/alice/retry?tab=files", 200, []string{"retry@v1.1.0.zip", "gopkgreg.test/alice/retry v1.1.0 h1:", "/api/proxy/gopkgreg.test/alice/retry/@v/v1.1.0.zip"}},
 		{"/alice/retry/v2", 200, []string{`<span class="major">/v2</span>`, "v2.0.0"}},
 		{"/alice", 200, []string{"@alice", `href="/alice/retry"`, `href="/alice/retry/v2"`}},
 		{"/nobody", 404, []string{"nothing at this address"}},
@@ -237,7 +237,7 @@ func TestProjectPages(t *testing.T) {
 	}
 
 	// Old library-view links and search results for published modules redirect.
-	resp, _ := get("/?m=gopherdex.test%2Falice%2Fretry&v=v1.0.0")
+	resp, _ := get("/?m=gopkgreg.test%2Falice%2Fretry&v=v1.0.0")
 	if loc := resp.Header.Get("Location"); resp.StatusCode != http.StatusFound || loc != "/alice/retry@v1.0.0" {
 		t.Errorf("/?m= redirect: %d %q", resp.StatusCode, loc)
 	}
@@ -266,9 +266,9 @@ func TestProjectPages(t *testing.T) {
 
 func TestDownloadCounts(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
 	for range 3 {
-		resp, err := env.srv.Client().Get(env.srv.URL + "/api/proxy/gopherdex.test/alice/retry/@v/v1.0.0.zip")
+		resp, err := env.srv.Client().Get(env.srv.URL + "/api/proxy/gopkgreg.test/alice/retry/@v/v1.0.0.zip")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -276,7 +276,7 @@ func TestDownloadCounts(t *testing.T) {
 		resp.Body.Close()
 	}
 	// go.mod and .info fetches aren't downloads.
-	resp, _ := env.srv.Client().Get(env.srv.URL + "/api/proxy/gopherdex.test/alice/retry/@v/v1.0.0.mod")
+	resp, _ := env.srv.Client().Get(env.srv.URL + "/api/proxy/gopkgreg.test/alice/retry/@v/v1.0.0.mod")
 	resp.Body.Close()
 	if err := env.downloads.Flush(context.Background()); err != nil {
 		t.Fatal(err)

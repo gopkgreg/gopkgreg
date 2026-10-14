@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/codebled/gopherdex/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/module"
 )
 
 func TestAdvisories(t *testing.T) {
@@ -35,7 +35,7 @@ func TestAdvisories(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.HasPrefix(a.ID, "GDX-") || !strings.HasSuffix(a.ID, "-0001") {
+	if !strings.HasPrefix(a.ID, "GPK-") || !strings.HasSuffix(a.ID, "-0001") {
 		t.Errorf("id = %s", a.ID)
 	}
 	if strings.Join(a.Aliases, " ") != "CVE-2026-12345 GHSA-2c4m-59x9-fr2g" {
@@ -53,7 +53,7 @@ func TestAdvisories(t *testing.T) {
 		t.Errorf("fixed = %s", a.Fixed())
 	}
 
-	e := a.OSV("https://gopherdex.test/advisories/" + a.ID)
+	e := a.OSV("https://gopkgreg.test/advisories/" + a.ID)
 	if e.Affected[0].Package.Name != mod || e.Affected[0].Ranges[0].Events[0].Introduced != "1.1.0" || e.Affected[0].Ranges[0].Events[1].Fixed != "1.2.0" {
 		t.Errorf("OSV affected = %+v", e.Affected)
 	}

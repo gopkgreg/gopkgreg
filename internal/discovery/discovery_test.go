@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/store"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/store"
 )
 
 func newService(t *testing.T) *Service {

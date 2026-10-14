@@ -12,12 +12,12 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 const (
-	sessionCookie = "gopherdex_session"
+	sessionCookie = "gopkgreg_session"
 	maxFormBytes  = 16 << 10
 )
 
@@ -144,7 +144,7 @@ func (s *server) tooManyRequests(w http.ResponseWriter, r *http.Request, what st
 		Heading:     "Please wait a few minutes.",
 		Body:        "There have been too many " + what + " attempts from your network. Try again later.",
 		ActionURL:   "/",
-		ActionLabel: "Back to Gopherdex",
+		ActionLabel: "Back to gopkgreg",
 	})
 }
 
@@ -357,7 +357,7 @@ type newToken struct {
 // notices maps ?done= keys to fixed messages, so the query string can't
 // inject arbitrary text into the page.
 var notices = map[string]string{
-	"signed-up":         "Welcome to Gopherdex! We've emailed you a link to confirm your address.",
+	"signed-up":         "Welcome to gopkgreg! We've emailed you a link to confirm your address.",
 	"email-verified":    "Your email is verified. You can create API tokens now.",
 	"verification-sent": "We've sent a new verification link. It expires in 24 hours.",
 	"token-revoked":     "Token revoked. Anything using it can no longer publish.",
@@ -368,7 +368,7 @@ var notices = map[string]string{
 	"invite-declined":   "Invitation declined.",
 	"left":              "Done. You no longer have that role.",
 	"preferences":       "Email preferences saved.",
-	"publisher-added":   "Trusted publisher added. Its workflow can publish the module's first release with gopherdex publish, no API token needed.",
+	"publisher-added":   "Trusted publisher added. Its workflow can publish the module's first release with gopkgreg publish, no API token needed.",
 	"publisher-removed": "Trusted publisher removed.",
 }
 
@@ -488,19 +488,19 @@ func (s *server) handleRevokeToken(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// bearerUser authenticates an API request (Authorization: Bearer gdx_…) and
+// bearerUser authenticates an API request (Authorization: Bearer gpk_…) and
 // writes a 401 when it fails.
 func (s *server) bearerUser(w http.ResponseWriter, r *http.Request) (*accounts.User, *accounts.Token, bool) {
 	secret, ok := strings.CutPrefix(r.Header.Get("Authorization"), "Bearer ")
 	if !ok {
-		w.Header().Set("WWW-Authenticate", `Bearer realm="gopherdex"`)
-		writeJSON(w, http.StatusUnauthorized, apiError{"Send an API token in the Authorization header: Bearer gdx_…"})
+		w.Header().Set("WWW-Authenticate", `Bearer realm="gopkgreg"`)
+		writeJSON(w, http.StatusUnauthorized, apiError{"Send an API token in the Authorization header: Bearer gpk_…"})
 		return nil, nil, false
 	}
 	u, tok, err := s.accounts.AuthenticateToken(r.Context(), strings.TrimSpace(secret))
 	switch {
 	case errors.Is(err, accounts.ErrInvalidToken):
-		w.Header().Set("WWW-Authenticate", `Bearer realm="gopherdex", error="invalid_token"`)
+		w.Header().Set("WWW-Authenticate", `Bearer realm="gopkgreg", error="invalid_token"`)
 		writeJSON(w, http.StatusUnauthorized, apiError{"This API token is invalid, expired or revoked. Create a new one at " + s.siteURL + "/account."})
 		return nil, nil, false
 	case err != nil:

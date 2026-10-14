@@ -12,7 +12,7 @@ import (
 
 func TestOpenMigratesOnce(t *testing.T) {
 	ctx := context.Background()
-	path := filepath.Join(t.TempDir(), "sub", "gopherdex.db")
+	path := filepath.Join(t.TempDir(), "sub", "gopkgreg.db")
 
 	db, err := Open(ctx, path)
 	if err != nil {

@@ -21,7 +21,7 @@ func TestPutOpen(t *testing.T) {
 	}
 	defer s.Close()
 
-	key := "gopherdex.dev/alice/retry/@v/v1.0.0.zip"
+	key := "gopkgreg.com/alice/retry/@v/v1.0.0.zip"
 	info, err := s.Put(ctx, key, strings.NewReader("zip bytes"), 1<<20)
 	if err != nil {
 		t.Fatal(err)
@@ -45,7 +45,7 @@ func TestPutOpen(t *testing.T) {
 		t.Fatalf("second Put = %v, want ErrExists", err)
 	}
 
-	entries, _ := os.ReadDir(filepath.Join(dir, "gopherdex.dev/alice/retry/@v"))
+	entries, _ := os.ReadDir(filepath.Join(dir, "gopkgreg.com/alice/retry/@v"))
 	if len(entries) != 1 {
 		t.Fatalf("temporary files left behind: %v", entries)
 	}

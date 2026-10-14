@@ -1,4 +1,4 @@
-// Package bench builds large, realistic datasets for Gopherdex and drives
+// Package bench builds large, realistic datasets for gopkgreg and drives
 // load against a running server, to measure how it behaves at scale.
 //
 // Seeding samples real modules from the Go module index and mirror
@@ -26,7 +26,7 @@ import (
 	xmodule "golang.org/x/mod/module"
 )
 
-const userAgent = "gopherdex-bench (+https://github.com/codebled/gopherdex)"
+const userAgent = "gopkgreg-bench (+https://github.com/gopkgreg/gopkgreg)"
 
 // Upstream reads the public module index and mirror, caching every
 // response under Cache.
