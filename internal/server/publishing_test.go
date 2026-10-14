@@ -50,6 +50,10 @@ func TestTrustedPublishingFlow(t *testing.T) {
 	// Owners add publishers on the Manage tab.
 	resp, body := alice.get("/alice/retry?tab=manage")
 	expect(t, resp, body, http.StatusOK, "Trusted publishers")
+	// The example workflow is the one-step action, pointed at this registry.
+	if !strings.Contains(body, "uses: gopkgreg/publish@v1") || !strings.Contains(body, "registry: http") || strings.Contains(body, "setup-go") {
+		t.Error("manage tab's example workflow doesn't use the gopkgreg/publish action with this registry")
+	}
 	resp, body = alice.post("/-/publishers", url.Values{"module": {mod}, "repository": {"alice/retry"}, "workflow": {"release.sh"}})
 	expect(t, resp, body, http.StatusBadRequest, "Give the workflow")
 	resp, body = alice.post("/-/publishers", url.Values{"module": {mod}, "repository": {"https://github.com/Alice/retry"}, "workflow": {"release.yml"}})

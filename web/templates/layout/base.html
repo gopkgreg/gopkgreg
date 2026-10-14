@@ -96,11 +96,9 @@ jobs:
     # environment: release  # if the trusted publisher names one
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: gopkgreg/publish@v1
         with:
-          go-version: stable
-      - run: {{cliInstall}}
-      - run: gopkgreg publish --registry {{.SiteURL}}
+          registry: {{.SiteURL}}
 {{- end}}
 
 {{define "advisoryFields" -}}
