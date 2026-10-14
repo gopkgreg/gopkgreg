@@ -25,6 +25,7 @@ import (
 	"github.com/gopkgreg/gopkgreg/internal/blob"
 	"github.com/gopkgreg/gopkgreg/internal/database"
 	"github.com/gopkgreg/gopkgreg/internal/discovery"
+	"github.com/gopkgreg/gopkgreg/internal/goindex"
 	"github.com/gopkgreg/gopkgreg/internal/goproxy"
 	"github.com/gopkgreg/gopkgreg/internal/mail"
 	"github.com/gopkgreg/gopkgreg/internal/mirror"
@@ -168,6 +169,7 @@ func run() error {
 	backupKeep := flag.Int("backup-keep", 7, "automatic backups to keep")
 	trusted := flag.Bool("trusted-publishing", true, "let GitHub Actions workflows publish with OIDC ID tokens instead of API tokens (off with -offline)")
 	oidcAudience := flag.String("oidc-audience", "", "audience GitHub ID tokens must be requested for (default: the module host)")
+	goIndex := flag.String("go-index", goindex.DefaultURL, "public Go module index whose newest releases the home page lists; empty turns it off (off with -offline)")
 	vulnDB := flag.String("vulndb", vulndb.DefaultUpstream, "public Go vulnerability database merged into /vulndb and used to flag vulnerable dependencies; empty turns it off (off with -offline)")
 	playground := flag.String("playground", "https://play.golang.org", "Go Playground that documentation examples open in; empty hides the Run buttons (off with -offline)")
 	publishChecks := flag.Bool("publish-checks", true, "scan uploads before publishing: refuse compiled programs, and send code that runs on import, encoded blobs and look-alike names for review")
@@ -303,6 +305,20 @@ func run() error {
 		go vulnUpstream.Run(ctx, time.Hour)
 	}
 
+	// The home page's "Just released across Go" list. It reads module
+	// paths and versions only, every two minutes, and skips this registry's
+	// own modules, which the page lists separately.
+	var indexFeed *goindex.Feed
+	if *goIndex != "" && !*offline {
+		indexFeed = &goindex.Feed{
+			URL:       *goIndex,
+			UserAgent: "gopkgreg/" + version.String() + " (+" + site.String() + ")",
+			Log:       log,
+			Skip:      func(p string) bool { return strings.HasPrefix(p, *moduleHost+"/") },
+		}
+		go indexFeed.Run(ctx, 2*time.Minute)
+	}
+
 	handler, err := server.New(server.Config{
 		Discovery:     disc,
 		Accounts:      accts,
@@ -318,6 +334,7 @@ func run() error {
 		GitHubOIDC:    githubOIDC,
 		ListingCache:  *listingCache,
 		VulnDB:        vulnUpstream,
+		GoIndex:       goIndexOrNil(indexFeed),
 		PlaygroundURL: map[bool]string{true: "", false: *playground}[*offline],
 	})
 	if err != nil {
@@ -402,6 +419,15 @@ func mirrorOrNil(n *mirror.Notifier) interface{ Notify(string, string) } {
 		return nil
 	}
 	return n
+}
+
+// goIndexOrNil keeps a nil *goindex.Feed from becoming a non-nil interface,
+// which would make the home page call into a feed that isn't there.
+func goIndexOrNil(f *goindex.Feed) interface{ Latest(int) []goindex.Release } {
+	if f == nil {
+		return nil
+	}
+	return f
 }
 
 // defaultModuleHost derives the module domain from the site URL. Module

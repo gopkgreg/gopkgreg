@@ -12,11 +12,13 @@
         <button class="btn btn-primary" type="submit">Search</button>
       </form>
 
+      {{if .Stats.Modules}}
       <dl class="stats-line" aria-label="Registry statistics">
         <div><dt>modules</dt><dd>{{.Stats.Modules}}</dd></div>
         <div><dt>releases</dt><dd>{{.Stats.Releases}}</dd></div>
         <div><dt>publishers</dt><dd>{{.Stats.Publishers}}</dd></div>
       </dl>
+      {{end}}
     </div>
   </section>
 
@@ -82,11 +84,33 @@
           </ol>
         </div>
       </div>
-      {{else}}
+      {{else if not .Ecosystem}}
       <div class="empty-registry">
         <h2>No modules yet.</h2>
         <p>This registry is waiting for its first library. Publish yours and it will show up here.</p>
         <a class="btn btn-primary" href="{{if $.User}}/account{{else}}/signup{{end}}">Publish the first module</a>
+      </div>
+      {{end}}
+      {{if .Ecosystem}}
+      <div class="ecosystem{{if .Recent}} ecosystem-below{{end}}">
+        <div class="list-head">
+          <h2>Just released across Go</h2>
+          <a href="#q">Search them all ↑</a>
+        </div>
+        <p class="list-note">The newest tagged releases on the public Go module mirror. gopkgreg shows them but doesn't host them: they install with <code>go get</code> as always.</p>
+        <ol class="module-rows">
+          {{range .Ecosystem}}
+          <li>
+            <a class="module-row" href="{{projectURL $.ModuleHost .Path}}">
+              <span class="row-top"><code class="row-name">{{breakable .Path}}</code><span class="pill p-version">{{.Version}}</span></span>
+              <span class="row-meta">Public module · released {{since .Time}}</span>
+            </a>
+          </li>
+          {{end}}
+        </ol>
+        {{if not .Recent}}
+        <p class="ecosystem-cta">Nothing is hosted on gopkgreg yet. <a href="{{if $.User}}/account{{else}}/signup{{end}}">Publish the first module</a> and it leads this page.</p>
+        {{end}}
       </div>
       {{end}}
     </div>

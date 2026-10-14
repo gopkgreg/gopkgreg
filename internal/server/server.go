@@ -21,6 +21,7 @@ import (
 
 	"github.com/gopkgreg/gopkgreg/internal/accounts"
 	"github.com/gopkgreg/gopkgreg/internal/discovery"
+	"github.com/gopkgreg/gopkgreg/internal/goindex"
 	"github.com/gopkgreg/gopkgreg/internal/module"
 	"github.com/gopkgreg/gopkgreg/internal/oidc"
 	"github.com/gopkgreg/gopkgreg/internal/project"
@@ -68,6 +69,9 @@ type Config struct {
 	// VulnDB is a copy of the public Go vulnerability database, merged into
 	// /vulndb and used to flag vulnerable dependencies. Nil when offline.
 	VulnDB *vulndb.Upstream
+	// GoIndex lists the newest releases across the Go ecosystem for the home
+	// page, from index.golang.org. Nil leaves that section out.
+	GoIndex interface{ Latest(n int) []goindex.Release }
 	// PlaygroundURL is the Go Playground that "Run" buttons on examples
 	// share code with, e.g. https://play.golang.org. Empty hides them.
 	PlaygroundURL string
@@ -109,6 +113,7 @@ type server struct {
 	admins       map[string]bool
 	githubOIDC   *oidc.Verifier
 	vulnUpstream *vulndb.Upstream
+	goIndex      interface{ Latest(n int) []goindex.Release }
 
 	playground    bool
 	playgroundURL string
@@ -169,6 +174,7 @@ func New(cfg Config) (http.Handler, error) {
 		admins:        map[string]bool{},
 		githubOIDC:    cfg.GitHubOIDC,
 		vulnUpstream:  cfg.VulnDB,
+		goIndex:       cfg.GoIndex,
 		playground:    cfg.PlaygroundURL != "",
 		playgroundURL: strings.TrimSuffix(cfg.PlaygroundURL, "/"),
 	}
@@ -301,6 +307,9 @@ type indexData struct {
 	Recent     []registry.Listing
 	New        []registry.Listing
 	Popular    []registry.SearchHit
+	// Ecosystem is the newest releases of public modules, which this
+	// registry shows but doesn't host.
+	Ecosystem []goindex.Release
 }
 
 const showcaseSize = 8
@@ -331,6 +340,9 @@ func (s *server) handleIndex(w http.ResponseWriter, r *http.Request) {
 // loadIndex gathers the home page's totals and listings.
 func (s *server) loadIndex(ctx context.Context) (indexData, error) {
 	data := indexData{ModuleHost: s.moduleHost}
+	if s.goIndex != nil {
+		data.Ecosystem = s.goIndex.Latest(showcaseSize)
+	}
 	var err error
 	if data.Stats, err = s.registryStats(ctx); err != nil {
 		return data, err
