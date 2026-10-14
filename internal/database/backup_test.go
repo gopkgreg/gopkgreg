@@ -44,7 +44,7 @@ func TestBackup(t *testing.T) {
 		}
 	}
 	entries, _ := os.ReadDir(backups)
-	if len(entries) != 3 || entries[0].Name() != "gopherdex-20260918T020000Z.db" {
+	if len(entries) != 3 || entries[0].Name() != "gopkgreg-20260918T020000Z.db" {
 		t.Fatalf("kept backups = %v", entries)
 	}
 }

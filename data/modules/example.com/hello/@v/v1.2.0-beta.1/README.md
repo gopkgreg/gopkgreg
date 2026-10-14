@@ -1,6 +1,6 @@
 # hello
 
-Sample module for Gopherdex.
+Sample module for Gopkgreg.
 
 ```go
 hello.Greeting("gopher") // "Hello, gopher!"

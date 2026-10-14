@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
 )
 
 // Being made a member of an organization, or an owner or maintainer of a

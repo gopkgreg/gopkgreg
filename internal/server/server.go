@@ -19,16 +19,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/discovery"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/oidc"
-	"github.com/codebled/gopherdex/internal/project"
-	"github.com/codebled/gopherdex/internal/ratelimit"
-	"github.com/codebled/gopherdex/internal/registry"
-	"github.com/codebled/gopherdex/internal/tokens"
-	"github.com/codebled/gopherdex/internal/vulndb"
-	"github.com/codebled/gopherdex/web"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/discovery"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/oidc"
+	"github.com/gopkgreg/gopkgreg/internal/project"
+	"github.com/gopkgreg/gopkgreg/internal/ratelimit"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/tokens"
+	"github.com/gopkgreg/gopkgreg/internal/vulndb"
+	"github.com/gopkgreg/gopkgreg/web"
 )
 
 const (
@@ -46,10 +46,10 @@ type Config struct {
 
 	Registry *registry.Registry
 
-	// SiteURL is the public URL of the site, e.g. https://gopherdex.dev.
+	// SiteURL is the public URL of the site, e.g. https://gopkgreg.com.
 	SiteURL string
 	// ModuleHost is the domain modules are published under, e.g.
-	// "gopherdex.dev" for gopherdex.dev/<owner>/<module>.
+	// "gopkgreg.com" for gopkgreg.com/<owner>/<module>.
 	ModuleHost string
 	// SecureCookies marks session cookies Secure. Enable it whenever the
 	// site is served over HTTPS.
@@ -447,7 +447,7 @@ func (s *server) handleSearchPage(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case !canUnify || q.Get("scope") == "hosted":
 	case hostedOnly:
-		data.ScopeNote = "Filters, sorting and pages apply to modules on Gopherdex, so public modules from pkg.go.dev aren't shown."
+		data.ScopeNote = "Filters, sorting and pages apply to modules on Gopkgreg, so public modules from pkg.go.dev aren't shown."
 	default:
 		data.Scope = "all"
 	}

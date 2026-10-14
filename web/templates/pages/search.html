@@ -50,14 +50,14 @@
         {{if and .Public .Query}}
         <nav class="scope-toggle" aria-label="Where to search">
           <a href="{{.AllURL}}"{{if eq .Scope "all"}} aria-current="page"{{end}}>All Go modules</a>
-          <a href="{{.HostedURL}}"{{if eq .Scope "hosted"}} aria-current="page"{{end}}>On Gopherdex</a>
+          <a href="{{.HostedURL}}"{{if eq .Scope "hosted"}} aria-current="page"{{end}}>On Gopkgreg</a>
         </nav>
         {{end}}
         {{with .ScopeNote}}<p class="notice">{{.}} <a href="{{$.Data.AllURL}}">Search all Go modules</a></p>{{end}}
         <div class="results-bar">
           {{if eq .Scope "all"}}
           <h1 class="results-title">Results for “{{.Query}}”</h1>
-          <p class="muted results-count">{{.HostedShown}} on Gopherdex · {{.PublicShown}} from pkg.go.dev</p>
+          <p class="muted results-count">{{.HostedShown}} on Gopkgreg · {{.PublicShown}} from pkg.go.dev</p>
           {{else}}
           <h1 class="results-title">{{if .Query}}{{.Total}} result{{if ne .Total 1}}s{{end}} for “{{.Query}}”{{else}}{{.Total}} module{{if ne .Total 1}}s{{end}}{{end}}</h1>
           <form action="/search" method="get" class="sort-form">
@@ -87,7 +87,7 @@
             <a class="module-row" href="{{projectURL $.Data.ModuleHost .Path}}">
               <span class="row-top">
                 <code class="row-name">{{breakable .Path}}</code>
-                <span class="row-pills">{{if .Hosted}}<span class="pill p-hosted">Gopherdex</span>{{else}}<span class="pill p-public">pkg.go.dev</span>{{end}}{{with .Version}}<span class="pill p-version">{{.}}</span>{{end}}</span>
+                <span class="row-pills">{{if .Hosted}}<span class="pill p-hosted">Gopkgreg</span>{{else}}<span class="pill p-public">pkg.go.dev</span>{{end}}{{with .Version}}<span class="pill p-version">{{.}}</span>{{end}}</span>
               </span>
               {{with .Synopsis}}<span class="row-syn">{{.}}</span>{{end}}
               <span class="row-meta">
@@ -106,7 +106,7 @@
           </li>
           {{end}}
         </ol>
-        {{if gt .HostedTotal .HostedShown}}<p class="muted"><a href="{{.HostedURL}}">See all {{.HostedTotal}} matching modules on Gopherdex</a>, with filters and sorting.</p>{{end}}
+        {{if gt .HostedTotal .HostedShown}}<p class="muted"><a href="{{.HostedURL}}">See all {{.HostedTotal}} matching modules on Gopkgreg</a>, with filters and sorting.</p>{{end}}
         {{else}}
         <p class="empty">No Go modules match “{{.Query}}”. Try a shorter or different word.</p>
         {{end}}
@@ -135,7 +135,7 @@
           {{with .NextURL}}<a class="btn btn-outline btn-sm" href="{{.}}">Next →</a>{{else}}<span></span>{{end}}
         </nav>
         {{else}}
-        <p class="empty">{{if .Query}}No modules on Gopherdex match “{{.Query}}”{{if .Filtered}} with these filters{{end}}. Try a shorter or different word{{if .Filtered}}, or clear the filters{{end}}.{{else if .Filtered}}No modules match these filters.{{else}}No modules have been published yet. <a href="/signup">Create an account</a> to publish the first one.{{end}}</p>
+        <p class="empty">{{if .Query}}No modules on Gopkgreg match “{{.Query}}”{{if .Filtered}} with these filters{{end}}. Try a shorter or different word{{if .Filtered}}, or clear the filters{{end}}.{{else if .Filtered}}No modules match these filters.{{else}}No modules have been published yet. <a href="/signup">Create an account</a> to publish the first one.{{end}}</p>
         {{end}}
 
       </div>

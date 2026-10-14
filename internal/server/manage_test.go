@@ -7,13 +7,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/codebled/gopherdex/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
 )
 
 func TestManageFlows(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
-	env.publish(t, "gopherdex.test/alice/retry", "v1.1.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.1.0")
 	if _, err := env.accts.Register(context.Background(), "bob", "bob@example.com", "correct horse battery", accounts.Client{}); err != nil {
 		t.Fatal(err)
 	}
@@ -31,12 +31,12 @@ func TestManageFlows(t *testing.T) {
 	expect(t, resp, body, http.StatusOK, "Mark deprecated")
 
 	// Yank from the website.
-	resp, body = alice.post("/-/yank", url.Values{"module": {"gopherdex.test/alice/retry"}, "version": {"v1.1.0"}, "reason": {"Leaks goroutines."}})
+	resp, body = alice.post("/-/yank", url.Values{"module": {"gopkgreg.test/alice/retry"}, "version": {"v1.1.0"}, "reason": {"Leaks goroutines."}})
 	expect(t, resp, body, http.StatusSeeOther, "")
 	if loc := resp.Header.Get("Location"); loc != "/alice/retry?done=yanked&tab=manage" {
 		t.Fatalf("after yank: Location %q", loc)
 	}
-	resp, body = anon.get("/api/proxy/gopherdex.test/alice/retry/@v/list")
+	resp, body = anon.get("/api/proxy/gopkgreg.test/alice/retry/@v/list")
 	expect(t, resp, body, http.StatusOK, "")
 	if body != "v1.0.0\n" {
 		t.Fatalf("list after yank = %q", body)
@@ -50,7 +50,7 @@ func TestManageFlows(t *testing.T) {
 	expect(t, resp, body, http.StatusOK, "v1.0.0")
 
 	// Deprecate with a successor.
-	resp, body = alice.post("/-/deprecate", url.Values{"module": {"gopherdex.test/alice/retry"}, "message": {"Use v2."}, "successor": {"gopherdex.test/alice/retry/v2"}})
+	resp, body = alice.post("/-/deprecate", url.Values{"module": {"gopkgreg.test/alice/retry"}, "message": {"Use v2."}, "successor": {"gopkgreg.test/alice/retry/v2"}})
 	expect(t, resp, body, http.StatusSeeOther, "")
 	resp, body = anon.get("/alice/retry")
 	expect(t, resp, body, http.StatusOK, "<strong>Deprecated.</strong> Use v2.")
@@ -59,9 +59,9 @@ func TestManageFlows(t *testing.T) {
 	}
 
 	// Co-owners: bob becomes a maintainer.
-	resp, body = alice.post("/-/collaborators", url.Values{"module": {"gopherdex.test/alice/retry"}, "username": {"@bob"}, "role": {"maintainer"}})
+	resp, body = alice.post("/-/collaborators", url.Values{"module": {"gopkgreg.test/alice/retry"}, "username": {"@bob"}, "role": {"maintainer"}})
 	expect(t, resp, body, http.StatusSeeOther, "")
-	resp, body = alice.post("/-/collaborators", url.Values{"module": {"gopherdex.test/alice/retry"}, "username": {"nobody"}, "role": {"owner"}})
+	resp, body = alice.post("/-/collaborators", url.Values{"module": {"gopkgreg.test/alice/retry"}, "username": {"nobody"}, "role": {"owner"}})
 	expect(t, resp, body, http.StatusNotFound, "There&#39;s no user @nobody")
 
 	bob := newBrowser(t, env.srv.URL)
@@ -71,14 +71,14 @@ func TestManageFlows(t *testing.T) {
 	expect(t, resp, body, http.StatusNotFound, "")
 	resp, body = bob.get("/account")
 	expect(t, resp, body, http.StatusOK, "invited you to be a <strong>maintainer</strong>")
-	resp, body = bob.post("/account/invitations/accept", url.Values{"kind": {"module"}, "name": {"gopherdex.test/alice/retry"}})
+	resp, body = bob.post("/account/invitations/accept", url.Values{"kind": {"module"}, "name": {"gopkgreg.test/alice/retry"}})
 	expect(t, resp, body, http.StatusSeeOther, "")
 	resp, body = bob.get("/alice/retry?tab=manage")
 	expect(t, resp, body, http.StatusOK, "a maintainer")
 	if strings.Contains(body, "Mark deprecated") || strings.Contains(body, "Add or update") {
 		t.Error("maintainers must not see owner-only tools")
 	}
-	resp, body = bob.post("/-/undeprecate", url.Values{"module": {"gopherdex.test/alice/retry"}})
+	resp, body = bob.post("/-/undeprecate", url.Values{"module": {"gopkgreg.test/alice/retry"}})
 	expect(t, resp, body, http.StatusForbidden, "You need to be an owner")
 
 	// Organizations.
@@ -96,5 +96,5 @@ func TestManageFlows(t *testing.T) {
 	resp, body = alice.post("/-/orgs", url.Values{"org": {"bob"}})
 	expect(t, resp, body, http.StatusConflict, "is taken")
 	resp, body = alice.get("/account")
-	expect(t, resp, body, http.StatusOK, "gopherdex.test/acme/")
+	expect(t, resp, body, http.StatusOK, "gopkgreg.test/acme/")
 }

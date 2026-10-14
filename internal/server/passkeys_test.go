@@ -12,7 +12,7 @@ import (
 
 	"github.com/go-webauthn/webauthn/protocol"
 
-	"github.com/codebled/gopherdex/internal/webauthntest"
+	"github.com/gopkgreg/gopkgreg/internal/webauthntest"
 )
 
 // postJSONAs posts JSON with the browser's cookies, as the page script does.
@@ -31,9 +31,9 @@ func (b *browser) postJSONAs(path string, body []byte) (*http.Response, string) 
 }
 
 func TestPasskeysOverHTTP(t *testing.T) {
-	env := newTestEnv(t) // base URL http://gopherdex.test
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
-	key := webauthntest.NewSoftKey(t, "gopherdex.test", "http://gopherdex.test")
+	env := newTestEnv(t) // base URL http://gopkgreg.test
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
+	key := webauthntest.NewSoftKey(t, "gopkgreg.test", "http://gopkgreg.test")
 
 	alice := newBrowser(t, env.srv.URL)
 	alice.post("/login", url.Values{"login": {"alice"}, "password": {"correct horse battery"}})

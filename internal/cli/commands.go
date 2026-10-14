@@ -14,7 +14,7 @@ import (
 
 func login(ctx context.Context, args []string, env Env) error {
 	fs := newFlags("login", env)
-	registryFlag := fs.String("registry", "", "registry URL, e.g. https://gopherdex.dev")
+	registryFlag := fs.String("registry", "", "registry URL, e.g. https://gopkgreg.com")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func login(ctx context.Context, args []string, env Env) error {
 		return err
 	}
 
-	token := strings.TrimSpace(env.Getenv("GOPHERDEX_TOKEN"))
+	token := strings.TrimSpace(env.Getenv("GOPKGREG_TOKEN"))
 	if token == "" {
 		if token, err = readToken(env, registry); err != nil {
 			return err
@@ -59,7 +59,7 @@ func login(ctx context.Context, args []string, env Env) error {
 }
 
 // readToken prompts without echo on a terminal, or reads one line from
-// piped input (echo "$TOKEN" | gopherdex login).
+// piped input (echo "$TOKEN" | gopkgreg login).
 func readToken(env Env, registry string) (string, error) {
 	if f, ok := env.Stdin.(*os.File); ok && term.IsTerminal(int(f.Fd())) {
 		fmt.Fprintf(env.Stderr, "Create an API token at %s/account, then paste it here: ", registry)
@@ -76,7 +76,7 @@ func readToken(env Env, registry string) (string, error) {
 	}
 	token := strings.TrimSpace(line)
 	if token == "" {
-		return "", errors.New("no token given. Paste it when prompted, pipe it in, or set GOPHERDEX_TOKEN")
+		return "", errors.New("no token given. Paste it when prompted, pipe it in, or set GOPKGREG_TOKEN")
 	}
 	return token, nil
 }
@@ -166,7 +166,7 @@ func yank(ctx context.Context, args []string, env Env, doYank bool) error {
 	}
 	modPath, version, ok := strings.Cut(fs.Arg(0), "@")
 	if !ok || modPath == "" || version == "" {
-		return fmt.Errorf("name the release as MODULE@VERSION, e.g. gopherdex %s gopherdex.dev/you/lib@v1.2.3", name)
+		return fmt.Errorf("name the release as MODULE@VERSION, e.g. gopkgreg %s gopkgreg.com/you/lib@v1.2.3", name)
 	}
 	cfg, _, err := loadConfig(env)
 	if err != nil {

@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/oidc"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/oidc"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 // publisherTokenTTL is how long a token minted for a trusted publisher

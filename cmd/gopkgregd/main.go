@@ -1,4 +1,4 @@
-// Command gopherdexd runs the Gopherdex Go module registry server: accounts and API
+// Command gopkgregd runs the Gopkgreg Go module registry server: accounts and API
 // tokens, a GOPROXY server for hosted modules, and a site to search libraries,
 // browse their release history and read their docs.
 package main
@@ -21,19 +21,19 @@ import (
 
 	xmodule "golang.org/x/mod/module"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/blob"
-	"github.com/codebled/gopherdex/internal/database"
-	"github.com/codebled/gopherdex/internal/discovery"
-	"github.com/codebled/gopherdex/internal/goproxy"
-	"github.com/codebled/gopherdex/internal/mail"
-	"github.com/codebled/gopherdex/internal/mirror"
-	"github.com/codebled/gopherdex/internal/oidc"
-	"github.com/codebled/gopherdex/internal/registry"
-	"github.com/codebled/gopherdex/internal/server"
-	"github.com/codebled/gopherdex/internal/store"
-	"github.com/codebled/gopherdex/internal/version"
-	"github.com/codebled/gopherdex/internal/vulndb"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/blob"
+	"github.com/gopkgreg/gopkgreg/internal/database"
+	"github.com/gopkgreg/gopkgreg/internal/discovery"
+	"github.com/gopkgreg/gopkgreg/internal/goproxy"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/mirror"
+	"github.com/gopkgreg/gopkgreg/internal/oidc"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/server"
+	"github.com/gopkgreg/gopkgreg/internal/store"
+	"github.com/gopkgreg/gopkgreg/internal/version"
+	"github.com/gopkgreg/gopkgreg/internal/vulndb"
 )
 
 func main() {
@@ -47,17 +47,17 @@ func main() {
 		case "blobs":
 			run = blobsCommand
 		case "version", "-version", "--version":
-			fmt.Println("gopherdexd", version.String())
+			fmt.Println("gopkgregd", version.String())
 			return
 		}
 	}
 	if err := run(); err != nil {
-		fmt.Fprintln(os.Stderr, "gopherdexd:", err)
+		fmt.Fprintln(os.Stderr, "gopkgregd:", err)
 		os.Exit(1)
 	}
 }
 
-// healthcheckCommand is "gopherdexd healthcheck [-url URL]": it exits 0
+// healthcheckCommand is "gopkgregd healthcheck [-url URL]": it exits 0
 // when the server answers /healthz, for container health checks in images
 // without curl.
 func healthcheckCommand() error {
@@ -82,13 +82,13 @@ func healthcheckCommand() error {
 	return nil
 }
 
-// blobsCommand is "gopherdexd blobs copy -from A -to B": it copies every
+// blobsCommand is "gopkgregd blobs copy -from A -to B": it copies every
 // published zip between stores, e.g. from the local directory to S3 before
 // switching -blobs. Blobs already at the destination are skipped, so it's
 // safe to run again.
 func blobsCommand() error {
 	if len(os.Args) < 3 || os.Args[2] != "copy" {
-		return errors.New("usage: gopherdexd blobs copy -from DIR|s3://… -to DIR|s3://…")
+		return errors.New("usage: gopkgregd blobs copy -from DIR|s3://… -to DIR|s3://…")
 	}
 	fs := flag.NewFlagSet("blobs copy", flag.ExitOnError)
 	from := fs.String("from", "data/blobs", "store to copy from")
@@ -118,17 +118,17 @@ func blobsCommand() error {
 	return err
 }
 
-// backupCommand is "gopherdexd backup -db FILE -out FILE": a consistent
+// backupCommand is "gopkgregd backup -db FILE -out FILE": a consistent
 // copy of the database, safe to take while the server runs.
 func backupCommand() error {
 	fs := flag.NewFlagSet("backup", flag.ExitOnError)
-	dbPath := fs.String("db", "data/gopherdex.db", "database to back up")
-	out := fs.String("out", "", "file to write (must not exist); default gopherdex-<time>.db in the current directory")
+	dbPath := fs.String("db", "data/gopkgreg.db", "database to back up")
+	out := fs.String("out", "", "file to write (must not exist); default gopkgreg-<time>.db in the current directory")
 	if err := fs.Parse(os.Args[2:]); err != nil {
 		return err
 	}
 	if *out == "" {
-		*out = "gopherdex-" + time.Now().UTC().Format("20060102T150405Z") + ".db"
+		*out = "gopkgreg-" + time.Now().UTC().Format("20060102T150405Z") + ".db"
 	}
 	ctx := context.Background()
 	db, err := database.Open(ctx, *dbPath)
@@ -148,16 +148,16 @@ func run() error {
 	addr := flag.String("addr", "localhost:8080", "address to listen on")
 	dataDir := flag.String("data", "", "directory of fixture modules to serve alongside published ones (for demos and tests)")
 	blobDir := flag.String("blobs", "data/blobs", "where published module zips live: a directory, or an S3-compatible bucket like s3://bucket/prefix?region=…&endpoint=… (credentials from AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY)")
-	moduleHost := flag.String("module-host", "", "domain modules are published under (default: the -base-url host, or gopherdex.localhost for localhost)")
+	moduleHost := flag.String("module-host", "", "domain modules are published under (default: the -base-url host, or gopkgreg.localhost for localhost)")
 	maxUpload := flag.Int64("max-upload", registry.DefaultMaxZipSize, "largest module zip accepted, in bytes")
 	upstream := flag.String("upstream", "https://proxy.golang.org", "public GOPROXY used for modules not hosted here")
 	pkgsite := flag.String("pkgsite", "https://pkg.go.dev", "pkg.go.dev base URL for public search and docs links")
 	offline := flag.Bool("offline", false, "serve hosted modules only and make no outbound requests")
-	dbPath := flag.String("db", "data/gopherdex.db", "SQLite database file")
+	dbPath := flag.String("db", "data/gopkgreg.db", "SQLite database file")
 	baseURL := flag.String("base-url", "", "public site URL used in emails and cookies (default http://<addr>)")
 	smtpAddr := flag.String("smtp-addr", "", "SMTP server host:port; empty logs emails instead of sending them")
-	smtpFrom := flag.String("smtp-from", "Gopherdex <no-reply@localhost>", "sender address for emails")
-	smtpUser := flag.String("smtp-user", "", "SMTP username (password comes from $GOPHERDEX_SMTP_PASSWORD)")
+	smtpFrom := flag.String("smtp-from", "Gopkgreg <no-reply@localhost>", "sender address for emails")
+	smtpUser := flag.String("smtp-user", "", "SMTP username (password comes from $GOPKGREG_SMTP_PASSWORD)")
 	trustProxy := flag.Bool("trust-proxy", false, "take client IPs from X-Forwarded-For (only behind a reverse proxy that sets it)")
 	notifyMirror := flag.Bool("notify-mirror", true, "ask the public module mirror and checksum database to fetch each new version (skipped for local module hosts)")
 	sumdb := flag.String("sumdb", "https://sum.golang.org", "checksum database to notify")
@@ -205,7 +205,7 @@ func run() error {
 
 	var mailer mail.Mailer = mail.LogMailer{Log: log}
 	if *smtpAddr != "" {
-		mailer = mail.SMTPMailer{Addr: *smtpAddr, From: *smtpFrom, Username: *smtpUser, Password: os.Getenv("GOPHERDEX_SMTP_PASSWORD")}
+		mailer = mail.SMTPMailer{Addr: *smtpAddr, From: *smtpFrom, Username: *smtpUser, Password: os.Getenv("GOPKGREG_SMTP_PASSWORD")}
 	}
 	accts := &accounts.Service{DB: db, Mailer: mailer, BaseURL: site.String(), Log: log}
 
@@ -361,7 +361,7 @@ func run() error {
 
 	errc := make(chan error, 1)
 	go func() {
-		log.Info("gopherdex listening", "version", version.String(),
+		log.Info("gopkgreg listening", "version", version.String(),
 			"site", site.String(), "goproxy", site.String()+"/api/proxy",
 			"modules", *moduleHost+"/<user>/<module>", "db", *dbPath, "blobs", *blobDir,
 			"zero_config_go_get", !registry.IsLocalHost(*moduleHost) && site.Scheme == "https",
@@ -406,11 +406,11 @@ func mirrorOrNil(n *mirror.Notifier) interface{ Notify(string, string) } {
 
 // defaultModuleHost derives the module domain from the site URL. Module
 // paths can't carry a port or a dot-less host, so local development uses
-// gopherdex.localhost.
+// gopkgreg.localhost.
 func defaultModuleHost(site *url.URL) string {
 	host := site.Hostname()
 	if !strings.Contains(host, ".") || net.ParseIP(host) != nil {
-		return "gopherdex.localhost"
+		return "gopkgreg.localhost"
 	}
 	return strings.ToLower(host)
 }
@@ -426,7 +426,7 @@ func splitList(s string) []string {
 }
 
 // flagsFromEnv lets every flag be set from the environment, which suits
-// containers: -base-url becomes GOPHERDEX_BASE_URL. Flags given on the
+// containers: -base-url becomes GOPKGREG_BASE_URL. Flags given on the
 // command line win.
 func flagsFromEnv(fs *flag.FlagSet, getenv func(string) string) error {
 	set := map[string]bool{}
@@ -447,7 +447,7 @@ func flagsFromEnv(fs *flag.FlagSet, getenv func(string) string) error {
 }
 
 func envName(flagName string) string {
-	return "GOPHERDEX_" + strings.ToUpper(strings.ReplaceAll(flagName, "-", "_"))
+	return "GOPKGREG_" + strings.ToUpper(strings.ReplaceAll(flagName, "-", "_"))
 }
 
 // launchWarnings points out settings that are fine for development but

@@ -114,8 +114,8 @@
               <pre>module {{.Host}}/{{.User.Username}}/<span class="t-str">yourmodule</span></pre></li>
             <li>Tag the release and publish it with an API token:
               <pre>git tag v0.1.0
-gopherdex login --registry {{.SiteURL}}
-gopherdex publish</pre></li>
+gopkgreg login --registry {{.SiteURL}}
+gopkgreg publish</pre></li>
           </ol>
         </div>
         {{end}}
@@ -147,7 +147,7 @@ gopherdex publish</pre></li>
       </section>
 
       <section class="panel tokens-panel" aria-labelledby="tokens-title">
-        <div class="panel-head"><h2 id="tokens-title">API tokens</h2><p>Used by <code>gopherdex publish</code></p></div>
+        <div class="panel-head"><h2 id="tokens-title">API tokens</h2><p>Used by <code>gopkgreg publish</code></p></div>
 
         {{with .NewToken}}
         <div class="new-token" role="status">

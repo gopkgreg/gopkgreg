@@ -8,21 +8,21 @@ import (
 
 	"github.com/go-webauthn/webauthn/protocol"
 
-	"github.com/codebled/gopherdex/internal/webauthntest"
+	"github.com/gopkgreg/gopkgreg/internal/webauthntest"
 )
 
 func TestPasskeys(t *testing.T) {
 	s, rec, _ := newService(t)
 	ctx := context.Background()
 	alice := verifiedUser(t, s, rec, "alice")
-	key := webauthntest.NewSoftKey(t, "gopherdex.test", "https://gopherdex.test")
+	key := webauthntest.NewSoftKey(t, "gopkgreg.test", "https://gopkgreg.test")
 
 	// Register.
 	options, token, err := s.BeginPasskeyRegistration(ctx, alice)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if options.Response.RelyingParty.ID != "gopherdex.test" || options.Response.AuthenticatorSelection.ResidentKey != protocol.ResidentKeyRequirementRequired {
+	if options.Response.RelyingParty.ID != "gopkgreg.test" || options.Response.AuthenticatorSelection.ResidentKey != protocol.ResidentKeyRequirementRequired {
 		t.Errorf("options = %+v", options.Response)
 	}
 	pk, codes, err := s.FinishPasskeyRegistration(ctx, alice, token, "MacBook Touch ID", bytes.NewReader(key.Create(t, options)), client)
@@ -59,7 +59,7 @@ func TestPasskeys(t *testing.T) {
 	// A passkey from another site, or a replayed answer, is refused.
 	login, token, _ = s.BeginPasskeyLogin(ctx)
 	phished := *key
-	phished.Origin = "https://gopherdex-login.example"
+	phished.Origin = "https://gopkgreg-login.example"
 	if _, _, err := s.FinishPasskeyLogin(ctx, token, bytes.NewReader(phished.Get(t, login)), client); !errors.Is(err, ErrPasskey) {
 		t.Errorf("wrong origin: %v", err)
 	}

@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 // manageNotices are the fixed messages shown after a maintainer action.
@@ -25,7 +25,7 @@ var manageNotices = map[string]string{
 	"org-created":         "Organization created. Publish modules under its namespace, and add members below.",
 	"member-set":          "Member updated.",
 	"member-removed":      "Member removed.",
-	"publisher-added":     "Trusted publisher added. Its workflow can now publish with gopherdex publish, no API token needed.",
+	"publisher-added":     "Trusted publisher added. Its workflow can now publish with gopkgreg publish, no API token needed.",
 	"publisher-removed":   "Trusted publisher removed. Tokens it had already received are revoked.",
 	"access-set":          "Member access updated.",
 	"team-created":        "Team created. Add members and give it access to modules below.",
@@ -230,13 +230,13 @@ func (s *server) notifyRole(r *http.Request, target, kind, name, role, by, path 
 		return
 	}
 	if pending {
-		s.emailUser(target, accounts.EmailAccess, "@"+by+" invited you to "+name+" on Gopherdex",
-			fmt.Sprintf("@%s invited you to be %s %s of %s on Gopherdex. Nothing changes until you accept: accept or decline on your account page.\n\n%s/account",
+		s.emailUser(target, accounts.EmailAccess, "@"+by+" invited you to "+name+" on Gopkgreg",
+			fmt.Sprintf("@%s invited you to be %s %s of %s on Gopkgreg. Nothing changes until you accept: accept or decline on your account page.\n\n%s/account",
 				by, article(role), role, what, s.siteURL))
 		return
 	}
 	s.emailUser(target, accounts.EmailAccess, "You're now "+article(role)+" "+role+" of "+name,
-		fmt.Sprintf("@%s made you %s %s of %s on Gopherdex.\n\n%s%s", by, article(role), role, what, s.siteURL, path))
+		fmt.Sprintf("@%s made you %s %s of %s on Gopkgreg.\n\n%s%s", by, article(role), role, what, s.siteURL, path))
 }
 
 // ---- Invitations and leaving ----

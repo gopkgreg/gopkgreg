@@ -26,11 +26,11 @@ import (
 	xmodule "golang.org/x/mod/module"
 	"golang.org/x/mod/semver"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/blob"
-	"github.com/codebled/gopherdex/internal/database"
-	"github.com/codebled/gopherdex/internal/mail"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/blob"
+	"github.com/gopkgreg/gopkgreg/internal/database"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 // SeedConfig describes a dataset to build.
@@ -813,5 +813,5 @@ func fenceOffFromGo(dir string) error {
 	if _, err := os.Stat(p); err == nil {
 		return nil
 	}
-	return os.WriteFile(p, []byte("// Benchmark data from gdxbench; this file keeps go ./... out of it.\nmodule gdxbench.invalid/data\n"), 0o600)
+	return os.WriteFile(p, []byte("// Benchmark data from gpkbench; this file keeps go ./... out of it.\nmodule gpkbench.invalid/data\n"), 0o600)
 }

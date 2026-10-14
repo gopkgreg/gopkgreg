@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/codebled/gopherdex/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
 )
 
 // Passkey ceremonies are two JSON requests from the page's script: one
@@ -15,7 +15,7 @@ import (
 // with the browser's answer. The ceremony secret travels in a short-lived
 // cookie between them.
 
-const ceremonyCookie = "gopherdex_webauthn"
+const ceremonyCookie = "gopkgreg_webauthn"
 
 func (s *server) setCeremony(w http.ResponseWriter, token string) {
 	http.SetCookie(w, &http.Cookie{Name: ceremonyCookie, Value: token, Path: "/", MaxAge: 300, //nolint:gosec // Secure is off only for plain-HTTP local development

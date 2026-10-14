@@ -35,8 +35,8 @@ func TestMerge(t *testing.T) {
 	t0 := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 	t1 := t0.Add(time.Hour)
 	own := []*Entry{{
-		ID: "GDX-2026-0001", Modified: t1, Aliases: []string{"CVE-2026-1"},
-		Affected: []Affected{{Package: Package{Name: "gopherdex.dev/alice/retry"},
+		ID: "GPK-2026-0001", Modified: t1, Aliases: []string{"CVE-2026-1"},
+		Affected: []Affected{{Package: Package{Name: "gopkgreg.com/alice/retry"},
 			Ranges: []Range{{Type: "SEMVER", Events: []Event{{Introduced: "0"}, {Fixed: "1.2.0"}, {Introduced: "1.5.0"}, {Fixed: "1.5.2"}}}}}},
 	}}
 	up := []ModulesEntry{{Path: "github.com/x/y", Vulns: []ModuleVuln{{ID: "GO-2020-0001", Modified: t0}}}}
@@ -44,13 +44,13 @@ func TestMerge(t *testing.T) {
 	if !meta.Modified.Equal(t1) {
 		t.Errorf("modified = %v", meta.Modified)
 	}
-	if len(modules) != 2 || modules[0].Path != "github.com/x/y" || modules[1].Path != "gopherdex.dev/alice/retry" {
+	if len(modules) != 2 || modules[0].Path != "github.com/x/y" || modules[1].Path != "gopkgreg.com/alice/retry" {
 		t.Fatalf("modules = %+v", modules)
 	}
-	if v := modules[1].Vulns[0]; v.ID != "GDX-2026-0001" || v.Fixed != "1.5.2" {
+	if v := modules[1].Vulns[0]; v.ID != "GPK-2026-0001" || v.Fixed != "1.5.2" {
 		t.Errorf("our module vuln = %+v", v)
 	}
-	if len(vulns) != 2 || vulns[0].ID != "GDX-2026-0001" || vulns[1].ID != "GO-2020-0001" {
+	if len(vulns) != 2 || vulns[0].ID != "GO-2020-0001" || vulns[1].ID != "GPK-2026-0001" {
 		t.Errorf("vulns = %+v", vulns)
 	}
 	if len(up[0].Vulns) != 1 {

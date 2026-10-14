@@ -21,14 +21,14 @@ type registryConfig struct {
 }
 
 func configPath(env Env) (string, error) {
-	if p := env.Getenv("GOPHERDEX_CONFIG"); p != "" {
+	if p := env.Getenv("GOPKGREG_CONFIG"); p != "" {
 		return p, nil
 	}
 	dir, err := os.UserConfigDir()
 	if err != nil {
-		return "", fmt.Errorf("find your config directory: %w (set GOPHERDEX_CONFIG)", err)
+		return "", fmt.Errorf("find your config directory: %w (set GOPKGREG_CONFIG)", err)
 	}
-	return filepath.Join(dir, "gopherdex", "credentials.json"), nil
+	return filepath.Join(dir, "gopkgreg", "credentials.json"), nil
 }
 
 func loadConfig(env Env) (*config, string, error) {

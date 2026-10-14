@@ -14,7 +14,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/codebled/gopherdex/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/module"
 )
 
 // Source is where the Handler finds modules. *store.Store implements it.

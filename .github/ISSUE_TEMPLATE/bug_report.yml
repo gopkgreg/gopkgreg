@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting. **Security problems don't belong here**: please follow [SECURITY.md](https://github.com/codebled/gopherdex/blob/main/SECURITY.md) instead.
+        Thanks for reporting. **Security problems don't belong here**: please follow [SECURITY.md](https://github.com/gopkgreg/gopkgreg/blob/main/SECURITY.md) instead.
   - type: textarea
     id: what
     attributes:
@@ -18,7 +18,7 @@ body:
     attributes:
       label: Steps to reproduce
       placeholder: |
-        1. Run gopherdexd -offline
+        1. Run gopkgregd -offline
         2. Publish a module with …
         3. Open …
     validations:
@@ -27,7 +27,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Output of `gopherdexd version` or `gopherdex version`, or the commit.
+      description: Output of `gopkgregd version` or `gopkgreg version`, or the commit.
     validations:
       required: true
   - type: textarea

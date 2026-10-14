@@ -14,13 +14,13 @@ import (
 
 	"rsc.io/qr"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/mail"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
-const challengeCookie = "gopherdex_2fa"
+const challengeCookie = "gopkgreg_2fa"
 
 func (s *server) setChallenge(w http.ResponseWriter, secret string) {
 	http.SetCookie(w, &http.Cookie{Name: challengeCookie, Value: secret, Path: "/login/2fa", MaxAge: 300, //nolint:gosec // Secure is off only for plain-HTTP local development

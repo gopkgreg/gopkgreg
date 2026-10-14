@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 // Atom feeds, like PyPI's RSS feeds, for following new releases in a feed
@@ -27,7 +27,7 @@ type feedLink struct{ Title, URL string }
 
 // Feed advertises the site-wide releases feed on the home page.
 func (d indexData) Feed() *feedLink {
-	return &feedLink{"New releases on Gopherdex", "/feeds/releases.atom"}
+	return &feedLink{"New releases on Gopkgreg", "/feeds/releases.atom"}
 }
 
 // Feed advertises the feed of an owner's releases on their page.
@@ -75,7 +75,7 @@ func (s *server) handleFeed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ctx := r.Context()
-	feed := atomFeed{ID: s.siteURL + r.URL.Path, Author: atomAuthor{"Gopherdex"}}
+	feed := atomFeed{ID: s.siteURL + r.URL.Path, Author: atomAuthor{"Gopkgreg"}}
 	var page string
 	var releases []registry.Release
 	var err error
@@ -85,10 +85,10 @@ func (s *server) handleFeed(w http.ResponseWriter, r *http.Request) {
 	}
 	switch {
 	case name == "releases":
-		feed.Title, page = "New releases on Gopherdex", "/"
+		feed.Title, page = "New releases on Gopkgreg", "/"
 		releases, err = s.registry.Releases(ctx, "", "", feedSize)
 	case name == "new":
-		feed.Title, page = "New modules on Gopherdex", "/"
+		feed.Title, page = "New modules on Gopkgreg", "/"
 		var listings []registry.Listing
 		if listings, err = s.registry.NewModules(ctx, feedSize); err == nil {
 			for _, l := range listings {
@@ -164,7 +164,7 @@ func (s *server) writeAdvisoryFeed(w http.ResponseWriter, r *http.Request, feed 
 		s.serverError(w, r, err)
 		return
 	}
-	feed.Title = "Security advisories on Gopherdex"
+	feed.Title = "Security advisories on Gopkgreg"
 	feed.Links = []atomLink{{Rel: "self", Href: s.siteURL + r.URL.Path}, {Rel: "alternate", Href: s.siteURL + "/advisories"}}
 	updated := time.Unix(0, 0).UTC()
 	for i, a := range list {

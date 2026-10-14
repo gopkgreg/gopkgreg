@@ -1,14 +1,14 @@
-# Contributing to Gopherdex
+# Contributing to Gopkgreg
 
-Thanks for helping build Gopherdex. This guide covers everything from a first typo fix to a new feature. If something here is unclear, that's a bug too: open an issue.
+Thanks for helping build Gopkgreg. This guide covers everything from a first typo fix to a new feature. If something here is unclear, that's a bug too: open an issue.
 
 ## Before you start
 
 - **Small fixes** (typos, docs, an obvious bug with a test): open a pull request directly.
 - **Anything bigger** (a feature, a new dependency, a change to the database schema, the API or how publishing works): open an issue first and describe what you want to do. We'll agree on the approach before you spend time on code.
 - **Security problems:** never in a public issue or pull request. See [SECURITY.md](SECURITY.md).
-- **Questions, or an idea you're not sure about yet:** start a [discussion](https://github.com/codebled/gopherdex/discussions). Issues are for bugs and work we've agreed to do.
-- New here? Issues labelled [`good first issue`](https://github.com/codebled/gopherdex/labels/good%20first%20issue) are small, self-contained and have a pointer to where to start. Comment on one to say you're taking it.
+- **Questions, or an idea you're not sure about yet:** start a [discussion](https://github.com/gopkgreg/gopkgreg/discussions). Issues are for bugs and work we've agreed to do.
+- New here? Issues labelled [`good first issue`](https://github.com/gopkgreg/gopkgreg/labels/good%20first%20issue) are small, self-contained and have a pointer to where to start. Comment on one to say you're taking it.
 
 Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -21,7 +21,7 @@ Before your first pull request can be merged, you sign the [Contributor License 
 You need [Go](https://go.dev/dl/) (the version in `go.mod` is downloaded automatically) and `make`. Nothing else: the linters are run at pinned versions through `go run`.
 
 ```sh
-git clone https://github.com/<you>/gopherdex && cd gopherdex
+git clone https://github.com/<you>/gopkgreg && cd gopkgreg
 make run-offline          # a local registry at http://localhost:8080
 make check                # everything CI checks; run it before you push
 ```

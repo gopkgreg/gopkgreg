@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/oidc"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/oidc"
 )
 
 // Trusted publishing, as on PyPI: an owner names the GitHub repository and

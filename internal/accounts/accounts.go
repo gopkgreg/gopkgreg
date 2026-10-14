@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
 )
 
 var (
@@ -52,9 +52,9 @@ const (
 	SessionTTL      = 14 * 24 * time.Hour
 	verificationTTL = 24 * time.Hour
 	maxActiveTokens = 20
-	// TokenPrefix marks Gopherdex API tokens so secret scanners can find
+	// TokenPrefix marks Gopkgreg API tokens so secret scanners can find
 	// leaked ones.
-	TokenPrefix = "gdx_"
+	TokenPrefix = "gpk_"
 )
 
 // User is an account.
@@ -93,7 +93,7 @@ type Client struct {
 type Service struct {
 	DB      *sql.DB
 	Mailer  mail.Mailer
-	BaseURL string // public site URL used in emails, e.g. https://gopherdex.dev
+	BaseURL string // public site URL used in emails, e.g. https://gopkgreg.com
 	Log     *slog.Logger
 	Now     func() time.Time
 }
@@ -325,8 +325,8 @@ func (s *Service) SendVerification(ctx context.Context, u *User) error {
 	link := strings.TrimSuffix(s.BaseURL, "/") + "/verify-email?" + url.Values{"token": {secret}}.Encode()
 	return s.Mailer.Send(ctx, mail.Message{
 		To:      u.Email,
-		Subject: "Verify your email for Gopherdex",
-		Body: fmt.Sprintf("Hi %s,\n\nConfirm this is your email address so you can create API tokens and publish Go modules:\n\n%s\n\nThe link expires in 24 hours. If you didn't create a Gopherdex account, ignore this email.\n",
+		Subject: "Verify your email for Gopkgreg",
+		Body: fmt.Sprintf("Hi %s,\n\nConfirm this is your email address so you can create API tokens and publish Go modules:\n\n%s\n\nThe link expires in 24 hours. If you didn't create a Gopkgreg account, ignore this email.\n",
 			u.Username, link),
 	})
 }
@@ -385,7 +385,7 @@ func (s *Service) VerifyEmail(ctx context.Context, secret string, c Client) (*Us
 	}
 	if changed {
 		// Tell the old address, in case the account was taken over.
-		s.notify(&User{Username: username, Email: current}, "Your Gopherdex email address was changed",
+		s.notify(&User{Username: username, Email: current}, "Your Gopkgreg email address was changed",
 			fmt.Sprintf("The email address for @%s was changed from %s to %s. Emails about the account now go to the new address.", username, current, email))
 	}
 	return s.userByID(ctx, userID)
@@ -467,7 +467,7 @@ func (s *Service) CreateToken(ctx context.Context, u *User, name string, ttl tim
 	if m, ok := strings.CutPrefix(scope, ScopeModulePrefix); ok {
 		what = m
 	}
-	s.notify(u, "New Gopherdex API token", fmt.Sprintf("A new API token named %q was created for @%s. It can publish %s.", name, u.Username, what))
+	s.notify(u, "New Gopkgreg API token", fmt.Sprintf("A new API token named %q was created for @%s. It can publish %s.", name, u.Username, what))
 	return secret, t, nil
 }
 

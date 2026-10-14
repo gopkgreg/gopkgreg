@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
 )
 
 // Teams group an organization's members and give the group a role on
@@ -297,7 +297,7 @@ func (r *Registry) SetTeamModule(ctx context.Context, u *accounts.User, org, tea
 	}
 	modPath = strings.TrimSpace(modPath)
 	if !strings.Contains(modPath, "/") {
-		modPath = r.ModuleHost + "/" + org + "/" + modPath // "api" for gopherdex.dev/acme/api
+		modPath = r.ModuleHost + "/" + org + "/" + modPath // "api" for gopkgreg.com/acme/api
 	}
 	var moduleID int64
 	var namespace string

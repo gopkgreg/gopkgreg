@@ -30,9 +30,9 @@ func TestUploadRequestErrors(t *testing.T) {
 	resp, body := post(http.Header{"Content-Type": {"multipart/form-data; boundary=x"}})
 	expect(t, resp, body, http.StatusUnauthorized, "Authorization header")
 
-	resp, body = post(http.Header{"Content-Type": {"application/zip"}, "Authorization": {"Bearer gdx_invalid"}})
+	resp, body = post(http.Header{"Content-Type": {"application/zip"}, "Authorization": {"Bearer gpk_invalid"}})
 	expect(t, resp, body, http.StatusUnauthorized, "invalid, expired or revoked")
 
-	resp, body = post(http.Header{"Sec-Fetch-Site": {"cross-site"}, "Authorization": {"Bearer gdx_invalid"}})
+	resp, body = post(http.Header{"Sec-Fetch-Site": {"cross-site"}, "Authorization": {"Bearer gpk_invalid"}})
 	expect(t, resp, body, http.StatusForbidden, "Cross-site")
 }

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/codebled/gopherdex/internal/tokens"
-	"github.com/codebled/gopherdex/web"
+	"github.com/gopkgreg/gopkgreg/internal/tokens"
+	"github.com/gopkgreg/gopkgreg/web"
 )
 
 // Static files are linked with a fingerprint of their content

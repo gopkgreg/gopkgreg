@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/version"
+	"github.com/gopkgreg/gopkgreg/internal/version"
 )
 
 type whoamiResponse struct {
@@ -59,7 +59,7 @@ func (e *apiError) Error() string {
 	return e.Message
 }
 
-func userAgent() string { return "gopherdex-cli/" + version.String() }
+func userAgent() string { return "gopkgreg-cli/" + version.String() }
 
 func callWhoami(ctx context.Context, env Env, registry, token string) (*whoamiResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
@@ -157,7 +157,7 @@ func doJSON(env Env, req *http.Request, out any) error {
 		return e
 	}
 	if err := json.Unmarshal(body, out); err != nil {
-		return fmt.Errorf("the registry sent an unexpected response (is %s a Gopherdex registry?)", req.URL.Host)
+		return fmt.Errorf("the registry sent an unexpected response (is %s a Gopkgreg registry?)", req.URL.Host)
 	}
 	return nil
 }

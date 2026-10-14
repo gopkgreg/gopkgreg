@@ -41,7 +41,7 @@ func publish(ctx context.Context, args []string, env Env) error {
 	}
 	repoRoot, err := git(ctx, modRoot, "rev-parse", "--show-toplevel")
 	if err != nil {
-		return fmt.Errorf("%s isn't in a git repository. gopherdex publish builds releases from git tags: run git init, commit your code and tag a version first", modRoot)
+		return fmt.Errorf("%s isn't in a git repository. gopkgreg publish builds releases from git tags: run git init, commit your code and tag a version first", modRoot)
 	}
 	repoRoot, modRoot = realPath(repoRoot), realPath(modRoot)
 	subdir, err := filepath.Rel(repoRoot, modRoot)
@@ -137,7 +137,7 @@ func publish(ctx context.Context, args []string, env Env) error {
 	}
 
 	// Build the zip exactly as the go command would download it.
-	tmp, err := os.CreateTemp("", "gopherdex-publish-*.zip")
+	tmp, err := os.CreateTemp("", "gopkgreg-publish-*.zip")
 	if err != nil {
 		return err
 	}
@@ -234,7 +234,7 @@ func findModuleRoot(dir string) (string, error) {
 			return d, nil
 		}
 		if filepath.Dir(d) == d {
-			return "", fmt.Errorf("no go.mod found in %s or its parents. Run gopherdex publish inside a Go module", dir)
+			return "", fmt.Errorf("no go.mod found in %s or its parents. Run gopkgreg publish inside a Go module", dir)
 		}
 	}
 }
@@ -257,11 +257,11 @@ func versionAtHEAD(ctx context.Context, dir, tagPrefix string) (string, error) {
 	}
 	switch len(versions) {
 	case 0:
-		return "", fmt.Errorf("the current commit has no %sv* release tag. Tag it (git tag %sv0.1.0) or name a version: gopherdex publish v0.1.0", tagPrefix, tagPrefix)
+		return "", fmt.Errorf("the current commit has no %sv* release tag. Tag it (git tag %sv0.1.0) or name a version: gopkgreg publish v0.1.0", tagPrefix, tagPrefix)
 	case 1:
 		return versions[0], nil
 	default:
-		return "", fmt.Errorf("the current commit has several release tags (%s). Name the one to publish: gopherdex publish %s", strings.Join(versions, ", "), versions[0])
+		return "", fmt.Errorf("the current commit has several release tags (%s). Name the one to publish: gopkgreg publish %s", strings.Join(versions, ", "), versions[0])
 	}
 }
 

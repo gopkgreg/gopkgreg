@@ -1,17 +1,17 @@
-// Package version reports which build of Gopherdex is running.
+// Package version reports which build of Gopkgreg is running.
 package version
 
 import "runtime/debug"
 
-// Module is Gopherdex's module path; the CLI installs from Module + "/cmd/gopherdex".
-const Module = "github.com/codebled/gopherdex"
+// Module is Gopkgreg's module path; the CLI installs from Module + "/cmd/gopkgreg".
+const Module = "github.com/gopkgreg/gopkgreg"
 
-// CLIInstall is the command that installs the gopherdex CLI.
-const CLIInstall = "go install " + Module + "/cmd/gopherdex@latest"
+// CLIInstall is the command that installs the gopkgreg CLI.
+const CLIInstall = "go install " + Module + "/cmd/gopkgreg@latest"
 
 // Version is set for release builds:
 //
-//	go build -ldflags "-X github.com/codebled/gopherdex/internal/version.Version=v1.2.3"
+//	go build -ldflags "-X github.com/gopkgreg/gopkgreg/internal/version.Version=v1.2.3"
 //
 // When it's empty, String falls back to what the go command recorded.
 var Version = ""

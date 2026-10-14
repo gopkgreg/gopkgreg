@@ -17,7 +17,7 @@ import (
 	xmodule "golang.org/x/mod/module"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/codebled/gopherdex/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
 )
 
 // reset forgets the mail sent so far.
@@ -47,7 +47,7 @@ func (m *mailRecorder) find(t *testing.T, to, subject string) string {
 
 func TestPasswordResetFlow(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0") // registers alice
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0") // registers alice
 	b := newBrowser(t, env.srv.URL)
 
 	resp, body := b.post("/forgot-password", url.Values{"email": {"nobody@example.com"}})
@@ -55,7 +55,7 @@ func TestPasswordResetFlow(t *testing.T) {
 	resp, body = b.post("/forgot-password", url.Values{"email": {"alice@example.com"}})
 	expect(t, resp, body, http.StatusOK, "a reset link is on its way")
 
-	link := regexp.MustCompile(`/reset-password\?token=\S+`).FindString(env.mails.find(t, "alice@example.com", "Reset your Gopherdex password"))
+	link := regexp.MustCompile(`/reset-password\?token=\S+`).FindString(env.mails.find(t, "alice@example.com", "Reset your Gopkgreg password"))
 	resp, body = b.get(link)
 	expect(t, resp, body, http.StatusOK, "Choose a new password")
 	token, _ := url.ParseQuery(strings.TrimPrefix(link, "/reset-password?"))
@@ -72,7 +72,7 @@ func TestPasswordResetFlow(t *testing.T) {
 
 func TestTwoFactorAdminAndReports(t *testing.T) {
 	env := newTestEnv(t)
-	mod := "gopherdex.test/alice/retry"
+	mod := "gopkgreg.test/alice/retry"
 	env.publish(t, mod, "v1.0.0")
 	env.accts.Register(context.Background(), "bob", "bob@example.com", "correct horse battery", accounts.Client{})
 
@@ -180,18 +180,18 @@ func upload(t *testing.T, env *testEnv, token, modPath, version string) (int, st
 
 func TestScopedTokenAndPublishEmail(t *testing.T) {
 	env := newTestEnv(t)
-	mod := "gopherdex.test/alice/retry"
+	mod := "gopkgreg.test/alice/retry"
 	env.publish(t, mod, "v1.0.0")
 
 	alice := newBrowser(t, env.srv.URL)
 	alice.post("/login", url.Values{"login": {"alice"}, "password": {"correct horse battery"}})
 	resp, body := alice.post("/account/tokens", url.Values{"name": {"ci"}, "expires": {"30"}, "module": {mod}, "password": {"correct horse battery"}})
 	expect(t, resp, body, http.StatusCreated, "Copy it now")
-	token := regexp.MustCompile(`gdx_[A-Za-z0-9_-]{43}`).FindString(body)
-	env.mails.find(t, "alice@example.com", "New Gopherdex API token")
+	token := regexp.MustCompile(`gpk_[A-Za-z0-9_-]{43}`).FindString(body)
+	env.mails.find(t, "alice@example.com", "New Gopkgreg API token")
 	resp, body = alice.get("/account")
-	expect(t, resp, body, http.StatusOK, "<code>gopherdex.test/alice/retry</code>")
-	resp, body = alice.post("/account/tokens", url.Values{"name": {"x"}, "expires": {"30"}, "module": {"gopherdex.test/bob/other"}, "password": {"correct horse battery"}})
+	expect(t, resp, body, http.StatusOK, "<code>gopkgreg.test/alice/retry</code>")
+	resp, body = alice.post("/account/tokens", url.Values{"name": {"x"}, "expires": {"30"}, "module": {"gopkgreg.test/bob/other"}, "password": {"correct horse battery"}})
 	expect(t, resp, body, http.StatusUnprocessableEntity, "Choose one of your modules.")
 
 	// The module token publishes its module, and every maintainer is told.
@@ -203,7 +203,7 @@ func TestScopedTokenAndPublishEmail(t *testing.T) {
 		t.Errorf("publish email:\n%s", msg)
 	}
 	// It can't publish anything else.
-	if status, body := upload(t, env, token, "gopherdex.test/alice/other", "v1.0.0"); status != http.StatusForbidden || !strings.Contains(body, "token_scope") {
+	if status, body := upload(t, env, token, "gopkgreg.test/alice/other", "v1.0.0"); status != http.StatusForbidden || !strings.Contains(body, "token_scope") {
 		t.Fatalf("scoped token on another module: %d %s", status, body)
 	}
 }

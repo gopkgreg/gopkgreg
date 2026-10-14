@@ -5,15 +5,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/codebled/gopherdex/internal/tokens"
+	"github.com/gopkgreg/gopkgreg/internal/tokens"
 )
 
 func TestSVG(t *testing.T) {
-	svg := string(Badge{Label: "gopherdex", Value: "v1.2.0 <&>", Style: Blue}.SVG())
+	svg := string(Badge{Label: "gopkgreg", Value: "v1.2.0 <&>", Style: Blue}.SVG())
 	if err := xml.Unmarshal([]byte(svg), new(struct{})); err != nil {
 		t.Fatalf("not well-formed XML: %v\n%s", err, svg)
 	}
-	for _, want := range []string{`aria-label="gopherdex: v1.2.0 &lt;&amp;&gt;"`, `fill="#555759"`, `fill="#00ADD8"`, `>v1.2.0 &lt;&amp;&gt;</text>`} {
+	for _, want := range []string{`aria-label="gopkgreg: v1.2.0 &lt;&amp;&gt;"`, `fill="#555759"`, `fill="#00ADD8"`, `>v1.2.0 &lt;&amp;&gt;</text>`} {
 		if !strings.Contains(svg, want) {
 			t.Errorf("badge lacks %s:\n%s", want, svg)
 		}

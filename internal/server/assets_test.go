@@ -15,7 +15,7 @@ func TestAssetFingerprints(t *testing.T) {
 			t.Errorf("page doesn't link a fingerprinted %s", name)
 		}
 	}
-	for _, want := range []string{`href="/favicon.ico?v=`, `href="/tokens.css?v=`, `<meta property="og:image" content="http://gopherdex.test/static/og-image.png?v=`} {
+	for _, want := range []string{`href="/favicon.ico?v=`, `href="/tokens.css?v=`, `<meta property="og:image" content="http://gopkgreg.test/static/og-image.png?v=`} {
 		if !strings.Contains(page, want) {
 			t.Errorf("page lacks %s", want)
 		}

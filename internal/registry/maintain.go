@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/module"
 )
 
 // Role is what a user may do with a module.
@@ -297,7 +297,7 @@ func (r *Registry) SetCollaborator(ctx context.Context, u *accounts.User, modPat
 	var userID int64
 	err = r.DB.QueryRowContext(ctx, `SELECT id FROM users WHERE username = ?`, username).Scan(&userID)
 	if errors.Is(err, sql.ErrNoRows) {
-		return reject(http.StatusNotFound, "unknown_user", "There's no user @%s. Check the spelling; they need a Gopherdex account first.", username)
+		return reject(http.StatusNotFound, "unknown_user", "There's no user @%s. Check the spelling; they need a Gopkgreg account first.", username)
 	}
 	if err != nil {
 		return fmt.Errorf("look up @%s: %w", username, err)

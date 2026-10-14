@@ -1,0 +1,40 @@
+# systemd unit for running gopkgregd without containers, behind Caddy or
+# another reverse proxy on the same machine.
+#
+#   sudo install -m 0755 gopkgregd /usr/local/bin/
+#   sudo install -D -m 0600 gopkgreg.env /etc/gopkgreg/gopkgreg.env
+#   sudo cp gopkgregd.service /etc/systemd/system/ && sudo systemctl enable --now gopkgregd
+[Unit]
+Description=Gopkgreg Go module registry
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/gopkgregd
+EnvironmentFile=/etc/gopkgreg/gopkgreg.env
+Environment=GOPKGREG_ADDR=127.0.0.1:8080
+Environment=GOPKGREG_TRUST_PROXY=true
+Environment=GOPKGREG_DB=/var/lib/gopkgreg/gopkgreg.db
+Environment=GOPKGREG_BLOBS=/var/lib/gopkgreg/blobs
+Environment=GOPKGREG_BACKUP_DIR=/var/lib/gopkgreg/backups
+StateDirectory=gopkgreg
+DynamicUser=yes
+Restart=on-failure
+
+# Hardening: the server only needs its state directory and the network.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

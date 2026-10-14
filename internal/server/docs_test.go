@@ -15,8 +15,8 @@ import (
 	xmodule "golang.org/x/mod/module"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
 )
 
 // publishFiles publishes a version with the given files, as alice.
@@ -66,7 +66,7 @@ func TestDocsSourceAndDependencies(t *testing.T) {
 	t.Cleanup(play.Close)
 	env := newTestEnvWith(t, func(c *Config) { c.PlaygroundURL = play.URL })
 
-	mod := "gopherdex.test/alice/retry"
+	mod := "gopkgreg.test/alice/retry"
 	env.publishFiles(t, mod, "v1.0.0", map[string]string{
 		"go.mod": "module " + mod + "\n\ngo 1.22\n",
 		"retry.go": `// Package retry retries operations. See [Do].
@@ -85,7 +85,7 @@ func Forever() {}
 `,
 		"example_test.go": "package retry_test\n\nimport (\n\t\"fmt\"\n\n\t\"" + mod + "\"\n)\n\nfunc ExampleDo() {\n\tfmt.Println(retry.Do(func() error { return nil }))\n\t// Output: <nil>\n}\n",
 	})
-	app := "gopherdex.test/alice/app"
+	app := "gopkgreg.test/alice/app"
 	env.publishFiles(t, app, "v1.0.0", map[string]string{
 		"go.mod": "module " + app + "\n\ngo 1.22\n\nrequire (\n\t" + mod + " v1.0.0\n\tgithub.com/x/y v1.2.3 // indirect\n)\n",
 		"app.go": "package app\n",
@@ -111,11 +111,11 @@ func Forever() {}
 	}
 
 	_, body = fetch(t, env.srv, "/alice/retry?tab=deps")
-	if !strings.Contains(body, "Used by 1 module") || !strings.Contains(body, `<a href="/alice/app"><code>gopherdex.test/alice/app</code></a>`) {
+	if !strings.Contains(body, "Used by 1 module") || !strings.Contains(body, `<a href="/alice/app"><code>gopkgreg.test/alice/app</code></a>`) {
 		t.Error("retry's dependents aren't listed")
 	}
 	_, body = fetch(t, env.srv, "/alice/app?tab=deps")
-	if !strings.Contains(body, `<a href="/alice/retry"><code>gopherdex.test/alice/retry</code></a>`) ||
+	if !strings.Contains(body, `<a href="/alice/retry"><code>gopkgreg.test/alice/retry</code></a>`) ||
 		!strings.Contains(body, `href="https://pkg.go.dev/github.com/x/y"`) || !strings.Contains(body, "1 indirect dependency") {
 		t.Error("app's requirements aren't listed")
 	}

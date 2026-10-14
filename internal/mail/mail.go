@@ -60,7 +60,7 @@ func (l LogMailer) Send(_ context.Context, m Message) error {
 // when the server offers it, and only authenticates over TLS.
 type SMTPMailer struct {
 	Addr     string // host:port, e.g. smtp.example.com:587
-	From     string // e.g. "Gopherdex <no-reply@gopherdex.dev>"
+	From     string // e.g. "Gopkgreg <no-reply@gopkgreg.com>"
 	Username string
 	Password string
 }

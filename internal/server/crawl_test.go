@@ -8,14 +8,14 @@ import (
 
 func TestCrawlAndHealth(t *testing.T) {
 	env := newTestEnv(t)
-	env.publish(t, "gopherdex.test/alice/retry", "v1.0.0")
+	env.publish(t, "gopkgreg.test/alice/retry", "v1.0.0")
 
 	resp, body := fetch(t, env.srv, "/robots.txt")
-	if resp.StatusCode != http.StatusOK || !strings.Contains(body, "Disallow: /account") || !strings.Contains(body, "Sitemap: http://gopherdex.test/sitemap.xml") {
+	if resp.StatusCode != http.StatusOK || !strings.Contains(body, "Disallow: /account") || !strings.Contains(body, "Sitemap: http://gopkgreg.test/sitemap.xml") {
 		t.Errorf("robots.txt: %d\n%s", resp.StatusCode, body)
 	}
 	resp, body = fetch(t, env.srv, "/sitemap.xml")
-	if resp.StatusCode != http.StatusOK || !strings.Contains(body, "<loc>http://gopherdex.test/alice/retry</loc>") || !strings.Contains(body, "<lastmod>") {
+	if resp.StatusCode != http.StatusOK || !strings.Contains(body, "<loc>http://gopkgreg.test/alice/retry</loc>") || !strings.Contains(body, "<lastmod>") {
 		t.Errorf("sitemap.xml: %d\n%s", resp.StatusCode, body)
 	}
 	resp, body = fetch(t, env.srv, "/healthz")

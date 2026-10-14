@@ -1,10 +1,10 @@
 # Security policy
 
-Gopherdex stores other people's code and credentials, so we take reports seriously and fix them first.
+Gopkgreg stores other people's code and credentials, so we take reports seriously and fix them first.
 
 ## Reporting a vulnerability
 
-**Please don't open a public issue or pull request.** Report privately through GitHub instead: go to the repository's **Security** tab, then **Report a vulnerability** ([direct link](https://github.com/codebled/gopherdex/security/advisories/new)). Only the maintainers can see the report.
+**Please don't open a public issue or pull request.** Report privately through GitHub instead: go to the repository's **Security** tab, then **Report a vulnerability** ([direct link](https://github.com/gopkgreg/gopkgreg/security/advisories/new)). Only the maintainers can see the report.
 
 Include what you can:
 
@@ -22,7 +22,7 @@ Please give us a reasonable time to fix the problem before you disclose it publi
 
 ## Scope
 
-In scope: this repository's code, including the registry server (`gopherdexd`), the `gopherdex` CLI, and their default configuration.
+In scope: this repository's code, including the registry server (`gopkgregd`), the `gopkgreg` CLI, and their default configuration.
 
 Out of scope: denial of service by sheer traffic volume, findings that need an already-compromised server or administrator account, and reports from automated scanners without a demonstrated impact.
 

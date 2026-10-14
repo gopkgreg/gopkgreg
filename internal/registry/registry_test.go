@@ -17,14 +17,14 @@ import (
 	xmodule "golang.org/x/mod/module"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/blob"
-	"github.com/codebled/gopherdex/internal/database"
-	"github.com/codebled/gopherdex/internal/mail"
-	"github.com/codebled/gopherdex/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/blob"
+	"github.com/gopkgreg/gopkgreg/internal/database"
+	"github.com/gopkgreg/gopkgreg/internal/mail"
+	"github.com/gopkgreg/gopkgreg/internal/module"
 )
 
-const host = "gopherdex.test"
+const host = "gopkgreg.test"
 
 type nopMailer struct{}
 

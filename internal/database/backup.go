@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-const backupPrefix = "gopherdex-"
+const backupPrefix = "gopkgreg-"
 
 // Backup writes a consistent copy of the database to path with SQLite's
 // VACUUM INTO, which is safe while the server keeps serving requests. It

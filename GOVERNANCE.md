@@ -1,14 +1,14 @@
 # Governance
 
-How Gopherdex is run: who decides what, and how to get a say. The short version: anyone can contribute, people who keep showing up get more responsibility, and decisions happen in the open.
+How Gopkgreg is run: who decides what, and how to get a say. The short version: anyone can contribute, people who keep showing up get more responsibility, and decisions happen in the open.
 
 ## Roles
 
 | Role | What they do | How you get it |
 |---|---|---|
 | **Contributor** | Opens issues and pull requests, reviews, answers questions, improves the docs. | Take part. |
-| **Triager** | Labels and reproduces issues, answers questions, points newcomers at `good first issue`s, closes duplicates. Has the *triage* permission on the repository, through the `@codebled/gopherdex-triage` team. | Ask in an issue after a few weeks of helpful comments and reviews. A maintainer adds you. |
-| **Maintainer** | Reviews and merges pull requests, owns areas in [CODEOWNERS](.github/CODEOWNERS), cuts releases, handles security reports. Member of `@codebled/gopherdex-maintainers`. | Nominated by a maintainer, see below. |
+| **Triager** | Labels and reproduces issues, answers questions, points newcomers at `good first issue`s, closes duplicates. Has the *triage* permission on the repository, through the `@gopkgreg/triage` team. | Ask in an issue after a few weeks of helpful comments and reviews. A maintainer adds you. |
+| **Maintainer** | Reviews and merges pull requests, owns areas in [CODEOWNERS](.github/CODEOWNERS), cuts releases, handles security reports. Member of `@gopkgreg/maintainers`. | Nominated by a maintainer, see below. |
 | **Admin** | Repository settings, secrets, teams, the branch ruleset. | The organization owners. Kept to as few people as possible. |
 
 The current maintainers and triagers are listed in [MAINTAINERS.md](MAINTAINERS.md).

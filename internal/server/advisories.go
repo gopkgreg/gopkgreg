@@ -11,10 +11,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/registry"
-	"github.com/codebled/gopherdex/internal/vulndb"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/registry"
+	"github.com/gopkgreg/gopkgreg/internal/vulndb"
 )
 
 // ---- The vulnerability database, for govulncheck ----
@@ -168,7 +168,7 @@ type advisoriesData struct {
 
 // Feed advertises the security advisories feed on the advisories page.
 func (d advisoriesData) Feed() *feedLink {
-	return &feedLink{"Security advisories on Gopherdex", "/feeds/advisories.atom"}
+	return &feedLink{"Security advisories on Gopkgreg", "/feeds/advisories.atom"}
 }
 
 func (s *server) handleAdvisories(w http.ResponseWriter, r *http.Request) {

@@ -33,10 +33,10 @@ import (
 	"golang.org/x/mod/sumdb/dirhash"
 	modzip "golang.org/x/mod/zip"
 
-	"github.com/codebled/gopherdex/internal/accounts"
-	"github.com/codebled/gopherdex/internal/blob"
-	"github.com/codebled/gopherdex/internal/module"
-	"github.com/codebled/gopherdex/internal/scan"
+	"github.com/gopkgreg/gopkgreg/internal/accounts"
+	"github.com/gopkgreg/gopkgreg/internal/blob"
+	"github.com/gopkgreg/gopkgreg/internal/module"
+	"github.com/gopkgreg/gopkgreg/internal/scan"
 )
 
 // DefaultMaxZipSize caps uploads. The go command accepts up to 500 MiB, but
@@ -66,7 +66,7 @@ type Registry struct {
 
 	DB         *sql.DB
 	Blobs      blob.Store
-	ModuleHost string // e.g. "gopherdex.dev"
+	ModuleHost string // e.g. "gopkgreg.com"
 	MaxZipSize int64
 	Log        *slog.Logger
 	Now        func() time.Time
@@ -743,7 +743,7 @@ func (r *Registry) ModuleRoot(ctx context.Context, importPath string) (string, e
 var majorSuffix = regexp.MustCompile(`^v([2-9]|[1-9][0-9]+)$`)
 
 // IsLocalHost reports whether a module host only exists on developer
-// machines (gopherdex.localhost, *.test, …). The public Go module mirror
+// machines (gopkgreg.localhost, *.test, …). The public Go module mirror
 // can't reach such hosts, so installs need GOPROXY set explicitly.
 func IsLocalHost(host string) bool {
 	for _, suffix := range []string{".localhost", ".test", ".local", ".internal", ".invalid", ".example", ".home.arpa"} {
