@@ -623,7 +623,7 @@ Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md): setup,
 - **Questions and ideas** go to [Discussions](https://github.com/gopkgreg/gopkgreg/discussions); issues are for bugs and agreed work.
 - **Who decides what:** [GOVERNANCE.md](GOVERNANCE.md) describes the roles, how to become a triager or maintainer, and how decisions are made. [MAINTAINERS.md](MAINTAINERS.md) lists the current maintainers.
 - Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md).
-- Maintainers apply the repository's settings with `scripts/github-settings.sh`: branch rules, labels, topics, Discussions, the maintainer and triage teams, private vulnerability reporting and Actions defaults.
+- Maintainers apply the repository's settings with `scripts/github-settings.sh`: branch rules, labels, topics, Discussions, the maintainer and triage teams, private vulnerability reporting, secret scanning with push protection, the homepage link and Actions defaults.
 
 ## License
 

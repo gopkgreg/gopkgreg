@@ -2,12 +2,24 @@
 # github-settings.sh applies the repository settings an open-source project
 # needs: protected main, pull-request reviews, required checks, labels for
 # newcomers, topics and Discussions, the maintainer and triage teams,
-# private vulnerability reports and safe Actions defaults.
+# private vulnerability reports, secret scanning and safe Actions defaults.
 # Run it once as a repository admin (it uses your gh login). It's safe to
 # run again: every step replaces the previous setting.
+#
+#   scripts/github-settings.sh [owner/repo] [homepage URL]
+#
+# The homepage defaults to https://gopkgreg.com for gopkgreg/gopkgreg and to
+# none for other repositories; pass "" to leave it alone.
 set -eu
 
 repo=${1:-gopkgreg/gopkgreg}
+if [ $# -ge 2 ]; then
+	homepage=$2
+elif [ "$repo" = gopkgreg/gopkgreg ]; then
+	homepage=https://gopkgreg.com
+else
+	homepage=
+fi
 echo "Configuring $repo"
 
 # Pull requests are squash-merged; merged branches are deleted.
@@ -20,6 +32,18 @@ optional() { "$@" >/dev/null 2>&1 || echo "warning: couldn't apply: $*" >&2; }
 optional gh api -X PUT "repos/$repo/private-vulnerability-reporting"
 optional gh api -X PUT "repos/$repo/vulnerability-alerts"
 optional gh api -X PUT "repos/$repo/automated-security-fixes"
+
+# Secret scanning flags leaked keys and tokens; push protection blocks a
+# push that contains one before it reaches GitHub. Both are free for
+# public repositories.
+optional gh api -X PATCH "repos/$repo" \
+	-F 'security_and_analysis[secret_scanning][status]=enabled' \
+	-F 'security_and_analysis[secret_scanning_push_protection][status]=enabled'
+
+# The live registry, linked from the repository page.
+if [ -n "$homepage" ]; then
+	gh repo edit "$repo" --homepage "$homepage"
+fi
 
 # Actions: workflows get a read-only token unless they ask for more, can't
 # approve pull requests, and first-time contributors' runs wait for a
