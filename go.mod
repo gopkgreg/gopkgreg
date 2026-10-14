@@ -34,3 +34,6 @@ require (
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.12.1 // indirect
 )
+
+// Tagged by mistake on code from before the rename; use v0.2.1 or later.
+retract v0.2.0
