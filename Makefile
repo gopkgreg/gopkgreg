@@ -16,7 +16,7 @@ PKGS := ./cmd/... ./internal/... ./web/...
 
 # Tool versions, pinned so every contributor and CI get the same results.
 # `go run pkg@version` fetches and caches them: nothing to install.
-GOLANGCI_LINT := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.13.2
+GOLANGCI_LINT := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.14.0
 GOVULNCHECK := go run golang.org/x/vuln/cmd/govulncheck@v1.8.0
 ACTIONLINT := go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
 
