@@ -189,7 +189,7 @@ govulncheck reports only vulnerabilities your code can reach. When an advisory n
 Like PyPI's trusted publishers: a GitHub Actions workflow publishes with no API token stored anywhere.
 
 1. **Register the workflow.** On the module's **Manage** tab, add a trusted publisher: GitHub repository (`owner/name`), workflow file (`release.yml`), and optionally an environment. Before a module's first release, add it from **Publish from GitHub Actions** on your account page instead.
-2. **Give the job `id-token: write`** and run `gopkgreg publish`:
+2. **Give the job `id-token: write`** and add the [gopkgreg publish action](https://github.com/gopkgreg/publish):
 
 ```yaml
 on:
@@ -203,11 +203,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with: { go-version: stable }
-      - run: go install <where-this-source-lives>/cmd/gopkgreg@latest
-      - run: gopkgreg publish --registry https://gopkgreg.com
+      - uses: gopkgreg/publish@v1
 ```
+
+The action downloads the `gopkgreg` CLI for the runner, verifies its checksum and runs `gopkgreg publish`, so the job needs no Go installation. Its README covers modules in subdirectories, dry runs on pull requests and release approvals. To run the CLI yourself instead, install it with `go install github.com/gopkgreg/gopkgreg/cmd/gopkgreg@latest` and run `gopkgreg publish --registry https://gopkgreg.com`.
 
 With no token configured, `publish` sees it's running in GitHub Actions. It fetches the audience from `/api/oidc/audience` and asks GitHub for an ID token with that audience. It then trades the token at `/api/oidc/mint-token` for a registry token that expires after 15 minutes and can only upload that one module.
 
